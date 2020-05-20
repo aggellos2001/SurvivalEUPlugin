@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'me.aggellos2001.survivaleuplugin'
+version '1.15.2-2'
+
+sourceCompatibility = targetCompatibility = 11
+compileJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    jcenter()
+    maven { url 'https://jitpack.io' }
+    maven { url = 'https://papermc.io/repo/repository/maven-public/' }
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://hub.spigotmc.org/nexus/content/groups/public/" }
+}
+
+dependencies {
+    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    implementation 'com.github.ipinfo:java:ipinfo-api-1.1'
+    implementation 'org.jetbrains:annotations:19.0.0'
+    compileOnly 'net.luckperms:api:5.0'
+    compileOnly fileTree(include: ['*.jar'], dir: 'localapi')
+    compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    compile "co.aikar:taskchain-bukkit:3.7.2"
+}
+
+
+tasks.withType(Jar) {
+    destinationDirectory = file("C:/Users/aggel/Desktop/Minecraft_Test_Servers/Test_server/plugins")
+}
+
+shadowJar {
+    destinationDirectory = file("C:/Users/aggel/Desktop/Minecraft_Test_Servers/Test_server/plugins")
+    relocate 'co.aikar.commands', 'me.aggellos2001.survivaleuplugin.acf'
+    relocate 'co.aikar.locales', 'me.aggellos2001.survivaleuplugin.locales'
+    relocate 'co.aikar.taskchain', 'me.aggellos2001.survivaleuplugin.taskchain'
+}
+
+compileJava {
+    options.compilerArgs += ["-parameters"]
+    options.fork = true
+    options.forkOptions.executable = 'javac'
+}
+
+build.dependsOn shadowJar
+
+

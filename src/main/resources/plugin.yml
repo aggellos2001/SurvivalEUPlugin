@@ -1,0 +1,10 @@
+name: "SurvivalEUPlugin"
+main: "me.aggellos2001.survivaleuplugin.SurvivalEUPlugin"
+version: "1.15.2-2"
+author: "aggellos2001"
+api-version: "1.13"
+depend:
+  - Vault
+  - Essentials
+  - LuckPerms
+  - GriefPrevention
