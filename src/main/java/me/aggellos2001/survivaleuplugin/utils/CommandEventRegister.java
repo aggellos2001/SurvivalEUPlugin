@@ -46,7 +46,8 @@ public final class CommandEventRegister {
 				new XpAndDropMultiplyCommandEvent(),
 				new Shop(),
 				LuckPermsHook.INSTANCE,
-				new HelpCommand()
+				new HelpCommand(),
+				new UwUCommand()
 		};
 
 		for (final PluginActivity activity : commandsEvents) {
