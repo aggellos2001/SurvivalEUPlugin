@@ -165,7 +165,7 @@ public final class VoteCommand extends PluginActivity {
 						Utilities.sendMsg(player, Language.VOTE_REWARD_RECEIVED.getTranslation(player));
 						// everyone that the player voted
 						for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-							Utilities.sendMsg(onlinePlayer,Utilities.colorize(Language.VOTE_BROADCAST.getTranslation(onlinePlayer)));
+							Utilities.sendMsg(onlinePlayer,Utilities.colorize(String.format(Language.VOTE_BROADCAST.getTranslation(onlinePlayer),onlinePlayer.getName())));
 						}
 					}
 				}).execute();
