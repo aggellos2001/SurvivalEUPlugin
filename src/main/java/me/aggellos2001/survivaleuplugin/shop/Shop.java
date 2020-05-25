@@ -29,6 +29,7 @@ public final class Shop extends PluginActivity {
 
 		ACACIA_LOG(130.32, 6.0),
 		ACACIA_PLANKS(32.58, 1.50),
+		ACACIA_SAPLING(18.05, 3.0),
 		ANVIL(8_379.93, 50),
 		APPLE(10.83, 3.0),
 		BAMBOO(3.0, 0.10),
@@ -36,6 +37,7 @@ public final class Shop extends PluginActivity {
 		BELL(6_498.0, 600.0),
 		BIRCH_LOG(130.32, 6.0),
 		BIRCH_PLANKS(32.58, 1.50),
+		BIRCH_SAPLING(18.05, 3.0),
 		BLACK_CONCRETE(87.21, 3.0),
 		BLACK_DYE(11.41, 3.0),
 		BLACK_TERRACOTTA(2_102.72, 20.0),
@@ -46,6 +48,7 @@ public final class Shop extends PluginActivity {
 		BLUE_DYE(22.81, 3.0),
 		BLUE_TERRACOTTA(2_093.16, 20.0),
 		BLUE_WOOL(147.49, 5.0),
+		BONE(18.05, 3.0),
 		BROWN_CONCRETE(129.67, 3.0),
 		BROWN_DYE(65.16, 3.0),
 		BROWN_TERRACOTTA(2_114.48, 20.0),
@@ -70,6 +73,7 @@ public final class Shop extends PluginActivity {
 		CYAN_WOOL(723.27, 5.0),
 		DARK_OAK_LOG(130.32, 6.0),
 		DARK_OAK_PLANKS(32.58, 1.50),
+		DARK_OAK_SAPLING(18.05, 3.0),
 		DRAGON_BREATH(361.0, 100.0),
 		DRAGON_HEAD(3_610.0, 80.0),
 		ELYTRA(10_000, 300.0),
@@ -94,6 +98,7 @@ public final class Shop extends PluginActivity {
 		IRON_BLOCK(6_774.61, 300),
 		JUNGLE_LOG(130.32, 6.0),
 		JUNGLE_PLANKS(32.58, 1.50),
+		JUNGLE_SAPLING(18.05, 3.0),
 		LANTERN(114.44, 30.0),
 		LAPIS_BLOCK(351.87, 60.47),
 		LEAD(104.26, 28.88),
@@ -131,6 +136,7 @@ public final class Shop extends PluginActivity {
 		NAME_TAG(180.50, 0),
 		OAK_LOG(130.32, 6.0),
 		OAK_PLANKS(32.58, 1.50),
+		OAK_SAPLING(18.05, 3.0),
 		ORANGE_CONCRETE(61.84, 3.0),
 		ORANGE_DYE(23.52, 3.0),
 		ORANGE_TERRACOTTA(2_092.42, 20.0),
@@ -165,8 +171,10 @@ public final class Shop extends PluginActivity {
 		SPIDER_EYE(10.83, 3.00),
 		SPRUCE_LOG(130.32, 6.0),
 		SPRUCE_PLANKS(32.58, 1.50),
+		SPRUCE_SAPLING(18.05, 3.0),
 		STONECUTTER(1_035.01, 0.5),
 		STRING(5.42, 0),
+		SUGAR_CANE(3.12, 0.3),
 		SWEET_BERRIES(5.00, 0),
 		TRIDENT(10_000, 1_000),
 		TRIPWIRE_HOOK(139.86, 0.5),
@@ -177,8 +185,8 @@ public final class Shop extends PluginActivity {
 		WHITE_DYE(22.81, 3.0),
 		WHITE_TERRACOTTA(2_093.89, 20.0),
 		WHITE_WOOL(90.05, 3.0),
-		ZOMBIE_HEAD(5_000, 0),
-		SUGAR_CANE(3.12,0.3);
+		ZOMBIE_HEAD(5_000, 0);
+
 
 		//</editor-fold>
 
