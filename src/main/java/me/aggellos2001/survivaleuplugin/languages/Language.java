@@ -159,8 +159,8 @@ public enum Language {
 		this.greek = greek;
 	}
 
-	private final String english;
-	private final String greek;
+	public final String english;
+	public final String greek;
 
 	public String getTranslation(final Player player) {
 		if (PlayerLanguage.getPlayerLanguage(player).equals("greek"))
