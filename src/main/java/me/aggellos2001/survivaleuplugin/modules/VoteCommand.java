@@ -145,13 +145,19 @@ public final class VoteCommand extends PluginActivity {
 				.abortIfNull(new MessageActionHandler(), player, Language.VOTE_ERROR.getTranslation(player))
 				.storeAsData("checkIfClaimed")
 				.sync(() -> {
-					var checkIfVoted = chain.getTaskData("checkIfVoted");
-					var checkIfClaimed = chain.getTaskData("checkIfClaimed");
-					if (checkIfVoted.equals("0") && checkIfClaimed.equals("0")) {
+					var checkIfVoted = Utilities.toIntOrNull(chain.getTaskData("checkIfVoted"));
+					var checkIfClaimed = Utilities.toIntOrNull(chain.getTaskData("checkIfClaimed"));
+					if (checkIfVoted == null || checkIfClaimed == null){
+						Utilities.sendMsg(player,Utilities.colorize(Language.VOTE_ERROR.getTranslation(player)));
+						return;
+					}
+					if (checkIfVoted == 0 && checkIfClaimed == 0) {
 						Utilities.sendMsg(player, Language.VOTE_DID_NOT_VOTED.getTranslation(player));
-					} else if (checkIfClaimed.equals("0")) {
+					} else if (checkIfClaimed == 0) {
 						Utilities.sendMsg(player, Language.VOTE_ALREADY_CLAIMED.getTranslation(player));
 					} else {
+						System.out.println(checkIfClaimed);
+						System.out.println(checkIfVoted);
 						//Give player rewards here
 						final var rewards = new String[]{
 								"acb " + player.getName() + " 500",
@@ -164,7 +170,9 @@ public final class VoteCommand extends PluginActivity {
 						Utilities.sendMsg(player, Language.VOTE_REWARDS.getTranslation(player));
 						Utilities.sendMsg(player, Language.VOTE_REWARD_RECEIVED.getTranslation(player));
 						// everyone that the player voted
-						Bukkit.broadcastMessage(Utilities.colorize(String.format(Language.VOTE_BROADCAST.english, player.getName()),true));
+						for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+							Utilities.sendMsg(onlinePlayer,Utilities.colorize(String.format(Language.VOTE_BROADCAST.getTranslation(onlinePlayer) ,player.getName())));
+						}
 					}
 				}).execute();
 	}
