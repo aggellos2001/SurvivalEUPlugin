@@ -5,22 +5,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Config {
 
 	private final String name;
-	private String[] PATHS;
+	private final ArrayList<String> PATHS = new ArrayList<>();
 	public final YamlConfig CONFIG;
 	private final Map<String, Object> CONFIG_CACHE = new HashMap<>();
 	private final JavaPlugin plugin;
 
 
 	public void addDefaults(String... paths) {
-		if (this.PATHS == null) {
-			this.PATHS = paths;
-		}
+		PATHS.addAll(Arrays.asList(paths));
 		initializeConfig();
 	}
 
