@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.aggellos2001.survivaleuplugin'
-version '1.15.2-3'
+version '1.16.1-1'
 
 sourceCompatibility = targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
@@ -18,16 +18,21 @@ repositories {
     maven { url = 'https://papermc.io/repo/repository/maven-public/' }
     maven { url = "https://repo.aikar.co/content/groups/aikar/" }
     maven { url = "https://hub.spigotmc.org/nexus/content/groups/public/" }
+    maven {
+        name "essentialsx"
+        url "https://ci.ender.zone/plugin/repository/everything/"
+    }
 }
 
 dependencies {
-    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
     implementation 'com.github.ipinfo:java:ipinfo-api-1.1'
     implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly 'net.luckperms:api:5.0'
     compileOnly fileTree(include: ['*.jar'], dir: 'localapi')
     compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
     compile "co.aikar:taskchain-bukkit:3.7.2"
+    compileOnly "net.ess3:EssentialsX:2.17.2"
 }
 
 
