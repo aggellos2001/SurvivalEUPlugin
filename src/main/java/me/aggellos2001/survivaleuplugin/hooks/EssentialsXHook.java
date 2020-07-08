@@ -1,64 +1,51 @@
 package me.aggellos2001.survivaleuplugin.hooks;
 
+import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 
 public final class EssentialsXHook {
 
+	private static final IEssentials ESSENTIALS = SurvivalEUPlugin.IEssentials;
+
 	public static void subtractPlayerBalance(final Player player, final double amount) {
+		final var user = ESSENTIALS.getUser(player);
 		try {
-			Economy.substract(player.getName(), new BigDecimal(amount));
-		} catch (UserDoesNotExistException | NoLoanPermittedException e) {
-			e.printStackTrace();
+			Economy.subtract(user,new BigDecimal(amount));
+		} catch (final NoLoanPermittedException ignored) {
+
 		}
 	}
 
 	public static void addPlayerBalance(final Player player, final double amount) {
 		try {
-			Economy.add(player.getName(), new BigDecimal(amount));
-		} catch (UserDoesNotExistException | NoLoanPermittedException e) {
-			e.printStackTrace();
+			Economy.add(player.getUniqueId(), new BigDecimal(amount));
+		} catch (NoLoanPermittedException | UserDoesNotExistException ignored) {
 		}
 	}
 
 	public static double getPlayerBalance(final Player player) {
-		try {
-			return Economy.getMoneyExact(player.getName()).doubleValue();
-		} catch (final UserDoesNotExistException e) {
-			e.printStackTrace();
-			return 0D;
-		}
-
+		final var user = ESSENTIALS.getUser(player);
+		return Economy.getMoneyExact(user).doubleValue();
 	}
 
 	public static boolean hasEnough(final Player player, final double amount) {
-		try {
-			return Economy.hasEnough(player.getName(), new BigDecimal(amount));
-		} catch (final UserDoesNotExistException e) {
-			e.printStackTrace();
-			return false;
-		}
+		final var user = ESSENTIALS.getUser(player);
+		return Economy.hasEnough(user, new BigDecimal(amount));
 	}
 
 	public static boolean hasMore(final Player player, final double amount) {
-		try {
-			return Economy.hasMore(player.getName(), new BigDecimal(amount));
-		} catch (final UserDoesNotExistException e) {
-			e.printStackTrace();
-			return false;
-		}
+		final var user = ESSENTIALS.getUser(player);
+		return Economy.hasMore(user, new BigDecimal(amount));
 	}
 
 	public static boolean hasLess(final Player player, final double amount) {
-		try {
-			return Economy.hasLess(player.getName(), new BigDecimal(amount));
-		} catch (final UserDoesNotExistException e) {
-			e.printStackTrace();
-			return false;
-		}
+		final var user = ESSENTIALS.getUser(player);
+		return Economy.hasLess(user, new BigDecimal(amount));
 	}
 }

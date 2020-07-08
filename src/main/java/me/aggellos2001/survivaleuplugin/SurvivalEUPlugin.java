@@ -8,6 +8,9 @@ import me.aggellos2001.survivaleuplugin.modules.AdvertisementScheduler;
 import me.aggellos2001.survivaleuplugin.utils.CommandEventRegister;
 import me.aggellos2001.survivaleuplugin.utils.Config;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
+import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SurvivalEUPlugin extends JavaPlugin {
@@ -16,6 +19,7 @@ public class SurvivalEUPlugin extends JavaPlugin {
 	public static Config config;
 	public static PaperCommandManager COMMAND_MANAGER;
 	public static TaskChainFactory chainFactory;
+	public static IEssentials IEssentials;
 
 
 	@Override
@@ -43,6 +47,11 @@ public class SurvivalEUPlugin extends JavaPlugin {
 				config.CONFIG.addDefault("ip-key", "REPLACE_WITH_API_TOKEN"));
 		CommandEventRegister.registerCommandsAndListeners();
 		LuckPermsHook.setup();
+		Plugin essentials =  Bukkit.getPluginManager().getPlugin("Essentials");
+		if (essentials == null){
+			throw new IllegalStateException("Essentials plugin missing!");
+		}
+		IEssentials = (IEssentials) essentials;
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new AdvertisementScheduler(), 30 * 20, 3600 * 20);
 		getLogger().info(Utilities.colorize("&aPlugin loaded!"));
 
