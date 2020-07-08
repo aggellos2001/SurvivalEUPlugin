@@ -1,6 +1,6 @@
 name: "SurvivalEUPlugin"
 main: "me.aggellos2001.survivaleuplugin.SurvivalEUPlugin"
-version: "1.15.2-3"
+version: "1.16.1-1"
 author: "aggellos2001"
 api-version: "1.13"
 depend:
