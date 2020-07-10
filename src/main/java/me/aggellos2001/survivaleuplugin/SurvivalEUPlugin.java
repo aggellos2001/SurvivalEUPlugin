@@ -45,14 +45,19 @@ public class SurvivalEUPlugin extends JavaPlugin {
 				config.CONFIG.addDefaultInt("wild-delay", 300000),
 				config.CONFIG.addDefault("vote-key", "REPLACE_WITH_API_TOKEN"),
 				config.CONFIG.addDefault("ip-key", "REPLACE_WITH_API_TOKEN"));
+
 		CommandEventRegister.registerCommandsAndListeners();
+
 		LuckPermsHook.setup();
+
 		Plugin essentials =  Bukkit.getPluginManager().getPlugin("Essentials");
 		if (essentials == null){
 			throw new IllegalStateException("Essentials plugin missing!");
 		}
 		IEssentials = (IEssentials) essentials;
+
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new AdvertisementScheduler(), 30 * 20, 3600 * 20);
+
 		getLogger().info(Utilities.colorize("&aPlugin loaded!"));
 
 	}
