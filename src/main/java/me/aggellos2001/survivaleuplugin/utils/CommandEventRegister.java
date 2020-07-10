@@ -4,6 +4,8 @@ import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
 import me.aggellos2001.survivaleuplugin.modules.*;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
 import org.bukkit.Bukkit;
 
@@ -47,7 +49,9 @@ public final class CommandEventRegister {
 				new Shop(),
 				LuckPermsHook.INSTANCE,
 				new HelpCommand(),
-				new UwUCommand()
+				new UwUCommand(),
+				new PlayerDataEvent(),
+				new PlayerDataCommand()
 		};
 
 		for (final PluginActivity activity : commandsEvents) {
