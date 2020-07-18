@@ -48,4 +48,8 @@ public final class EssentialsXHook {
 		final var user = ESSENTIALS.getUser(player);
 		return Economy.hasLess(user, new BigDecimal(amount));
 	}
+
+	public static boolean isAFK(Player player){
+		return ESSENTIALS.getUser(player).isAfk();
+	}
 }
