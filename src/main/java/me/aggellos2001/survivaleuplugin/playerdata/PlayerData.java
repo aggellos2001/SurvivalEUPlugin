@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 public final class PlayerData {
 
-	public static final Map<UUID, PlayerData> PLAYER_DATA = new HashMap<>();
+	protected static final Map<UUID, PlayerData> PLAYER_DATA = new HashMap<>();
 
 	protected static final PlayerData DEFAULT = new PlayerData();
 
