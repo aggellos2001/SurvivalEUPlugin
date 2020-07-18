@@ -4,6 +4,7 @@ package me.aggellos2001.survivaleuplugin.modules;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import me.aggellos2001.survivaleuplugin.languages.Language;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Material;
@@ -20,7 +21,7 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 
 import java.util.*;
 
-@CommandAlias("sitonstairs|sitdown")
+//@CommandAlias("sitonstairs|sitdown")
 public class SitOnStairsEventCommand extends PluginActivity {
 
 	@Override
@@ -30,22 +31,22 @@ public class SitOnStairsEventCommand extends PluginActivity {
 
 	@Override
 	public boolean hasCommands() {
-		return true;
+		return false;
 	}
 
 	private static final Map<UUID, Long> LAST_TIME_SAT = new HashMap<>();
 	private static final Set<Player> PLAYERS_ENABLED_SIT_ON_STAIRS = new HashSet<>();
 
-	@Default
-	private void onCommand(final Player player) {
-		if (PLAYERS_ENABLED_SIT_ON_STAIRS.contains(player)){
-			PLAYERS_ENABLED_SIT_ON_STAIRS.remove(player);
-			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_DISABLED.getTranslation(player));
-		}else {
-			PLAYERS_ENABLED_SIT_ON_STAIRS.add(player);
-			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_ENABLED.getTranslation(player));
-		}
-	}
+//	@Default
+//	private void onCommand(final Player player) {
+//		if (PLAYERS_ENABLED_SIT_ON_STAIRS.contains(player)){
+//			PLAYERS_ENABLED_SIT_ON_STAIRS.remove(player);
+//			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_DISABLED.getTranslation(player));
+//		}else {
+//			PLAYERS_ENABLED_SIT_ON_STAIRS.add(player);
+//			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_ENABLED.getTranslation(player));
+//		}
+//	}
 
 
 	@EventHandler(ignoreCancelled = true)
@@ -59,7 +60,13 @@ public class SitOnStairsEventCommand extends PluginActivity {
 		if (e.getHand().equals(EquipmentSlot.OFF_HAND)) return;
 		if (!e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 		if (!(clickedBlock.getBlockData() instanceof Stairs)) return;
-		if (!PLAYERS_ENABLED_SIT_ON_STAIRS.contains(player)) return;
+
+
+		var data = PlayerData.getPlayerData();
+		var playerData = data.get(player.getUniqueId());
+
+
+		if (!playerData.isSittingOnStairs()) return;
 
 		final var lastTimeSat = LAST_TIME_SAT.getOrDefault(player.getUniqueId(), 0L);
 		final var difference = System.currentTimeMillis() - lastTimeSat;
