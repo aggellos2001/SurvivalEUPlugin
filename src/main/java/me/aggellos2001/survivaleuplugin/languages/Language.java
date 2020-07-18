@@ -126,7 +126,7 @@ public enum Language {
 					"&6&l&m                            "
 	),
 	SHOP_CANNOT_BUY("&cYou cannot buy this item!", "&cΔεν μπορείς να αγοράσεις αυτό το item!"),
-	SHOP_BUY_ZERO("&cYou cannot buy 0 %s","&cΔεν μπορείς να αγοράσεις 0 %s"),
+	SHOP_BUY_ZERO("&cYou cannot buy 0 %s", "&cΔεν μπορείς να αγοράσεις 0 %s"),
 	SHOP_CANNOT_SELL("&cYou cannot sell this item!", "&cΔεν μπορείς να πουλήσεις αυτό το item!"),
 	LAGINFO_HIGH_PING(
 			"&aServer TPS: %s\n" +
@@ -151,7 +151,32 @@ public enum Language {
 			"&cServer TPS: %s\n" +
 					"&aYour ping: %s\n" +
 					"&cΟ server κολλάει λίγο. Περίμενε λίγα λεπτά και συνήθως σταματάει να κολλάει!"
-	);
+	),
+	VOTEKICK_STARTED(Utilities.getHexColor("#ffc403") +
+			"&lA votekick has started for player &e %s " + Utilities.getHexColor("#ffc403") + "&lby&e %s\n" +
+			Utilities.getHexColor("#ffc403") + "/votekick yes\n" +
+			Utilities.getHexColor("#ff0314") + "/votekick no\n" +
+			"&eVote ends in 60 seconds!",
+
+			Utilities.getHexColor("#ffc403") +
+					"&lΨηφοφορία για kick άρχισε για τον παίκτη &e %s " + Utilities.getHexColor("#ffc403") + "&lαπό τον παίκτη&e %s\n" +
+					Utilities.getHexColor("#ffc403") + "/votekick yes\n" +
+					Utilities.getHexColor("#ff0314") + "/votekick no\n" +
+					"&eΗ ψηφοφορία λήγει σε 60 δευτερόλεπτα!"),
+	VOTEKICK_CANNOT_KICK_SELF("&cYou cannot votekick yourself!", "&cΔεν μπορείς να ξεκινήσεις ψηφοφορία για τον εαυτό σου!"),
+	VOTEKICK_FAILED("&cThe votekicked was failed. Not enough votes!",
+			"&cΤο votekick δεν ολοκληρώθηκε. Δεν μαζεύτηκαν αρκετά vote!"),
+	VOTEKICK_SUCCESS("&aThe votekicked was successfull. Kicking player %s!"
+			, "&aΤο votekick oλοκληρώθηκε! Ο παίκτης %s θα διωχθεί!"),
+	VOTEKICK_NOT_ONGOING("&cThere is no votekick currently ongoing!",
+			"&cΚαμία ψηφοφορία σε εξέλιξη!"),
+	VOTEKICK_CANT_VOTE_FOR_SELF("&cYou cannot vote while being votekicked!",
+			"&cΔεν μπορείς να ψηφίσεις για τον εαυτό σου!"),
+	VOTEKICK_VOTED_YES("&aYou voted YES!", "&aΨήφισες &lΝΑΙ!"),
+	VOTEKICK_VOTED_NO("&aYou have voted NO!", "&aΨήφισες &c&lΟΧΙ"),
+	VOTEKICK_ALREADY_VOTED("&cYou have already voted on this vote!", "&cΈχεις ήδη ψηφίσει σε αυτό αυτή την ψηφοφορία"),
+	VOTEKICK_VOTE_ALREADY_ONGOING("&cThere is a vote ongoing for player &e%s &c.", "&cΕίναι σε εξέλιξη ήδη μια ψηφοφορία για τον παίκτη &e%s &c.");
+
 
 	Language(
 			final String english, final String greek) {
