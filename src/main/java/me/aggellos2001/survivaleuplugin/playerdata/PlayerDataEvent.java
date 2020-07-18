@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public final class PlayerDataEvent extends PluginActivity {
 
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -65,6 +66,7 @@ public final class PlayerDataEvent extends PluginActivity {
 		} catch (final IOException e) {
 			//Puts default settings incase reading the file has failed
 			PlayerData.PLAYER_DATA.put(playerUUID,PlayerData.DEFAULT);
+			e.printStackTrace();
 		}
 	}
 
@@ -81,8 +83,9 @@ public final class PlayerDataEvent extends PluginActivity {
 			try (var writer = Files.newBufferedWriter(file.toPath())) {
 				gson.toJson(PlayerData.PLAYER_DATA.get(playerUUID), writer);
 				PlayerData.PLAYER_DATA.remove(playerUUID);
-			} catch (final Exception ignore) {
-				//if writing changes fails nothing happens and fail remains unchanged thus preventing further data loss.
+			} catch (final Exception ex) {
+				//if writing changes fails nothing happens and file remains unchanged thus preventing further data loss.
+				ex.printStackTrace();
 			}
 		}
 	}
