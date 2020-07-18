@@ -52,7 +52,8 @@ public final class CommandEventRegister {
 				new UwUCommand(),
 				new PlayerDataEvent(),
 				new PlayerDataCommand(),
-				new VoteKickCommand()
+				new VoteKickCommand(),
+				new KeepInventoryEvent()
 		};
 
 		for (final PluginActivity activity : commandsEvents) {
