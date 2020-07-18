@@ -44,6 +44,14 @@ public class Utilities {
 		else return colorize(s);
 	}
 
+	/**	Get HEX colors
+	 * @since MC 1.16
+	 *  Uses chatcolor api from bungee to return the color
+	 */
+	public static net.md_5.bungee.api.ChatColor getHexColor(String hexColorCode){
+		return net.md_5.bungee.api.ChatColor.of(hexColorCode);
+	}
+
 	@Nullable
 	public static Integer toIntOrNull(final String s) {
 		try {
