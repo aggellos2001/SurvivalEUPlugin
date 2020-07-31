@@ -14,7 +14,7 @@ import java.nio.file.Files;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public final class PlayerDataEvent extends PluginActivity {
 
-	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	protected static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 	@Override
 	public boolean hasEvents() {
@@ -29,7 +29,7 @@ public final class PlayerDataEvent extends PluginActivity {
 	/**
 	 * Initializes the file and creates the directory if it does not exist.
 	 */
-	private void firstTimeInit(final File file) {
+	private void fileCheck(final File file) {
 		try {
 			if (!PlayerData.Directory.exists()) {
 				PlayerData.Directory.mkdirs();
@@ -55,14 +55,12 @@ public final class PlayerDataEvent extends PluginActivity {
 		final var playerUUID = event.getPlayer().getUniqueId();
 		final var file = new File(PlayerData.Directory, playerUUID.toString() + ".json");
 
-		//Makes sure the directory and the file is created
-		firstTimeInit(file);
+		//Makes sure the directory and the file is created and that there's valid data
+		fileCheck(file);
 
 		try (var reader = Files.newBufferedReader(file.toPath())) {
 			final var playerData = gson.fromJson(reader, PlayerData.class);
-			PlayerData.PLAYER_DATA.putIfAbsent(playerUUID, playerData);
-			System.out.println(playerData.isKeepingInventory());
-			System.out.println(playerData.isSittingOnStairs());
+			PlayerData.PLAYER_DATA.put(playerUUID, playerData);
 		} catch (final IOException e) {
 			//Puts default settings incase reading the file has failed
 			PlayerData.PLAYER_DATA.put(playerUUID,PlayerData.DEFAULT);

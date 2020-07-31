@@ -21,16 +21,11 @@ public class SurvivalEUPlugin extends JavaPlugin {
 	public static TaskChainFactory chainFactory;
 	public static IEssentials IEssentials;
 
-
-	@Override
-	public void onLoad() {
-
-	}
-
 	@Override
 	public void onEnable() {
 
 		instance = this;
+
 		chainFactory =  BukkitTaskChainFactory.create(this);
 
 		COMMAND_MANAGER = new PaperCommandManager(this);

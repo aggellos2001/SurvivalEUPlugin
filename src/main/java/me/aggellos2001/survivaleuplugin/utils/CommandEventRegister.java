@@ -53,7 +53,7 @@ public final class CommandEventRegister {
 				new PlayerDataEvent(),
 				new PlayerDataCommand(),
 				new VoteKickCommand(),
-				new KeepInventoryEvent()
+				new KeepInventoryEvent(),
 		};
 
 		for (final PluginActivity activity : commandsEvents) {
