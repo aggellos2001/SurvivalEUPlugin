@@ -1,5 +1,6 @@
 package me.aggellos2001.survivaleuplugin.modules;
 
+import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
@@ -41,7 +42,7 @@ public final class VoteKickCommand extends PluginActivity {
 	private void onVoteKick(final Player player, @Optional final OnlinePlayer playerToVote) {
 		if (playerToVote != null) {
 			if (this.isVoteOnGoing) {
-				Utilities.sendMsg(player, Language.VOTEKICK_VOTE_ALREADY_ONGOING.getTranslation(player));
+				Utilities.sendMsg(player, String.format(Language.VOTEKICK_VOTE_ALREADY_ONGOING.getTranslation(player), this.playerBeingKicked.getName()));
 				return;
 			}
 			if (player.equals(playerToVote.getPlayer())) {
@@ -50,9 +51,10 @@ public final class VoteKickCommand extends PluginActivity {
 			}
 			this.isVoteOnGoing = true;
 			this.playerBeingKicked = playerToVote.getPlayer();
+			this.votedYes.add(player);
 
 			for (final Player playerInLoop : Bukkit.getOnlinePlayers()) {
-				Utilities.colorize(String.format(Language.VOTEKICK_STARTED.getTranslation(player), this.playerBeingKicked, player), true);
+				Utilities.sendMsg(playerInLoop, String.format(Language.VOTEKICK_STARTED.getTranslation(player), this.playerBeingKicked.getName(), player.getName()));
 			}
 
 			new BukkitRunnable() {
@@ -76,15 +78,16 @@ public final class VoteKickCommand extends PluginActivity {
 					}
 					if (percentage >= percentageToBeKicked) {
 						for (final Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-							Utilities.sendMsg(onlinePlayer, String.format(Language.VOTEKICK_SUCCESS.getTranslation(player), VoteKickCommand.this.playerBeingKicked));
+							Utilities.sendMsg(onlinePlayer, String.format(Language.VOTEKICK_SUCCESS.getTranslation(player), VoteKickCommand.this.playerBeingKicked.getName()));
 						}
-						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ipban -s " + playerToVote.getPlayer().getName() + " 1h Votekicked!");
+						Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ipban -s " + playerToVote.getPlayer().getName() + " 30m Votekicked!");
 					}
 
 					VoteKickCommand.this.votedYes.clear();
 					VoteKickCommand.this.votedNo.clear();
 					VoteKickCommand.this.isVoteOnGoing = false;
 					VoteKickCommand.this.playerBeingKicked = null;
+					Bukkit.broadcastMessage("Pososto nai/players/ = " + percentage);
 				}
 			}.runTaskLater(SurvivalEUPlugin.instance, Utilities.TicksDuration.SECOND.ticks * 60);
 
@@ -101,11 +104,10 @@ public final class VoteKickCommand extends PluginActivity {
 	@Subcommand("yes|y")
 	private void onYes(final Player player) {
 		if (!this.isVoteOnGoing) {
-			Utilities.sendMsg(player, Language.VOTEKICK_NOT_ONGOING.getTranslation(player));
-			return;
+			throw new ConditionFailedException(Language.VOTEKICK_NOT_ONGOING.getTranslation(player));
 		}
 		if (player.equals(this.playerBeingKicked)) {
-			Utilities.sendMsg(player, Language.VOTEKICK_CANT_VOTE_FOR_SELF.getTranslation(player));
+			throw new ConditionFailedException(Language.VOTEKICK_CANT_VOTE_FOR_SELF.getTranslation(player));
 		}
 		if (!this.votedYes.contains(player) && !this.votedNo.contains(player)) {
 			this.votedYes.add(player);
@@ -118,11 +120,10 @@ public final class VoteKickCommand extends PluginActivity {
 	@Subcommand("no|n")
 	private void onNo(final Player player) {
 		if (!this.isVoteOnGoing) {
-			Utilities.sendMsg(player, Language.VOTEKICK_NOT_ONGOING.getTranslation(player));
-			return;
+			throw new ConditionFailedException(Language.VOTEKICK_NOT_ONGOING.getTranslation(player));
 		}
 		if (player.equals(this.playerBeingKicked)) {
-			Utilities.sendMsg(player, Language.VOTEKICK_CANT_VOTE_FOR_SELF.getTranslation(player));
+			throw new ConditionFailedException(Language.VOTEKICK_CANT_VOTE_FOR_SELF.getTranslation(player));
 		}
 
 		if (!this.votedYes.contains(player) && !this.votedNo.contains(player)) {

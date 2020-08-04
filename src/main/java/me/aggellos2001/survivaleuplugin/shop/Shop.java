@@ -1,14 +1,9 @@
 package me.aggellos2001.survivaleuplugin.shop;
 
-import co.aikar.commands.ConditionFailedException;
-import co.aikar.commands.annotation.*;
-import me.aggellos2001.survivaleuplugin.hooks.EssentialsXHook;
-import me.aggellos2001.survivaleuplugin.languages.Language;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Default;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
-import me.aggellos2001.survivaleuplugin.utils.Utilities;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 
 @CommandAlias("shop")

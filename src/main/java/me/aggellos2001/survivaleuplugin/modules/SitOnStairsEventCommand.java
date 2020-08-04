@@ -1,8 +1,6 @@
 package me.aggellos2001.survivaleuplugin.modules;
 
 
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Default;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
