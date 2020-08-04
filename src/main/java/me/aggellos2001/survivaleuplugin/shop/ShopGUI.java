@@ -24,15 +24,8 @@ import java.util.Set;
 public class ShopGUI extends PluginActivity {
 
 
-	//cache shop inventories
-//	public static final HashMap<Player, ShopGUI> shopMap = new HashMap<>();
-//	public static final HashMap<Player, ShopGUI> shopPurchaseMap = new HashMap<>();
 	public static final Set<Inventory> mainShopUISet = new HashSet<>();
 	public static final Set<Inventory> purchaseShopUISet = new HashSet<>();
-
-//	private Inventory shopInventory;
-//	private int currentPage = 0;
-
 
 	@Override
 	public boolean hasEvents() {
