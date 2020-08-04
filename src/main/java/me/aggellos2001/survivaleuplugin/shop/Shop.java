@@ -190,8 +190,8 @@ public final class Shop extends PluginActivity {
 
 		//</editor-fold>
 
-		private final double buy;
-		private final double sell;
+		protected final double buy;
+		protected final double sell;
 
 		ShopPrices(final double buy, final double sell) {
 			this.buy = buy;
@@ -203,83 +203,84 @@ public final class Shop extends PluginActivity {
 
 	@Default
 	private void onCommand(Player player) {
-		Utilities.sendMsg(player, Language.SHOP_INFO.getTranslation(player));
+		//Utilities.sendMsg(player, Language.SHOP_INFO.getTranslation(player));
+		ShopGUI.openInventory(player);
 	}
 
-	@Subcommand("buy")
-	@CommandCompletion("@shopItems 1")
-	private void buyItem(Player player, ShopPrices item, @Optional Integer amount) {
-
-		if (item.buy == 0) {
-			throw new ConditionFailedException(Language.SHOP_CANNOT_BUY.getTranslation(player));
-		}
-
-		if (amount == null) {
-			Utilities.sendMsg(player, String.format(Language.SHOP_PRICES_BUY.getTranslation(player), item.buy));
-			return;
-		}
-
-		if (amount == 0) {
-			throw new ConditionFailedException(String.format(Language.SHOP_BUY_ZERO.getTranslation(player),item.name()));
-		}
-
-		final var amountToPay = item.buy * amount;
-		if (!EssentialsXHook.hasEnough(player, amountToPay)) {
-			throw new ConditionFailedException(Language.NO_MONEY.getTranslation(player));
-		}
-		EssentialsXHook.subtractPlayerBalance(player, amountToPay);
-		final var map = player.getInventory().addItem(new ItemStack(Material.valueOf(item.name()), amount));
-		Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), amount, item.name(), amountToPay));
-
-		//if ivnentory was full
-		if (!map.isEmpty()) {
-			map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
-			Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
-		}
-	}
-
-	@Subcommand("sell")
-	@CommandCompletion("@shopItems hand|inventory")
-	private void sell(Player player, ShopPrices item, @Optional String handOrInventory) {
-
-		if (handOrInventory == null) {
-			Utilities.sendMsg(player, String.format(Language.SHOP_PRICES_SELL.getTranslation(player), item.sell));
-			return;
-		}
-
-		if (item.sell == 0) {
-			throw new ConditionFailedException(Language.SHOP_CANNOT_SELL.getTranslation(player));
-
-		}
-		if (handOrInventory.equalsIgnoreCase("hand")){
-			final var itemInHand = player.getInventory().getItemInMainHand();
-			if (!itemInHand.getType().equals(Material.valueOf(item.name()))) {
-				throw new ConditionFailedException(String.format(Language.SHOP_SELL_HAND_DIFFERENT_ITEM.getTranslation(player), Material.valueOf(item.name()), itemInHand.getType()));
-			}
-			final var amountToGetPaid = item.sell * itemInHand.getAmount();
-			player.getInventory().setItemInMainHand(null);
-			EssentialsXHook.addPlayerBalance(player, amountToGetPaid);
-			Utilities.sendMsg(player, String.format(Language.SHOP_SELL_SUCCESS.getTranslation(player), itemInHand.getAmount(), item.name(), amountToGetPaid));
-		}
-		if (handOrInventory.equalsIgnoreCase("inventory")) {
-			final var inv = player.getInventory();
-			var amountOfItemOnInventory = 0;
-			//check every slot for the item
-			for (final ItemStack slot : inv.getContents()) {
-				//slot may be null
-				if (slot == null) continue;
-
-				if (slot.getType().equals(Material.valueOf(item.name()))) {
-					amountOfItemOnInventory += slot.getAmount();
-					slot.setAmount(-1);
-				}
-			}
-			if (amountOfItemOnInventory == 0) {
-				throw new ConditionFailedException(String.format(Language.SHOP_SELL_INVENTORY_NO_ITEM.getTranslation(player), item.name()));
-			}
-			final var amountToGetPaid = amountOfItemOnInventory * item.sell;
-			EssentialsXHook.addPlayerBalance(player, amountToGetPaid);
-			Utilities.sendMsg(player, String.format(Language.SHOP_SELL_SUCCESS.getTranslation(player), amountOfItemOnInventory, item.name(), Math.round(amountToGetPaid * 100.0) / 100.0));
-		}
-	}
+//	@Subcommand("buy")
+//	@CommandCompletion("@shopItems 1")
+//	private void buyItem(Player player, ShopPrices item, @Optional Integer amount) {
+//
+//		if (item.buy == 0) {
+//			throw new ConditionFailedException(Language.SHOP_CANNOT_BUY.getTranslation(player));
+//		}
+//
+//		if (amount == null) {
+//			Utilities.sendMsg(player, String.format(Language.SHOP_PRICES_BUY.getTranslation(player), item.buy));
+//			return;
+//		}
+//
+//		if (amount == 0) {
+//			throw new ConditionFailedException(String.format(Language.SHOP_BUY_ZERO.getTranslation(player),item.name()));
+//		}
+//
+//		final var amountToPay = item.buy * amount;
+//		if (!EssentialsXHook.hasEnough(player, amountToPay)) {
+//			throw new ConditionFailedException(Language.NO_MONEY.getTranslation(player));
+//		}
+//		EssentialsXHook.subtractPlayerBalance(player, amountToPay);
+//		final var map = player.getInventory().addItem(new ItemStack(Material.valueOf(item.name()), amount));
+//		Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), amount, item.name(), amountToPay));
+//
+//		//if ivnentory was full
+//		if (!map.isEmpty()) {
+//			map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
+//			Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
+//		}
+//	}
+//
+//	@Subcommand("sell")
+//	@CommandCompletion("@shopItems hand|inventory")
+//	private void sell(Player player, ShopPrices item, @Optional String handOrInventory) {
+//
+//		if (handOrInventory == null) {
+//			Utilities.sendMsg(player, String.format(Language.SHOP_PRICES_SELL.getTranslation(player), item.sell));
+//			return;
+//		}
+//
+//		if (item.sell == 0) {
+//			throw new ConditionFailedException(Language.SHOP_CANNOT_SELL.getTranslation(player));
+//
+//		}
+//		if (handOrInventory.equalsIgnoreCase("hand")){
+//			final var itemInHand = player.getInventory().getItemInMainHand();
+//			if (!itemInHand.getType().equals(Material.valueOf(item.name()))) {
+//				throw new ConditionFailedException(String.format(Language.SHOP_SELL_HAND_DIFFERENT_ITEM.getTranslation(player), Material.valueOf(item.name()), itemInHand.getType()));
+//			}
+//			final var amountToGetPaid = item.sell * itemInHand.getAmount();
+//			player.getInventory().setItemInMainHand(null);
+//			EssentialsXHook.addPlayerBalance(player, amountToGetPaid);
+//			Utilities.sendMsg(player, String.format(Language.SHOP_SELL_SUCCESS.getTranslation(player), itemInHand.getAmount(), item.name(), amountToGetPaid));
+//		}
+//		if (handOrInventory.equalsIgnoreCase("inventory")) {
+//			final var inv = player.getInventory();
+//			var amountOfItemOnInventory = 0;
+//			//check every slot for the item
+//			for (final ItemStack slot : inv.getContents()) {
+//				//slot may be null
+//				if (slot == null) continue;
+//
+//				if (slot.getType().equals(Material.valueOf(item.name()))) {
+//					amountOfItemOnInventory += slot.getAmount();
+//					slot.setAmount(-1);
+//				}
+//			}
+//			if (amountOfItemOnInventory == 0) {
+//				throw new ConditionFailedException(String.format(Language.SHOP_SELL_INVENTORY_NO_ITEM.getTranslation(player), item.name()));
+//			}
+//			final var amountToGetPaid = amountOfItemOnInventory * item.sell;
+//			EssentialsXHook.addPlayerBalance(player, amountToGetPaid);
+//			Utilities.sendMsg(player, String.format(Language.SHOP_SELL_SUCCESS.getTranslation(player), amountOfItemOnInventory, item.name(), Math.round(amountToGetPaid * 100.0) / 100.0));
+//		}
+//	}
 }
