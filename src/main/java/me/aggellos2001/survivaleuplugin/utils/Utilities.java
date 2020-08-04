@@ -14,7 +14,7 @@ public class Utilities {
 	/**
 	 * Simple way to get tick values from real time values.
 	 */
-	public enum  TicksDuration {
+	public enum TicksDuration {
 
 		SECOND(20),
 		MINUTE(1200),
@@ -29,26 +29,49 @@ public class Utilities {
 			this.ticks = ticks;
 		}
 
-		public int getTime(int duration){
+		public int getTime(int duration) {
 			return this.ticks * duration;
 		}
 	}
 
 	public static String colorize(final String s) {
-		return ChatColor.translateAlternateColorCodes('&', s);
+		var translateLegacy = ChatColor.translateAlternateColorCodes('&', s);
+		return translateHexColorCodes(translateLegacy);
 	}
 
 	public static String colorize(final String s, final boolean addPrefix) {
-		if (addPrefix)
-			return ChatColor.translateAlternateColorCodes('&', "&6[&bSurvivalEU&6]&r " + s);
-		else return colorize(s);
+		if (addPrefix) {
+			var translateLegacy = ChatColor.translateAlternateColorCodes('&', "&6[&bSurvivalEU&6]&r " + s);
+			return translateHexColorCodes(translateLegacy);
+		} else return colorize(s);
 	}
 
-	/**	Get HEX colors
+	public static String translateHexColorCodes(String string) {
+		var tokens = string.split("\\s+");
+		for (int i = 0; i < tokens.length; i++) {
+			if (tokens[i].startsWith("#")) {
+				if (tokens[i].length() < 7) {
+					continue;
+				}
+				if (tokens[i].length() == 7) {
+					tokens[i] = getHexColor(tokens[i]).toString();
+				} else {
+					var tokenToTranslate = tokens[i].substring(0, 7);
+					var restOfToken = tokens[i].substring(7);
+					tokens[i] = getHexColor(tokenToTranslate) + restOfToken;
+				}
+			}
+		}
+		return String.join(" ", tokens);
+	}
+
+	/**
+	 * Get HEX colors
+	 *
 	 * @since MC 1.16
-	 *  Uses chatcolor api from bungee to return the color
+	 * Uses chatcolor api from bungee to return the color
 	 */
-	public static net.md_5.bungee.api.ChatColor getHexColor(String hexColorCode){
+	public static net.md_5.bungee.api.ChatColor getHexColor(String hexColorCode) {
 		return net.md_5.bungee.api.ChatColor.of(hexColorCode);
 	}
 
@@ -86,7 +109,7 @@ public class Utilities {
 		return "&r \n";
 	}
 
-	public static void sendMsg(CommandSender sender, String message){
-		sender.sendMessage(colorize(message,true));
+	public static void sendMsg(CommandSender sender, String message) {
+		sender.sendMessage(colorize(message, true));
 	}
 }
