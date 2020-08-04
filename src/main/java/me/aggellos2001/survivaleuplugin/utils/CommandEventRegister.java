@@ -7,6 +7,7 @@ import me.aggellos2001.survivaleuplugin.modules.*;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
+import me.aggellos2001.survivaleuplugin.shop.ShopGUI;
 import org.bukkit.Bukkit;
 
 public final class CommandEventRegister {
@@ -54,6 +55,7 @@ public final class CommandEventRegister {
 				new PlayerDataCommand(),
 				new VoteKickCommand(),
 				new KeepInventoryEvent(),
+				new ShopGUI(),
 		};
 
 		for (final PluginActivity activity : commandsEvents) {

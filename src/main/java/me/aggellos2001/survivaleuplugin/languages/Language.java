@@ -79,7 +79,7 @@ public enum Language {
 	VOTE_BROADCAST("&aPlayer&6 %s &avoted for the server!", "&aΟ παίκτης&6 %s &aέκανε vote!"),
 	SIT_ON_STAIRS_ENABLED("&aYou can now sit on any stair blocks by right click them!", "&aΤώρα μπορείς να κάθεσαι στις σκάλες με δεξί κλίκ πάνω τους!"),
 	SIT_ON_STAIRS_DISABLED("&cYou will no longer sit on stair blocks when right clicking them", "&cΤώρα δεν μπορείς να κάθεσαι στις σκάλες με δεξί κλίκ πάνω τους!"),
-	SIT_ON_STAIRS_NOTIFY("&eYou can disable sitting on a stair blocks any time by doing /sitonstairs ", "&eΜπορείς να απενεργοποιήσεις να κάθεσε στις σκάλες με την εντολή: /sitonstairs"),
+	SIT_ON_STAIRS_NOTIFY("&eYou can disable sitting on a stair blocks any time by doing /settings sitonstairs ", "&eΜπορείς να απενεργοποιήσεις να κάθεσε στις σκάλες με την εντολή: /settings sitonstairs"),
 	SIT_ON_STAIRS_DELAY("&cPlease wait %s seconds before sitting again!", "&cΠερίμενε %s δευτερόλεπτα πριν ξανακαθήσεις!"),
 	ADVERTISEMENT("&aRemember to /vote once a day. Do you want a rank? Do /donation for more info! Join our discord server /discord", "&aΜην ξεχνάς να κάνεις /vote. Ενδιαφέρεσαι για rank? Κάνε /donation για πληροφορίες! Μπες στο Discord μας /discord"),
 	PAYSELF_EXPLOIT("&cYou cannot send money to accounts with the same IP!", "&cΔεν μπορείς να στείλεις λεφτά σε account με στην ίδια IP!"),
@@ -153,7 +153,7 @@ public enum Language {
 					"&cΟ server κολλάει λίγο. Περίμενε λίγα λεπτά και συνήθως σταματάει να κολλάει!"
 	),
 	VOTEKICK_STARTED(Utilities.getHexColor("#ffc403") +
-			"&lA votekick has started for player &e %s " + Utilities.getHexColor("#ffc403") + "&lby&e %s\n" +
+			"&lA votekick has been started for player &e %s " + Utilities.getHexColor("#ffc403") + "&lby&e %s\n" +
 			Utilities.getHexColor("#ffc403") + "/votekick yes\n" +
 			Utilities.getHexColor("#ff0314") + "/votekick no\n" +
 			"&eVote ends in 60 seconds!",
