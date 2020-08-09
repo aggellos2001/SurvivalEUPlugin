@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.aggellos2001.survivaleuplugin'
-version '1.16.1-1'
+version '1.16.1-2'
 
 sourceCompatibility = targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
