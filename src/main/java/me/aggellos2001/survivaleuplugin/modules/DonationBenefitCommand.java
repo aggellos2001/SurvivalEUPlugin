@@ -7,6 +7,7 @@ import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -64,18 +65,20 @@ public final class DonationBenefitCommand extends PluginActivity {
 			new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0),
 	};
 
-	private void givePotions(final Player player, final LuckPermsHook.Ranks playerRank) {
-		if (playerRank.equals(LuckPermsHook.Ranks.EMERALD)) {
+	private void givePotions(final Player player) {
+		if (player.hasPermission("group.emerald")) {
 			player.addPotionEffects(Arrays.asList(this.EMERALD_EFFECTS));
-
+			return;
 		}
-		if (playerRank.equals(LuckPermsHook.Ranks.DIAMOND)) {
+		if (player.hasPermission("group.diamond")) {
 			player.addPotionEffects(Arrays.asList(this.DIAMOND_EFFECTS));
+			return;
 		}
-		if (playerRank.equals(LuckPermsHook.Ranks.IRON)) {
+		if (player.hasPermission("group.iron")) {
 			player.addPotionEffects(Arrays.asList(this.IRON_EFFECTS));
+			return;
 		}
-		if (playerRank.equals(LuckPermsHook.Ranks.COAL)) {
+		if (player.hasPermission("group.coal")) {
 			player.addPotionEffects(Arrays.asList(this.COAL_EFFECTS));
 		}
 	}
@@ -98,27 +101,31 @@ public final class DonationBenefitCommand extends PluginActivity {
 
 	@Subcommand("potion|potions")
 	private void onPotions(final Player player) {
-		final var playerRank = LuckPermsHook.getPlayerRank(player);
-		if (playerRank.equals(LuckPermsHook.Ranks.DIAMOND) || playerRank.equals(LuckPermsHook.Ranks.EMERALD) || playerRank.equals(LuckPermsHook.Ranks.IRON) || playerRank.equals(LuckPermsHook.Ranks.COAL)) {
+		if (
+				!player.hasPermission("group.emerald") &
+						!player.hasPermission("group.diamond") &
+						!player.hasPermission("group.iron") &
+						!player.hasPermission("group.coal")
+		) {
+			Utilities.sendMsg(player, Language.DONATION_NOT_DONATED_ACCESS_DENIED.getTranslation(player));
+			return;
+		}
 
-			if (PvPCommand.hasPvPOn(player)) {
-				Utilities.sendMsg(player, Language.DONATION_POTION_ENABLE_FAIL_PVP.getTranslation(player));
-			}
+		if (PvPCommand.hasPvPOn(player)) {
+			Utilities.sendMsg(player, Language.DONATION_POTION_ENABLE_FAIL_PVP.getTranslation(player));
+		}
 
-			if (HAS_EFFECTS_ON.contains(player)) {
-				for (final PotionEffect potionEffect : player.getActivePotionEffects()) {
-					final var type = potionEffect.getType();
-					player.removePotionEffect(type);
-				}
-				Utilities.sendMsg(player, Language.DONATION_POTIONS_DISABLED.getTranslation(player));
-				HAS_EFFECTS_ON.remove(player);
-			} else {
-				givePotions(player, playerRank);
-				HAS_EFFECTS_ON.add(player);
-				Utilities.sendMsg(player,Language.DONATION_POTIONS_ENABLED.getTranslation(player));
+		if (HAS_EFFECTS_ON.contains(player)) {
+			for (final PotionEffect potionEffect : player.getActivePotionEffects()) {
+				final var type = potionEffect.getType();
+				player.removePotionEffect(type);
 			}
+			Utilities.sendMsg(player, Language.DONATION_POTIONS_DISABLED.getTranslation(player));
+			HAS_EFFECTS_ON.remove(player);
 		} else {
-			Utilities.sendMsg(player,Language.DONATION_NOT_DONATED_ACCESS_DENIED.getTranslation(player));
+			givePotions(player);
+			HAS_EFFECTS_ON.add(player);
+			Utilities.sendMsg(player, Language.DONATION_POTIONS_ENABLED.getTranslation(player));
 		}
 	}
 }

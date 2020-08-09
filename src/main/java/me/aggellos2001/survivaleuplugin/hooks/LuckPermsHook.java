@@ -4,6 +4,8 @@ import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +30,8 @@ public final class LuckPermsHook extends PluginActivity {
 	public static final LuckPermsHook INSTANCE = new LuckPermsHook();
 
 	private static final HashMap<Player, Ranks> PERM_CACHE = new HashMap<>();
+
+	public static LuckPerms permissionAPI;
 
 	private LuckPermsHook() {
 	}
@@ -105,15 +109,11 @@ public final class LuckPermsHook extends PluginActivity {
 	}
 
 	public static void setup() {
-		final LuckPerms api;
 		if (SurvivalEUPlugin.instance.getServer().getPluginManager().getPlugin("LuckPerms") == null) {
-			api = null;
+			permissionAPI = null;
 			throw new IllegalStateException("Luck Perms API initialization unsuccessful! Use Luck Perms please!");
 		} else {
-			final var provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-			if (provider != null) {
-				api = provider.getProvider();
-			}
+			permissionAPI = LuckPermsProvider.get();
 		}
 	}
 
@@ -135,6 +135,4 @@ public final class LuckPermsHook extends PluginActivity {
 	public static Ranks getPlayerRank(final Player player) {
 		return PERM_CACHE.getOrDefault(player, Ranks.DEFAULT);
 	}
-
-
 }
