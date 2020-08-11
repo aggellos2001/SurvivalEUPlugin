@@ -8,13 +8,14 @@ import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
 import me.aggellos2001.survivaleuplugin.shop.ShopGUI;
+import me.aggellos2001.survivaleuplugin.ui.PlayMusicCommand;
 import org.bukkit.Bukkit;
 
 public final class CommandEventRegister {
 
 	private static final SurvivalEUPlugin instance = SurvivalEUPlugin.instance;
 
-	public static void registerCommandsAndListeners() {
+	public static void registerCommandsAndListeners()  {
 
 		CustomCommandConditions.registerConditions();
 
@@ -56,6 +57,7 @@ public final class CommandEventRegister {
 				new VoteKickCommand(),
 				new KeepInventoryEvent(),
 				new ShopGUI(),
+				new PlayMusicCommand(),
 		};
 
 		for (final PluginActivity activity : commandsEvents) {
