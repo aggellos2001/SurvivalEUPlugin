@@ -4,7 +4,6 @@ import me.aggellos2001.survivaleuplugin.hooks.EssentialsXHook;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +13,14 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import static me.aggellos2001.survivaleuplugin.utils.Utilities.createRenamedItemStack;
+import static org.bukkit.Bukkit.createInventory;
+
 
 public class ShopGUI extends PluginActivity {
 
@@ -38,7 +39,7 @@ public class ShopGUI extends PluginActivity {
 	}
 
 	public ShopGUI() {
-		//Possible sizes 9, 18, 27, 36, 45 ,54
+		//Possible sizes 9, 18, 27, 36, 45,54
 	}
 
 
@@ -52,7 +53,7 @@ public class ShopGUI extends PluginActivity {
 		if (player == null) return;
 
 		if (inventory == null) {
-			inventory = Bukkit.createInventory(null, 54, Utilities.colorize(
+			inventory = createInventory(null, 54, Utilities.colorize(
 					"#02A122&lSurvivalEU &e&lShop"));
 		}
 
@@ -87,22 +88,13 @@ public class ShopGUI extends PluginActivity {
 		}
 
 		//adding menu items
-		final var previousPage = new ItemStack(Material.PAPER);
-		var meta = previousPage.getItemMeta();
-		meta.setDisplayName(Utilities.colorize("#e30000Previous page"));
-		previousPage.setItemMeta(meta);
-		final var nextPage = new ItemStack(Material.PAPER);
-		meta = nextPage.getItemMeta();
-		meta.setDisplayName(Utilities.colorize("#02a147Next page"));
-		nextPage.setItemMeta(meta);
-		final var homeButton = new ItemStack(Material.BOOK);
-		meta = homeButton.getItemMeta();
-		meta.setDisplayName(Utilities.colorize("#1a6debHome"));
-		homeButton.setItemMeta(meta);
-		final var exitButton = new ItemStack(Material.BARRIER);
-		meta = exitButton.getItemMeta();
-		meta.setDisplayName(Utilities.colorize("#e30000&lExit"));
-		exitButton.setItemMeta(meta);
+		final var previousPage = createRenamedItemStack(Material.PAPER, "#e30000Previous page");
+
+		final var nextPage = createRenamedItemStack(Material.PAPER, "#02a147Next page");
+
+		final var homeButton = createRenamedItemStack(Material.BOOK, "#1a6debHome");
+
+		final var exitButton = createRenamedItemStack(Material.BARRIER, "#e30000&lExit");
 
 
 		inventory.setItem(48, previousPage);
@@ -123,31 +115,22 @@ public class ShopGUI extends PluginActivity {
 	//========================== purchase menu ===========================
 	public static void openPurchaseMenu(final Player player, final Material material) {
 
-		final var inventory = Bukkit.createInventory(null, 9, Utilities.colorize("#02A122&lSurvivalEU &e&lShop"));
+		final var inventory = createInventory(null, 9, Utilities.colorize("#02A122&lSurvivalEU &e&lShop"));
 
 
-		ItemMeta meta;
 
 		//back button
 		{
-			final var backButton = new ItemStack(Material.OAK_DOOR, 1);
-			meta = backButton.getItemMeta();
-			meta.setDisplayName(Utilities.colorize("#f6ff00&lBack"));
-			backButton.setItemMeta(meta);
+			final var backButton = createRenamedItemStack(Material.OAK_DOOR, "#f6ff00&lBack");
 
 			inventory.setItem(0, backButton);
 		}
+
 		{
 			//exit button
-			final var exitButton = new ItemStack(Material.BARRIER);
-			meta = exitButton.getItemMeta();
-			meta.setDisplayName(Utilities.colorize("#e30000&lExit"));
-			exitButton.setItemMeta(meta);
-
+			final var exitButton = createRenamedItemStack(Material.BARRIER, "#e30000&lExit");
 
 			inventory.setItem(8, new ItemStack(exitButton));
-
-
 		}
 
 		//=================  BUY, SELL and Middle Buttons  ===================
@@ -155,59 +138,47 @@ public class ShopGUI extends PluginActivity {
 		final var shopPrice = Shop.ShopPrices.valueOf(material.name());
 
 		//set middle slot with relevant material
-		final var itemToBeAdded = new ItemStack(material);
-		itemToBeAdded.setLore(
-				Arrays.asList(Utilities.colorize("#1eff00Buy price: #fffb00" + shopPrice.buy + " #1dbf00$"),
-						Utilities.colorize("#e30000Sell price: #fffb00" + shopPrice.sell + " #1dbf00$"))
-		);
+		final var itemToBeAdded = createRenamedItemStack(material, null,
+				"#1eff00Buy price: #fffb00" + shopPrice.buy + " #1dbf00$",
+				"#e30000Sell price: #fffb00" + shopPrice.sell + " #1dbf00$");
+
 		inventory.setItem(4, itemToBeAdded);
 
 
 		//buy 1
 		{
-			final var buyOne = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
-			final var buyOnePrice = shopPrice.buy;
-			meta = buyOne.getItemMeta();
-			meta.setDisplayName(Utilities.colorize("#1eff00Buy&l 1x"));
-			meta.setLore(Collections.singletonList(Utilities.colorize("#fffb00" + buyOnePrice + " #1dbf00$")));
-			buyOne.setItemMeta(meta);
+			final var buyOne = createRenamedItemStack(Material.GREEN_STAINED_GLASS, "#1eff00Buy&l 1x",
+					"#fffb00" + shopPrice.buy + " #1dbf00$");
 
 			inventory.setItem(2, buyOne);
 		}
 
 		//buy 64
 		{
-			final var buyFullStack = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
-			final var buyFullStackPrice = shopPrice.buy * maxStackOfMaterial;
-			meta = buyFullStack.getItemMeta();
-			meta.setDisplayName(Utilities.colorize("#1eff00Buy&l " + maxStackOfMaterial + "x"));
-			meta.setLore(Collections.singletonList(Utilities.colorize("#fffb00" + buyFullStackPrice + " #1dbf00$")));
-			buyFullStack.setItemMeta(meta);
+
+			final var buyFullStack = createRenamedItemStack(Material.GREEN_STAINED_GLASS,
+					"#1eff00Buy&l " + maxStackOfMaterial + "x",
+					"#fffb00" + shopPrice.buy * maxStackOfMaterial + " #1dbf00$"
+			);
 
 			inventory.setItem(3, buyFullStack);
 		}
 
 		//sell 1
 		{
-			final var sellOne = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-			final var amountOfItemOnInventory = 0;
-			meta = sellOne.getItemMeta();
-			meta.setDisplayName(Utilities.colorize("#e30000Sell&l 1x"));
-			meta.setLore(Collections.singletonList(Utilities.colorize("#fffb00" + shopPrice.sell + " #1dbf00$")));
-			sellOne.setItemMeta(meta);
+			final var sellOne = createRenamedItemStack(Material.RED_STAINED_GLASS_PANE,
+					"#e30000Sell&l 1x",
+					"#fffb00" + shopPrice.sell + " #1dbf00$");
 
-			inventory.setItem(5, new ItemStack(sellOne));
+			inventory.setItem(5, sellOne);
 		}
 		//sell all from inventory
 		{
-			final var sellInventory = new ItemStack(Material.RED_STAINED_GLASS_PANE);
-			final var amountOfItemOnInventory = 0;
-			meta = sellInventory.getItemMeta();
-			meta.setDisplayName(Utilities.colorize("#e30000Sell&l Inventory"));
-			meta.setLore(Collections.singletonList(Utilities.colorize("#fffb00" + shopPrice.sell + " #1dbf00$ #fffb00each ")));
-			sellInventory.setItemMeta(meta);
+			final var sellInventory = createRenamedItemStack(Material.RED_STAINED_GLASS_PANE,
+					"#e30000Sell&l Inventory",
+					"#fffb00" + shopPrice.sell + " #1dbf00$ #fffb00each ");
 
-			inventory.setItem(6, new ItemStack(sellInventory));
+			inventory.setItem(6, sellInventory);
 		}
 
 
@@ -231,7 +202,7 @@ public class ShopGUI extends PluginActivity {
 
 		final var player = ((Player) event.getWhoClicked());
 		if (event.getRawSlot() > inventory.getSize())
-			return; //fixes NullPointerException from the line getItem(event.getRawSlot() if >inv size
+			return; //fixes NullPointerException from the line getItem(event.getRawSlot() if >inv size)
 		final var clickedItem = event.getInventory().getItem(event.getRawSlot());
 
 
@@ -296,9 +267,11 @@ public class ShopGUI extends PluginActivity {
 			return;
 		}
 		//Buy - sell handlers
-		if (inventory.getItem(4) == null) return;
-		final var shopPrice = Shop.ShopPrices.valueOf(inventory.getItem(4).getType().name());
-		final var material = inventory.getItem(4).getType();
+		var clickedItem = inventory.getItem(4);
+		if (clickedItem == null) return;
+
+		final var shopPrice = Shop.ShopPrices.valueOf(clickedItem.getType().name());
+		final var material = clickedItem.getType();
 		final var maxStack = Material.valueOf(shopPrice.name()).getMaxStackSize();
 
 		//buy 1 button
