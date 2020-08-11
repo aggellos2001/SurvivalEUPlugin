@@ -2,12 +2,16 @@ package me.aggellos2001.survivaleuplugin.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class Utilities {
 
@@ -25,29 +29,29 @@ public class Utilities {
 
 		public final int ticks;
 
-		TicksDuration(int ticks) {
+		TicksDuration(final int ticks) {
 			this.ticks = ticks;
 		}
 
-		public int getTime(int duration) {
+		public int getTime(final int duration) {
 			return this.ticks * duration;
 		}
 	}
 
 	public static String colorize(final String s) {
-		var translateLegacy = ChatColor.translateAlternateColorCodes('&', s);
+		final var translateLegacy = ChatColor.translateAlternateColorCodes('&', s);
 		return translateHexColorCodes(translateLegacy);
 	}
 
 	public static String colorize(final String s, final boolean addPrefix) {
 		if (addPrefix) {
-			var translateLegacy = ChatColor.translateAlternateColorCodes('&', "&6[&bSurvivalEU&6]&r " + s);
+			final var translateLegacy = ChatColor.translateAlternateColorCodes('&', "&6[&bSurvivalEU&6]&r " + s);
 			return translateHexColorCodes(translateLegacy);
 		} else return colorize(s);
 	}
 
-	public static String translateHexColorCodes(String string) {
-		var tokens = string.split("\\s+");
+	public static String translateHexColorCodes(final String string) {
+		final var tokens = string.split("\\s+");
 		for (int i = 0; i < tokens.length; i++) {
 			if (tokens[i].startsWith("#")) {
 				if (tokens[i].length() < 7) {
@@ -56,8 +60,8 @@ public class Utilities {
 				if (tokens[i].length() == 7) {
 					tokens[i] = getHexColor(tokens[i]).toString();
 				} else {
-					var tokenToTranslate = tokens[i].substring(0, 7);
-					var restOfToken = tokens[i].substring(7);
+					final var tokenToTranslate = tokens[i].substring(0, 7);
+					final var restOfToken = tokens[i].substring(7);
 					tokens[i] = getHexColor(tokenToTranslate) + restOfToken;
 				}
 			}
@@ -71,7 +75,7 @@ public class Utilities {
 	 * @since MC 1.16
 	 * Uses chatcolor api from bungee to return the color
 	 */
-	public static net.md_5.bungee.api.ChatColor getHexColor(String hexColorCode) {
+	public static net.md_5.bungee.api.ChatColor getHexColor(final String hexColorCode) {
 		return net.md_5.bungee.api.ChatColor.of(hexColorCode);
 	}
 
@@ -109,7 +113,39 @@ public class Utilities {
 		return "&r \n";
 	}
 
-	public static void sendMsg(CommandSender sender, String message) {
+	public static void sendMsg(final CommandSender sender, final String message) {
 		sender.sendMessage(colorize(message, true));
+	}
+
+	public static ItemStack createRenamedItemStack(final Material material, final String displayName) {
+		final var stack = new ItemStack(material);
+		final ItemMeta meta = stack.getItemMeta();
+		meta.setDisplayName(colorize(displayName));
+		stack.setItemMeta(meta);
+		return stack;
+	}
+
+	public static ItemStack createRenamedItemStack(final Material material, final String displayName, String... lore) {
+		final var stack = new ItemStack(material);
+		final ItemMeta meta = stack.getItemMeta();
+		if (displayName != null)
+			meta.setDisplayName(colorize(displayName));
+		if (lore != null) {
+			var colorizedLore = new ArrayList<String>();
+			for (String line : lore) {
+				if (line == null || line.equals("null")) {
+					meta.addItemFlags(ItemFlag.values());
+					colorizedLore = null;
+					break;
+				}
+				colorizedLore.add(colorize(line));
+			}
+			meta.setLore(colorizedLore);
+		} else {
+			meta.addItemFlags(ItemFlag.values());
+			meta.setLore(null);
+		}
+		stack.setItemMeta(meta);
+		return stack;
 	}
 }
