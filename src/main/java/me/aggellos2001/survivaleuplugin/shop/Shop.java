@@ -9,15 +9,9 @@ import org.bukkit.entity.Player;
 @CommandAlias("shop")
 public final class Shop extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
 
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
+
+
 
 	public enum ShopPrices {
 		//<editor-fold desc="Prices" defaultstate="collapsed">

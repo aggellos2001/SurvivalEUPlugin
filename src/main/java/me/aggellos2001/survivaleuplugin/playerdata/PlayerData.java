@@ -1,6 +1,7 @@
 package me.aggellos2001.survivaleuplugin.playerdata;
 
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -14,39 +15,34 @@ import java.util.UUID;
  */
 public final class PlayerData {
 
-	protected static final Map<UUID, PlayerData> PLAYER_DATA = new HashMap<>();
+	private static final Map<UUID, PlayerData> PLAYER_DATA = new HashMap<>();
 
 	protected static final PlayerData DEFAULT = new PlayerData();
 
 	protected static final File Directory = new File(Path.of(SurvivalEUPlugin.instance.getDataFolder() + File.separator + "playerData").toUri());
 
-	private boolean keepingInventory;
-	private boolean sittingOnStairs;
+	public boolean keepingInventory;
+	public boolean sittingOnStairs;
+	public boolean pvp;
 
 
 	//no arg constructor for Gson
 	private PlayerData() {
 		this.keepingInventory = true;
 		this.sittingOnStairs = false;
+		this.pvp = false;
 	}
 
-	public boolean isKeepingInventory() {
-		return this.keepingInventory;
+
+	public static PlayerData getPlayerData(Player player) {
+		return PLAYER_DATA.get(player.getUniqueId());
 	}
 
-	public void setKeepingInventory(final boolean keepingInventory) {
-		this.keepingInventory = keepingInventory;
+	public static void updatePlayerData(Player player, PlayerData data) {
+		PLAYER_DATA.put(player.getUniqueId(),data);
 	}
 
-	public boolean isSittingOnStairs() {
-		return this.sittingOnStairs;
-	}
-
-	public void setSittingOnStairs(final boolean sittingOnStairs) {
-		this.sittingOnStairs = sittingOnStairs;
-	}
-
-	public static Map<UUID, PlayerData> getPlayerData() {
-		return PLAYER_DATA;
+	public static void removePlayerData(Player player){
+		PLAYER_DATA.remove(player.getUniqueId());
 	}
 }

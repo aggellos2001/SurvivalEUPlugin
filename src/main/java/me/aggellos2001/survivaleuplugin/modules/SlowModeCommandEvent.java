@@ -20,16 +20,6 @@ import java.util.UUID;
 @CommandPermission("seu.slowmode")
 public final class SlowModeCommandEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private final Map<UUID, Long> LAST_TIME_CHATTED = new HashMap<>();
 
 	@EventHandler(ignoreCancelled = true)

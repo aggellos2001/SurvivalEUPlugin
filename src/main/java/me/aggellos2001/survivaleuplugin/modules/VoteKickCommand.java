@@ -19,16 +19,6 @@ import java.util.Set;
 @CommandPermission("seu.votekick")
 public final class VoteKickCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private static final double percentageToBeKicked = 0.9;
 
 	private final Set<Player> votedYes = new HashSet<>();

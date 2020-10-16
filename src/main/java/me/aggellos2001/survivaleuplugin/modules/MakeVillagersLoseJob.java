@@ -10,16 +10,6 @@ import org.bukkit.inventory.EquipmentSlot;
 
 public class MakeVillagersLoseJob extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerInteractingWithVillager(final PlayerInteractEntityEvent e) {
 

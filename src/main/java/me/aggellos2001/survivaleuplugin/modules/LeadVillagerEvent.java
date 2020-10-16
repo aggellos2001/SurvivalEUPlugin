@@ -11,15 +11,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class LeadVillagerEvent extends PluginActivity {
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
 
 	@EventHandler(ignoreCancelled = true)
 	private void onVillagerClick(final PlayerInteractEntityEvent e) {

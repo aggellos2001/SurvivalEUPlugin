@@ -18,16 +18,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 @CommandPermission("seu.entitylimit")
 public final class EntitySpawningLimitCommandEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	@EventHandler(ignoreCancelled = true)
 	private void onEntitySpawnEvent(final CreatureSpawnEvent e) {
 		if (!e.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.EGG)) {

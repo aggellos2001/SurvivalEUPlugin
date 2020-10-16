@@ -1,5 +1,6 @@
 package me.aggellos2001.survivaleuplugin.utils;
 
+import co.aikar.commands.annotation.CommandAlias;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
@@ -10,12 +11,16 @@ import me.aggellos2001.survivaleuplugin.shop.Shop;
 import me.aggellos2001.survivaleuplugin.shop.ShopGUI;
 import me.aggellos2001.survivaleuplugin.ui.PlayMusicCommand;
 import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 public final class CommandEventRegister {
 
 	private static final SurvivalEUPlugin instance = SurvivalEUPlugin.instance;
 
-	public static void registerCommandsAndListeners()  {
+	public static void registerCommandsAndListeners() {
 
 		CustomCommandConditions.registerConditions();
 
@@ -60,13 +65,16 @@ public final class CommandEventRegister {
 				new PlayMusicCommand(),
 		};
 
-		for (final PluginActivity activity : commandsEvents) {
-			if (activity.hasCommands()) {
-				SurvivalEUPlugin.COMMAND_MANAGER.registerCommand(activity);
+		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {
+
+			if (unregisteredCommandEvent.getClass().isAnnotationPresent(CommandAlias.class)) {
+				SurvivalEUPlugin.COMMAND_MANAGER.registerCommand(unregisteredCommandEvent);
 			}
-			if (activity.hasEvents()) {
-				Bukkit.getServer().getPluginManager().registerEvents(activity, instance);
+
+			if (Arrays.stream(unregisteredCommandEvent.getClass().getDeclaredMethods()).anyMatch(method -> method.isAnnotationPresent(EventHandler.class))){
+				Bukkit.getServer().getPluginManager().registerEvents(unregisteredCommandEvent, instance);
 			}
+
 		}
 	}
 }

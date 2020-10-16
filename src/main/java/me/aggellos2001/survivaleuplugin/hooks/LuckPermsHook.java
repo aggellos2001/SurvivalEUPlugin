@@ -17,16 +17,6 @@ import java.util.HashMap;
 
 public final class LuckPermsHook extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	public static final LuckPermsHook INSTANCE = new LuckPermsHook();
 
 	private static final HashMap<Player, Ranks> PERM_CACHE = new HashMap<>();
@@ -124,6 +114,13 @@ public final class LuckPermsHook extends PluginActivity {
 		if (player.getName().equals("GGRLX")) {
 			return Ranks.COOWNER;
 		}
+		if (player.getName().equals("alexandroulis")){
+			return Ranks.ADMINISTRATOR;
+		}
+		if (player.getName().equals("SchachShaolin78")){
+			return Ranks.ADMINISTRATOR;
+		}
+
 		for (final String group : Ranks.POSSIBLE_GROUPS) {
 			if (player.hasPermission("group." + group)) {
 				return Ranks.valueOfPermission("group." + group);

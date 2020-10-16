@@ -10,16 +10,6 @@ import java.util.Random;
 
 public final class DeathMessagesEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerDeath(final PlayerDeathEvent e) {
 		final var lastDamageCause = e.getEntity().getLastDamageCause();

@@ -28,15 +28,9 @@ public class ShopGUI extends PluginActivity {
 	public static final Set<Inventory> mainShopUISet = new HashSet<>();
 	public static final Set<Inventory> purchaseShopUISet = new HashSet<>();
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
 
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
+
+
 
 	public ShopGUI() {
 		//Possible sizes 9, 18, 27, 36, 45,54
@@ -234,8 +228,9 @@ public class ShopGUI extends PluginActivity {
 		}
 		//else open purchase menu
 		if (clickedItem == null) return;
-		//Close previous shop inventory to remove current one from set mainShopUISet
+
 		player.closeInventory();
+
 		openPurchaseMenu(player, clickedItem.getType());
 
 

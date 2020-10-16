@@ -20,16 +20,6 @@ import java.util.List;
 @CommandAlias("donation|donations|rank|ranks")
 public final class DonationBenefitCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private static final List<Player> HAS_EFFECTS_ON = new ArrayList<>();
 
 	private final PotionEffect[] EMERALD_EFFECTS = new PotionEffect[]{
@@ -89,7 +79,7 @@ public final class DonationBenefitCommand extends PluginActivity {
 	 * @param player the player
 	 * @return Returns true if the player has donation effects turned on
 	 */
-	static boolean hasDonationPotions(final Player player) {
+	public static boolean hasDonationPotions(final Player player) {
 		return HAS_EFFECTS_ON.contains(player);
 	}
 

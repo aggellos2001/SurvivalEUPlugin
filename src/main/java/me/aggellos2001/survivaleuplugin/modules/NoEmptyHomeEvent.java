@@ -10,20 +10,10 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 public final class NoEmptyHomeEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
 	private void onSetHomeCommand(final PlayerCommandPreprocessEvent e) {
 		if (e.getMessage().equals("/sethome")) {
-			Utilities.sendMsg(e.getPlayer(),Language.NO_EMPTY_HOME.getTranslation(e.getPlayer()));
+			Utilities.sendMsg(e.getPlayer(), Language.NO_EMPTY_HOME.getTranslation(e.getPlayer()));
 			e.setCancelled(true);
 		}
 	}

@@ -22,16 +22,6 @@ import java.util.concurrent.ThreadLocalRandom;
 @CommandAlias("wild")
 public class WildCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	private static final List<Player> pendingTeleportation = new ArrayList<>();
@@ -135,14 +125,14 @@ public class WildCommand extends PluginActivity {
 		final var diff = System.currentTimeMillis() - lastTimeUsedCommand;
 		final var delay = (int) SurvivalEUPlugin.config.getValue("wild-delay");
 		if (lastTimeUsedCommand != 0L && diff < delay) {
-			Utilities.sendMsg(player,String.format(Language.WILD_COOLDOWN.getTranslation(player), (delay - diff) / 1000));
+			Utilities.sendMsg(player, String.format(Language.WILD_COOLDOWN.getTranslation(player), (delay - diff) / 1000));
 			return true;
 		}
 		return false;
 	}
 
 	@Default
-	private void onCommand(Player player) {
+	private void onCommand(final Player player) {
 
 		final var wildCost = (int) SurvivalEUPlugin.config.getValue("wild-cost");
 		final var maxDistance = (int) SurvivalEUPlugin.config.getValue("wild-distance");
@@ -176,7 +166,7 @@ public class WildCommand extends PluginActivity {
 
 	@Subcommand("setmaxdistance")
 	@CommandPermission("seu.edit.wild")
-	private void setMaxDistance(Player player, @Optional Integer newDistance) {
+	private void setMaxDistance(final Player player, @Optional final Integer newDistance) {
 		if (newDistance != null) {
 			SurvivalEUPlugin.config.setValue("wild-distance", newDistance);
 			Utilities.sendMsg(player, "&aSuccessfully set new max distance to " + newDistance);
@@ -189,10 +179,10 @@ public class WildCommand extends PluginActivity {
 
 	@Subcommand("setcost")
 	@CommandPermission("seu.edit.wild")
-	private void changeCost(Player player, @Optional Integer newCost) {
+	private void changeCost(final Player player, @Optional final Integer newCost) {
 		if (newCost != null) {
 			SurvivalEUPlugin.config.setValue("wild-cost", newCost);
-			Utilities.sendMsg(player,"&aSuccessfully set new cost to " + newCost);
+			Utilities.sendMsg(player, "&aSuccessfully set new cost to " + newCost);
 		} else {
 			final var wildCost = (int) SurvivalEUPlugin.config.getValue("wild-cost");
 			Utilities.sendMsg(player, "&cSpecify the cost! Current: " + wildCost);
@@ -201,7 +191,7 @@ public class WildCommand extends PluginActivity {
 
 	@Subcommand("setmaxretries")
 	@CommandPermission("seu.edit.wild")
-	private void maxRetries(Player player, @Optional Integer newRetries) {
+	private void maxRetries(final Player player, @Optional final Integer newRetries) {
 		if (newRetries != null) {
 			SurvivalEUPlugin.config.setValue("wild-retries", newRetries);
 			Utilities.sendMsg(player, "&aSuccessfully set maxRetries to " + newRetries);
@@ -213,7 +203,7 @@ public class WildCommand extends PluginActivity {
 
 	@Subcommand("setdelay")
 	@CommandPermission("seu.edit.wild")
-	private void delay(Player player, @Optional Integer newDelay) {
+	private void delay(final Player player, @Optional final Integer newDelay) {
 		if (newDelay != null) {
 			SurvivalEUPlugin.config.setValue("wild-delay", newDelay);
 			Utilities.sendMsg(player, "&aSuccessfully set delay to " + newDelay);

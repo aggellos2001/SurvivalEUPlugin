@@ -18,16 +18,6 @@ import org.bukkit.inventory.ItemStack;
 @CommandPermission("seu.xpmultiplier")
 public final class XpAndDropMultiplyCommandEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	@EventHandler(ignoreCancelled = true)
 	private void onEntityPlayerKill(final EntityDeathEvent e) {
 
@@ -57,7 +47,7 @@ public final class XpAndDropMultiplyCommandEvent extends PluginActivity {
 	}
 
 	@Default
-	private void onCommand(CommandSender sender, @Optional Integer newValue) {
+	private void onCommand(final CommandSender sender, @Optional final Integer newValue) {
 		final var xpMultiplier = (int) SurvivalEUPlugin.config.getValue("xp-multiplier");
 		if (newValue == null) {
 			Utilities.sendMsg(sender, "&cUsage: /xpmultiplier {amount}. &aCurrent: " + xpMultiplier);

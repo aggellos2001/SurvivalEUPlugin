@@ -10,16 +10,6 @@ import org.bukkit.command.CommandSender;
 @CommandAlias("seureload|seurl")
 public final class ReloadCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	@Default
 	private void onCommand(final CommandSender sender) {
 		SurvivalEUPlugin.config.saveConfig();

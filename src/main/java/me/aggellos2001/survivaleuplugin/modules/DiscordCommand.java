@@ -9,15 +9,6 @@ import org.bukkit.command.CommandSender;
 
 @CommandAlias("discord")
 public final class DiscordCommand extends PluginActivity {
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
 
 	@Default
 	public boolean onCommand(final CommandSender sender) {

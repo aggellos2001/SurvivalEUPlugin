@@ -5,7 +5,4 @@ import org.bukkit.event.Listener;
 
 public abstract class PluginActivity extends BaseCommand implements Listener {
 
-	abstract public boolean hasEvents();
-	abstract public boolean hasCommands();
-
 }

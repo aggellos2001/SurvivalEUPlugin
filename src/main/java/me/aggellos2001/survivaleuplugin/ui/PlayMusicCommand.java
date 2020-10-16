@@ -25,16 +25,6 @@ public final class PlayMusicCommand extends PluginActivity {
 
 	public static final Set<Inventory> openMenus = new HashSet<>();
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private void stopAllSounds(final Player player) {
 		for (final Sound sound : Sound.values()) {
 			player.stopSound(sound);

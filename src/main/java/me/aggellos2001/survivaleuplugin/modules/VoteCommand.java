@@ -25,18 +25,7 @@ import java.time.Duration;
 @Conditions("cooldown:seconds=10")
 public final class VoteCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private final HttpClient client = HttpClient.newHttpClient();
-
 
 	private String checkIfVoted(final Player p) {
 		//get vote key from config
@@ -147,8 +136,8 @@ public final class VoteCommand extends PluginActivity {
 				.sync(() -> {
 					var checkIfVoted = Utilities.toIntOrNull(chain.getTaskData("checkIfVoted"));
 					var checkIfClaimed = Utilities.toIntOrNull(chain.getTaskData("checkIfClaimed"));
-					if (checkIfVoted == null || checkIfClaimed == null){
-						Utilities.sendMsg(player,Utilities.colorize(Language.VOTE_ERROR.getTranslation(player)));
+					if (checkIfVoted == null || checkIfClaimed == null) {
+						Utilities.sendMsg(player, Utilities.colorize(Language.VOTE_ERROR.getTranslation(player)));
 						return;
 					}
 					if (checkIfVoted == 0 && checkIfClaimed == 0) {
@@ -171,7 +160,7 @@ public final class VoteCommand extends PluginActivity {
 						Utilities.sendMsg(player, Language.VOTE_REWARD_RECEIVED.getTranslation(player));
 						// everyone that the player voted
 						for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-							Utilities.sendMsg(onlinePlayer,Utilities.colorize(String.format(Language.VOTE_BROADCAST.getTranslation(onlinePlayer) ,player.getName())));
+							Utilities.sendMsg(onlinePlayer, Utilities.colorize(String.format(Language.VOTE_BROADCAST.getTranslation(onlinePlayer), player.getName())));
 						}
 					}
 				}).execute();

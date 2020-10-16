@@ -4,6 +4,7 @@ package me.aggellos2001.survivaleuplugin.modules;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import me.aggellos2001.survivaleuplugin.languages.Language;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Material;
@@ -19,21 +20,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandAlias("pvp")
-@Conditions("cooldown:seconds=10")
+//@CommandAlias("pvp")
+//@Conditions("cooldown:seconds=10")
 public final class PvPCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
-	private static final List<Player> PVP_ON = new ArrayList<>();
+//private static final List<Player> PVP_ON = new ArrayList<>();
 
 	/**
 	 * Package private gia na epitrefei se alles klaseis an o player exei pvp on
@@ -42,44 +33,44 @@ public final class PvPCommand extends PluginActivity {
 	 * @return an exei to pvp on
 	 */
 	static boolean hasPvPOn(final Player p) {
-		return PVP_ON.contains(p);
+		return PlayerData.getPlayerData(p).pvp;
 	}
 
-	@Default
-	private void onCommand(final Player player) {
-		if (PVP_ON.contains(player)) {
-			PVP_ON.remove(player);
-			Utilities.sendMsg(player, Language.PVP_DISABLED.getTranslation(player));
-		} else {
-			if (DonationBenefitCommand.hasDonationPotions(player)) {
-				Utilities.sendMsg(player, Language.PVP_DONATION_POTIONS_DENIED.getTranslation(player));
-				return;
-			}
-			PVP_ON.add(player);
-			Utilities.sendMsg(player, Language.PVP_ENABLED.getTranslation(player));
-		}
-	}
-
-	@Subcommand("check")
-	@CommandCompletion("@players")
-	@CommandPermission("seu.pvp.other")
-	private void onCheckPvP(final Player player, @Optional final OnlinePlayer playerToCheck) {
-		if (playerToCheck == null) {
-			final var hasPvP = hasPvPOn(player);
-			if (hasPvP) {
-				Utilities.sendMsg(player, "&aYour PvP status is: &lenabled!");
-			} else {
-				Utilities.sendMsg(player, "&aYour PvP status is: &c&ldisabled!");
-			}
-		} else {
-			final var hasPvP = hasPvPOn(playerToCheck.getPlayer());
-			if (hasPvP) {
-				Utilities.sendMsg(player, String.format("&aPlayer %s PvP status is: &lenabled!", playerToCheck.player.getName()));
-			} else {
-				Utilities.sendMsg(player, String.format("&aPlayer %s PvP status is: &c&ldisabled!", playerToCheck.player.getName()));
-			}
-		}
-	}
+//	@Default
+//	private void onCommand(final Player player) {
+//		if (PVP_ON.contains(player)) {
+//			PVP_ON.remove(player);
+//			Utilities.sendMsg(player, Language.PVP_DISABLED.getTranslation(player));
+//		} else {
+//			if (DonationBenefitCommand.hasDonationPotions(player)) {
+//				Utilities.sendMsg(player, Language.PVP_DONATION_POTIONS_DENIED.getTranslation(player));
+//				return;
+//			}
+//			PVP_ON.add(player);
+//			Utilities.sendMsg(player, Language.PVP_ENABLED.getTranslation(player));
+//		}
+//	}
+//
+//	@Subcommand("check")
+//	@CommandCompletion("@players")
+//	@CommandPermission("seu.pvp.other")
+//	private void onCheckPvP(final Player player, @Optional final OnlinePlayer playerToCheck) {
+//		if (playerToCheck == null) {
+//			final var hasPvP = hasPvPOn(player);
+//			if (hasPvP) {
+//				Utilities.sendMsg(player, "&aYour PvP status is: &lenabled!");
+//			} else {
+//				Utilities.sendMsg(player, "&aYour PvP status is: &c&ldisabled!");
+//			}
+//		} else {
+//			final var hasPvP = hasPvPOn(playerToCheck.getPlayer());
+//			if (hasPvP) {
+//				Utilities.sendMsg(player, String.format("&aPlayer %s PvP status is: &lenabled!", playerToCheck.player.getName()));
+//			} else {
+//				Utilities.sendMsg(player, String.format("&aPlayer %s PvP status is: &c&ldisabled!", playerToCheck.player.getName()));
+//			}
+//		}
+//	}
 
 	/**
 	 * Σταματάει το PvP αν είναι OFF (από default είναι OFF)
@@ -93,13 +84,16 @@ public final class PvPCommand extends PluginActivity {
 		final var attacker = (Player) e.getDamager();
 		final var defender = (Player) e.getEntity();
 
-		if (!PVP_ON.contains(attacker)) {
+		var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
+		var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+
+		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
 			e.setCancelled(true);
 			return;
 		}
 
-		if (!PVP_ON.contains(defender)) {
+		if (!defenderPvP) {
 			Utilities.sendMsg(attacker, String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(attacker), defender.getName()));
 			e.setCancelled(true);
 		}
@@ -122,13 +116,16 @@ public final class PvPCommand extends PluginActivity {
 
 		if (attacker.equals(defender)) return;
 
-		if (!PVP_ON.contains(attacker)) {
+		var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
+		var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+
+		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
 			e.setCancelled(true);
 			return;
 		}
 
-		if (!PVP_ON.contains(defender)) {
+		if (!defenderPvP) {
 			Utilities.sendMsg(attacker, String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(attacker), defender.getName()));
 			e.setCancelled(true);
 		}
@@ -144,7 +141,8 @@ public final class PvPCommand extends PluginActivity {
 		if (e.getBucket() != Material.LAVA_BUCKET) return;
 
 		for (final Player player : e.getBlockClicked().getLocation().getNearbyPlayers(4)) {
-			if (!PVP_ON.contains(player) && !player.equals(e.getPlayer())) {
+			var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+			if (!pvpOfPlayer && !player.equals(e.getPlayer())) {
 				Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 				e.setCancelled(true);
 			}
@@ -163,7 +161,8 @@ public final class PvPCommand extends PluginActivity {
 
 		if (e.getItem().getType().equals(Material.FLINT_AND_STEEL) || e.getItem().getType().equals(Material.TNT)) {
 			for (final Player player : e.getClickedBlock().getLocation().getNearbyPlayers(4)) {
-				if (!PVP_ON.contains(player) && player != e.getPlayer()) {
+				var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+				if (!pvpOfPlayer && player != e.getPlayer()) {
 					Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 					e.setCancelled(true);
 					return;
@@ -177,7 +176,8 @@ public final class PvPCommand extends PluginActivity {
 						e.getClickedBlock().getWorld().getEnvironment().equals(World.Environment.THE_END))) {
 
 			for (final Player player : e.getClickedBlock().getLocation().getNearbyPlayers(4)) {
-				if (!PVP_ON.contains(player) && player != e.getPlayer()) {
+				var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+				if (!pvpOfPlayer && player != e.getPlayer()) {
 					Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 					e.setCancelled(true);
 					return;

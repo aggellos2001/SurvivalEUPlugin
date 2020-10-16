@@ -10,16 +10,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public final class AntiSwearingEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	private final static String[] BAD_WORDS = new String[]{
 			//greeklish
 			"malak", "arxid", "mouni", "gamo", "pouta", "kwlo", "nigg", "papar", "vlaka", "blaka",

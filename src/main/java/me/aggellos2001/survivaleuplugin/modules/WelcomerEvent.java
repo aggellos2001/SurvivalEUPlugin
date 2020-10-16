@@ -9,16 +9,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public final class WelcomerEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerJoinTitle(final PlayerJoinEvent e) {
 

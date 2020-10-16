@@ -19,16 +19,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 @CommandPermission("seu.blockvpn")
 public final class BlockVPN extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	private final IpInfoPrivacy ipInfo = new IpInfoPrivacy();
 
 

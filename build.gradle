@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.aggellos2001.survivaleuplugin'
-version '1.16.1-2'
+version '1.16.3-1'
 
 sourceCompatibility = targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.destroystokyo.paper:paper-api:1.16.1-R0.1-SNAPSHOT'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.3-R0.1-SNAPSHOT'
     implementation 'com.github.ipinfo:java:ipinfo-api-1.1'
     implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly 'net.luckperms:api:5.0'

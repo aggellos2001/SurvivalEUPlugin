@@ -13,16 +13,6 @@ import java.util.Map;
 
 public final class PlayerLanguage extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	private static final Map<Player, String> LANGUAGE_MAP = new HashMap<>();
 
 	@EventHandler(ignoreCancelled = true)

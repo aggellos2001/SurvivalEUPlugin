@@ -14,16 +14,6 @@ import java.util.Map;
 
 public final class CommandCoolDownEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	private final static Map<Player, Long> LAST_TIME_EXECUTED_COMMAND = new HashMap<>();
 
 	@EventHandler(priority = EventPriority.LOWEST)

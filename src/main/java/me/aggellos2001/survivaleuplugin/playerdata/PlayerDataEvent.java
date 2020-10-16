@@ -3,6 +3,7 @@ package me.aggellos2001.survivaleuplugin.playerdata;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -15,16 +16,6 @@ import java.nio.file.Files;
 public final class PlayerDataEvent extends PluginActivity {
 
 	protected static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
 
 	/**
 	 * Initializes the file and creates the directory if it does not exist.
@@ -52,6 +43,7 @@ public final class PlayerDataEvent extends PluginActivity {
 
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerJoinLoadDataFromFile(final PlayerJoinEvent event) {
+		final var player = event.getPlayer();
 		final var playerUUID = event.getPlayer().getUniqueId();
 		final var file = new File(PlayerData.Directory, playerUUID.toString() + ".json");
 
@@ -60,10 +52,12 @@ public final class PlayerDataEvent extends PluginActivity {
 
 		try (var reader = Files.newBufferedReader(file.toPath())) {
 			final var playerData = gson.fromJson(reader, PlayerData.class);
-			PlayerData.PLAYER_DATA.put(playerUUID, playerData);
+//			PlayerData.PLAYER_DATA.put(playerUUID, playerData);
+			PlayerData.updatePlayerData(player,playerData);
 		} catch (final IOException e) {
-			//Puts default settings incase reading the file has failed
-			PlayerData.PLAYER_DATA.put(playerUUID,PlayerData.DEFAULT);
+			//Puts default settings in case reading the file has failed
+//			PlayerData.PLAYER_DATA.put(playerUUID,PlayerData.DEFAULT);
+			PlayerData.updatePlayerData(player,PlayerData.DEFAULT);
 			e.printStackTrace();
 		}
 	}
@@ -73,14 +67,16 @@ public final class PlayerDataEvent extends PluginActivity {
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerLeaveSaveToFile(final PlayerQuitEvent e) {
 
+		final var player = e.getPlayer();
 		final var playerUUID = e.getPlayer().getUniqueId();
 		final var file = new File(PlayerData.Directory, playerUUID.toString() + ".json");
 
 		//If something went wrong and cache is null make sure not to write null into the file or bad things will happen!
-		if (PlayerData.getPlayerData().get(e.getPlayer().getUniqueId()) != null){
+		if (PlayerData.getPlayerData(e.getPlayer()) != null){
 			try (var writer = Files.newBufferedWriter(file.toPath())) {
-				gson.toJson(PlayerData.PLAYER_DATA.get(playerUUID), writer);
-				PlayerData.PLAYER_DATA.remove(playerUUID);
+				gson.toJson(PlayerData.getPlayerData(player), writer);
+//				PlayerData.PLAYER_DATA.remove(playerUUID);
+				PlayerData.removePlayerData(player);
 			} catch (final Exception ex) {
 				//if writing changes fails nothing happens and file remains unchanged thus preventing further data loss.
 				ex.printStackTrace();

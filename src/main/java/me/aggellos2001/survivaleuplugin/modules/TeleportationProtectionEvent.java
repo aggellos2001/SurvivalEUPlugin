@@ -9,16 +9,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public final class TeleportationProtectionEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerTp(final PlayerTeleportEvent e) {
 		if (e.getCause().equals(PlayerTeleportEvent.TeleportCause.UNKNOWN)) return;

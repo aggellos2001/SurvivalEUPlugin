@@ -11,16 +11,6 @@ import org.bukkit.command.CommandSender;
 @CommandPermission("seu.garbage")
 public final class GarbageCollectorCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	@Default
 	private void onCommand(final CommandSender sender) {
 		System.gc();

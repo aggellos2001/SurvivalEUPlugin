@@ -10,15 +10,6 @@ import org.bukkit.event.world.ChunkLoadEvent;
 
 @CommandAlias("help")
 public final class HelpCommand extends PluginActivity {
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
 	private void onServerHelp(PlayerCommandPreprocessEvent e) {

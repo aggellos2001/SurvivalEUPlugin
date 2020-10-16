@@ -13,16 +13,6 @@ import org.bukkit.entity.Player;
 @CommandPermission("seu.alert")
 public final class AlertCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
-
 	@Default
 	private void onCommand(final Player player, int seconds, String message) {
 		for (final Player p : Bukkit.getOnlinePlayers()) {

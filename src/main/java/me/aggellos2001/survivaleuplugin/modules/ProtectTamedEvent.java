@@ -15,16 +15,6 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
 public final class ProtectTamedEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerKillingTamedAnimal(final EntityDamageByEntityEvent e) {
@@ -40,7 +30,7 @@ public final class ProtectTamedEvent extends PluginActivity {
 			final var player = (Player) attacker;
 			if (player.isOp()) return;
 			if (!defenderEntityOwnerUniqueId.equals(player.getUniqueId())) {
-				Utilities.sendMsg(player,Language.TAMED_HARM_DENIED.getTranslation(player));
+				Utilities.sendMsg(player, Language.TAMED_HARM_DENIED.getTranslation(player));
 				e.setCancelled(true);
 			}
 		}
@@ -49,7 +39,7 @@ public final class ProtectTamedEvent extends PluginActivity {
 			if (!(projectile.getShooter() instanceof Player)) return;
 			final var arrowShooter = (Player) projectile.getShooter();
 			if (!defenderEntityOwnerUniqueId.equals(arrowShooter.getUniqueId())) {
-				Utilities.sendMsg(arrowShooter,Language.TAMED_HARM_DENIED.getTranslation(arrowShooter));
+				Utilities.sendMsg(arrowShooter, Language.TAMED_HARM_DENIED.getTranslation(arrowShooter));
 				e.setCancelled(true);
 			}
 		}
@@ -63,7 +53,7 @@ public final class ProtectTamedEvent extends PluginActivity {
 			if (!(entity instanceof Tameable)) continue;
 			final var tamedEntity = (Tameable) entity;
 			if (tamedEntity.isTamed() && tamedEntity.getOwnerUniqueId() != playerUUID) {
-				Utilities.sendMsg(e.getPlayer(),Language.TAMED_PUT_LAVA_DENIED.getTranslation(e.getPlayer()));
+				Utilities.sendMsg(e.getPlayer(), Language.TAMED_PUT_LAVA_DENIED.getTranslation(e.getPlayer()));
 			}
 		}
 	}

@@ -22,29 +22,9 @@ import java.util.*;
 //@CommandAlias("sitonstairs|sitdown")
 public class SitOnStairsEventCommand extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
 
 	private static final Map<UUID, Long> LAST_TIME_SAT = new HashMap<>();
 	private static final Set<Player> PLAYERS_ENABLED_SIT_ON_STAIRS = new HashSet<>();
-
-//	@Default
-//	private void onCommand(final Player player) {
-//		if (PLAYERS_ENABLED_SIT_ON_STAIRS.contains(player)){
-//			PLAYERS_ENABLED_SIT_ON_STAIRS.remove(player);
-//			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_DISABLED.getTranslation(player));
-//		}else {
-//			PLAYERS_ENABLED_SIT_ON_STAIRS.add(player);
-//			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_ENABLED.getTranslation(player));
-//		}
-//	}
 
 
 	@EventHandler(ignoreCancelled = true)
@@ -60,17 +40,16 @@ public class SitOnStairsEventCommand extends PluginActivity {
 		if (!(clickedBlock.getBlockData() instanceof Stairs)) return;
 
 
-		var data = PlayerData.getPlayerData();
-		var playerData = data.get(player.getUniqueId());
+		final var playerData = PlayerData.getPlayerData(player);
 
 
-		if (!playerData.isSittingOnStairs()) return;
+		if (!playerData.sittingOnStairs) return;
 
 		final var lastTimeSat = LAST_TIME_SAT.getOrDefault(player.getUniqueId(), 0L);
 		final var difference = System.currentTimeMillis() - lastTimeSat;
 		final var delay = 5000;
 		if (lastTimeSat != 0L && difference < delay) {
-			Utilities.sendMsg(player,String.format(Language.SIT_ON_STAIRS_DELAY.getTranslation(player), (delay - difference) / 1000));
+			Utilities.sendMsg(player, String.format(Language.SIT_ON_STAIRS_DELAY.getTranslation(player), (delay - difference) / 1000));
 			return;
 		}
 		final var stair = (Stairs) e.getClickedBlock().getBlockData();
@@ -78,7 +57,7 @@ public class SitOnStairsEventCommand extends PluginActivity {
 			final var arrow = clickedBlock.getWorld().spawnEntity(clickedBlock.getLocation().add(0.5, 0.0, 0.5), EntityType.ARROW);
 			arrow.addPassenger(player);
 			LAST_TIME_SAT.put(player.getUniqueId(), System.currentTimeMillis());
-			Utilities.sendMsg(player,Language.SIT_ON_STAIRS_NOTIFY.getTranslation(player));
+			Utilities.sendMsg(player, Language.SIT_ON_STAIRS_NOTIFY.getTranslation(player));
 		}
 	}
 

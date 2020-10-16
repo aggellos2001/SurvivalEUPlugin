@@ -7,16 +7,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public final class AntiCapsEvent extends PluginActivity {
 
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
-
 	private int capsInMessage(final String s) {
 		var caps = 0;
 		for (var i = 0; i < s.length(); i++) {

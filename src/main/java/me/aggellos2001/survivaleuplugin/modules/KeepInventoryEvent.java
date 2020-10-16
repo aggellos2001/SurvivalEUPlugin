@@ -6,21 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class KeepInventoryEvent extends PluginActivity {
-	@Override
-	public boolean hasEvents() {
-		return true;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return false;
-	}
 
 	@EventHandler
 	private void onDeath(PlayerDeathEvent e){
-		var data = PlayerData.getPlayerData();
-		var playerData = data.get(e.getEntity().getUniqueId());
-		if (playerData.isKeepingInventory()){
+		var playerData = PlayerData.getPlayerData(e.getEntity());
+		if (playerData.keepingInventory){
 			e.setKeepInventory(true);
 			e.setKeepLevel(true);
 			e.getDrops().clear();

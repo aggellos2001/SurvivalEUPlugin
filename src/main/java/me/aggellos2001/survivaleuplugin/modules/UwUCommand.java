@@ -9,19 +9,10 @@ import org.bukkit.entity.Player;
 
 @CommandAlias("uwu")
 public final class UwUCommand extends PluginActivity {
-	@Override
-	public boolean hasEvents() {
-		return false;
-	}
-
-	@Override
-	public boolean hasCommands() {
-		return true;
-	}
 
 	@Default
-	private void uwu(Player player){
+	private void uwu(final Player player) {
 		player.setHealth(0);
-		Bukkit.broadcastMessage(Utilities.colorize(String.format("&bPlayer &6%s&b got uwued!",player.getName()),true));
+		Bukkit.broadcastMessage(Utilities.colorize(String.format("&bPlayer &6%s&b got uwued!", player.getName()), true));
 	}
 }
