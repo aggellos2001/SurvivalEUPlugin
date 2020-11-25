@@ -63,6 +63,7 @@ public final class CommandEventRegister {
 				new KeepInventoryEvent(),
 				new ShopGUI(),
 				new PlayMusicCommand(),
+				new ServerSnow(),
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

@@ -49,6 +49,9 @@ public class Config {
 	}
 
 	public void saveConfig() {
+		if (PATHS.size() == 0 ){
+			return;
+		}
 		for (String path : PATHS) {
 			CONFIG.getConfig().set(path, CONFIG_CACHE.get(path));
 		}

