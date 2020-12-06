@@ -2,6 +2,7 @@ package me.aggellos2001.survivaleuplugin.utils;
 
 import co.aikar.commands.annotation.CommandAlias;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
+import me.aggellos2001.survivaleuplugin.discordreport.ReportPlayerCommand;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
 import me.aggellos2001.survivaleuplugin.modules.*;
@@ -64,6 +65,7 @@ public final class CommandEventRegister {
 				new ShopGUI(),
 				new PlayMusicCommand(),
 				new ServerSnow(),
+				new ReportPlayerCommand()
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {
