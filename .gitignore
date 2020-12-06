@@ -1,3 +1,4 @@
 .idea/
 build/
 .gradle/
+me.aggellos2001.survivaleuplugin.discordreport.ReportPlayerCommand
