@@ -24,6 +24,7 @@ public final class PlayerData {
 	public boolean keepingInventory;
 	public boolean sittingOnStairs;
 	public boolean pvp;
+	public int supportPIN;
 
 
 	//no arg constructor for Gson
@@ -31,18 +32,19 @@ public final class PlayerData {
 		this.keepingInventory = true;
 		this.sittingOnStairs = false;
 		this.pvp = false;
+		this.supportPIN = 0;
 	}
 
 
-	public static PlayerData getPlayerData(Player player) {
-		return PLAYER_DATA.get(player.getUniqueId());
+	public static PlayerData getPlayerData(final Player player) {
+		return PLAYER_DATA.getOrDefault(player.getUniqueId(), PlayerData.DEFAULT);
 	}
 
-	public static void updatePlayerData(Player player, PlayerData data) {
-		PLAYER_DATA.put(player.getUniqueId(),data);
+	public static void updatePlayerData(final Player player, final PlayerData data) {
+		PLAYER_DATA.put(player.getUniqueId(), data);
 	}
 
-	public static void removePlayerData(Player player){
+	public static void removePlayerData(final Player player) {
 		PLAYER_DATA.remove(player.getUniqueId());
 	}
 }

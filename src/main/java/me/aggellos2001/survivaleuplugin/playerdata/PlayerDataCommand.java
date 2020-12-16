@@ -1,13 +1,14 @@
 package me.aggellos2001.survivaleuplugin.playerdata;
 
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.modules.DonationBenefitCommand;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -87,7 +88,7 @@ public final class PlayerDataCommand extends PluginActivity {
 
 		{
 			//close button
-			ui.setItem(8,createRenamedItemStack(Material.BARRIER,"&c&lExit"));
+			ui.setItem(8, createRenamedItemStack(Material.BARRIER, "&c&lExit"));
 		}
 
 		player.openInventory(ui);
@@ -133,29 +134,53 @@ public final class PlayerDataCommand extends PluginActivity {
 		if (e.getRawSlot() == 3) {
 			//compare to material clicked. if green glass then its ON (true) so !true == true = false
 			playerData.keepingInventory = !clickedMaterial.equals(ENABLED_BUTTON.getType());
-			PlayerData.updatePlayerData(player,playerData);
+			PlayerData.updatePlayerData(player, playerData);
 			openGUI(player);
 		}
 
-		if (e.getRawSlot() == 4){
+		if (e.getRawSlot() == 4) {
 			playerData.sittingOnStairs = !clickedMaterial.equals(ENABLED_BUTTON.getType());
-			PlayerData.updatePlayerData(player,playerData);
+			PlayerData.updatePlayerData(player, playerData);
 			openGUI(player);
 		}
 
-		if (e.getRawSlot() == 5){
+		if (e.getRawSlot() == 5) {
 			if (DonationBenefitCommand.hasDonationPotions(player)) {
 				Utilities.sendMsg(player, Language.PVP_DONATION_POTIONS_DENIED.getTranslation(player));
 				return;
 			}
 			playerData.pvp = !clickedMaterial.equals(ENABLED_BUTTON.getType());
-			PlayerData.updatePlayerData(player,playerData);
+			PlayerData.updatePlayerData(player, playerData);
 			openGUI(player);
 		}
 
-		if (e.getRawSlot() == 8){
+		if (e.getRawSlot() == 8) {
 			player.closeInventory();
 		}
 
+	}
+
+	@Subcommand("setsupportpin")
+	private void setSupportPin(final Player player, final int supportPin) {
+		if (supportPin < 1000 || supportPin > 9999) {
+			Utilities.sendMsg(player, "&cSupport PIN must be a 4 digit number! (1000-9999)");
+			return;
+		}
+		final var playerDat = PlayerData.getPlayerData(player);
+		playerDat.supportPIN = supportPin;
+		PlayerData.updatePlayerData(player, playerDat);
+		Utilities.sendMsg(player, "&aSupport PIN set to &e" + supportPin + "&a!");
+	}
+
+	@Subcommand("getsupportpIN")
+	@Conditions("ConsoleOrOp") //only OP or console can check someones PIN
+	@CommandCompletion("@players @nothing")
+	private void getSupportPIN(final CommandSender sender, final OnlinePlayer player) {
+		final var dat = PlayerData.getPlayerData(player.getPlayer());
+		if (dat == null || dat.supportPIN == 0) {
+			Utilities.sendMsg(sender, "&cPlayer " + player.getPlayer().getName() + " has no PIN set!");
+			return;
+		}
+		Utilities.sendMsg(sender, "&aPlayer " + player.getPlayer().getName() + " has support PIN: &e" + dat.supportPIN + "!");
 	}
 }

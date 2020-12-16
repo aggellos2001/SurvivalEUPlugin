@@ -3,7 +3,6 @@ package me.aggellos2001.survivaleuplugin.playerdata;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -53,11 +52,11 @@ public final class PlayerDataEvent extends PluginActivity {
 		try (var reader = Files.newBufferedReader(file.toPath())) {
 			final var playerData = gson.fromJson(reader, PlayerData.class);
 //			PlayerData.PLAYER_DATA.put(playerUUID, playerData);
-			PlayerData.updatePlayerData(player,playerData);
+			PlayerData.updatePlayerData(player, playerData); //put players data into array
 		} catch (final IOException e) {
 			//Puts default settings in case reading the file has failed
 //			PlayerData.PLAYER_DATA.put(playerUUID,PlayerData.DEFAULT);
-			PlayerData.updatePlayerData(player,PlayerData.DEFAULT);
+			PlayerData.updatePlayerData(player, PlayerData.DEFAULT);
 			e.printStackTrace();
 		}
 	}
@@ -72,7 +71,7 @@ public final class PlayerDataEvent extends PluginActivity {
 		final var file = new File(PlayerData.Directory, playerUUID.toString() + ".json");
 
 		//If something went wrong and cache is null make sure not to write null into the file or bad things will happen!
-		if (PlayerData.getPlayerData(e.getPlayer()) != null){
+		if (PlayerData.getPlayerData(e.getPlayer()) != null) {
 			try (var writer = Files.newBufferedWriter(file.toPath())) {
 				gson.toJson(PlayerData.getPlayerData(player), writer);
 //				PlayerData.PLAYER_DATA.remove(playerUUID);
