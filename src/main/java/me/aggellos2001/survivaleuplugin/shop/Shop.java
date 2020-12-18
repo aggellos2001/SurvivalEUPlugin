@@ -193,7 +193,7 @@ public final class Shop extends PluginActivity {
 	@Default
 	private void onCommand(Player player) {
 		//Utilities.sendMsg(player, Language.SHOP_INFO.getTranslation(player));
-		ShopGUI.openInventory(player);
+		NewShopUI.mainUI(player);
 	}
 
 //	@Subcommand("buy")

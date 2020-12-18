@@ -22,6 +22,7 @@ repositories {
         name "essentialsx"
         url "https://ci.ender.zone/plugin/repository/everything/"
     }
+    maven { url = 'https://repo.mattstudios.me/artifactory/public' }
 }
 
 dependencies {
@@ -36,6 +37,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.google.oauth-client:google-oauth-client:1.31.1'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
+    implementation "me.mattstudios.utils:matt-framework-gui:2.0.3"
+    implementation "me.mattstudios:mf-msg-bukkit:2.0.1"
 }
 
 
@@ -48,6 +51,8 @@ shadowJar {
     relocate 'co.aikar.commands', 'me.aggellos2001.survivaleuplugin.acf'
     relocate 'co.aikar.locales', 'me.aggellos2001.survivaleuplugin.locales'
     relocate 'co.aikar.taskchain', 'me.aggellos2001.survivaleuplugin.taskchain'
+    relocate 'me.mattstudios.mfgui', 'me.aggellos2001.survivaleuplugin.mattlib'
+    relocate 'me.mattstudios.mfmsg', 'me.aggellos2001.survivaleuplugin.mfmsg'
 }
 
 compileJava {
