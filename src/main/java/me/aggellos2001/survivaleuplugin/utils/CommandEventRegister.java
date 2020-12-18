@@ -9,12 +9,10 @@ import me.aggellos2001.survivaleuplugin.modules.*;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
-import me.aggellos2001.survivaleuplugin.shop.ShopGUI;
 import me.aggellos2001.survivaleuplugin.ui.PlayMusicCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 
 public final class CommandEventRegister {
@@ -35,7 +33,6 @@ public final class CommandEventRegister {
 				new DiscordCommand(),
 				new DonationBenefitCommand(),
 				new EntitySpawningLimitCommandEvent(),
-				new GarbageCollectorCommand(),
 				new LagInfoCommand(),
 				new LeadVillagerEvent(),
 				new MakeVillagersLoseJob(),
@@ -62,7 +59,6 @@ public final class CommandEventRegister {
 				new PlayerDataCommand(),
 				new VoteKickCommand(),
 				new KeepInventoryEvent(),
-				new ShopGUI(),
 				new PlayMusicCommand(),
 				new ServerSnow(),
 				new ReportPlayerCommand()
@@ -74,7 +70,7 @@ public final class CommandEventRegister {
 				SurvivalEUPlugin.COMMAND_MANAGER.registerCommand(unregisteredCommandEvent);
 			}
 
-			if (Arrays.stream(unregisteredCommandEvent.getClass().getDeclaredMethods()).anyMatch(method -> method.isAnnotationPresent(EventHandler.class))){
+			if (Arrays.stream(unregisteredCommandEvent.getClass().getDeclaredMethods()).anyMatch(method -> method.isAnnotationPresent(EventHandler.class))) {
 				Bukkit.getServer().getPluginManager().registerEvents(unregisteredCommandEvent, instance);
 			}
 

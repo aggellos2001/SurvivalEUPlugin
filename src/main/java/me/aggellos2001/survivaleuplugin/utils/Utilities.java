@@ -1,7 +1,8 @@
 package me.aggellos2001.survivaleuplugin.utils;
 
+import me.mattstudios.mfmsg.bukkit.BukkitMessage;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,6 +19,9 @@ public class Utilities {
 	/**
 	 * Simple way to get tick values from real time values.
 	 */
+
+	private static final BukkitMessage messageParser = BukkitMessage.create();
+
 	public enum TicksDuration {
 
 		SECOND(20),
@@ -39,44 +43,13 @@ public class Utilities {
 	}
 
 	public static String colorize(final String s) {
-		final var translateLegacy = ChatColor.translateAlternateColorCodes('&', s);
-		return translateHexColorCodes(translateLegacy);
+		return messageParser.parse(s).toString();
 	}
 
 	public static String colorize(final String s, final boolean addPrefix) {
 		if (addPrefix) {
-			final var translateLegacy = ChatColor.translateAlternateColorCodes('&', "&6[&bSurvivalEU&6]&r " + s);
-			return translateHexColorCodes(translateLegacy);
+			return messageParser.parse("&6[&bSurvivalEU&6]&r " + s).toString();
 		} else return colorize(s);
-	}
-
-	public static String translateHexColorCodes(final String string) {
-		final var tokens = string.split("\\s+");
-		for (int i = 0; i < tokens.length; i++) {
-			if (tokens[i].startsWith("#")) {
-				if (tokens[i].length() < 7) {
-					continue;
-				}
-				if (tokens[i].length() == 7) {
-					tokens[i] = getHexColor(tokens[i]).toString();
-				} else {
-					final var tokenToTranslate = tokens[i].substring(0, 7);
-					final var restOfToken = tokens[i].substring(7);
-					tokens[i] = getHexColor(tokenToTranslate) + restOfToken;
-				}
-			}
-		}
-		return String.join(" ", tokens);
-	}
-
-	/**
-	 * Get HEX colors
-	 *
-	 * @since MC 1.16
-	 * Uses chatcolor api from bungee to return the color
-	 */
-	public static net.md_5.bungee.api.ChatColor getHexColor(final String hexColorCode) {
-		return net.md_5.bungee.api.ChatColor.of(hexColorCode);
 	}
 
 	@Nullable
@@ -125,14 +98,14 @@ public class Utilities {
 		return stack;
 	}
 
-	public static ItemStack createRenamedItemStack(final Material material, final String displayName, String... lore) {
+	public static ItemStack createRenamedItemStack(final Material material, final String displayName, final String... lore) {
 		final var stack = new ItemStack(material);
 		final ItemMeta meta = stack.getItemMeta();
 		if (displayName != null)
 			meta.setDisplayName(colorize(displayName));
 		if (lore != null) {
 			var colorizedLore = new ArrayList<String>();
-			for (String line : lore) {
+			for (final String line : lore) {
 				if (line == null || line.equals("null")) {
 					meta.addItemFlags(ItemFlag.values());
 					colorizedLore = null;
@@ -147,5 +120,12 @@ public class Utilities {
 		}
 		stack.setItemMeta(meta);
 		return stack;
+	}
+
+	public static String readableEnumName(String enumValue) {
+		enumValue = enumValue.replace('_', ' ');
+		enumValue = enumValue.toLowerCase();
+		enumValue = StringUtils.capitalize(enumValue);
+		return enumValue;
 	}
 }

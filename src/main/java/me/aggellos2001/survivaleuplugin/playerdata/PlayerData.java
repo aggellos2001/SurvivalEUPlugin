@@ -25,6 +25,7 @@ public final class PlayerData {
 	public boolean sittingOnStairs;
 	public boolean pvp;
 	public int supportPIN;
+	public String chatColor;
 
 
 	//no arg constructor for Gson
@@ -33,6 +34,7 @@ public final class PlayerData {
 		this.sittingOnStairs = false;
 		this.pvp = false;
 		this.supportPIN = 0;
+		this.chatColor = "f"; //white default chat color
 	}
 
 

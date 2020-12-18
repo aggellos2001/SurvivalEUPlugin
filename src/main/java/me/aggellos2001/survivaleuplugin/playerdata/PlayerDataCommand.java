@@ -6,20 +6,14 @@ import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.modules.DonationBenefitCommand;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
-import org.bukkit.Bukkit;
+import me.mattstudios.mfgui.gui.components.ItemBuilder;
+import me.mattstudios.mfgui.gui.guis.Gui;
+import me.mattstudios.mfgui.gui.guis.GuiItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import static me.aggellos2001.survivaleuplugin.utils.Utilities.createRenamedItemStack;
 
@@ -27,137 +21,94 @@ import static me.aggellos2001.survivaleuplugin.utils.Utilities.createRenamedItem
 @CommandAlias("settings")
 public final class PlayerDataCommand extends PluginActivity {
 
-	private static final ItemStack ENABLED_BUTTON = createRenamedItemStack(Material.GREEN_STAINED_GLASS_PANE, "&a&lON");
-	private static final ItemStack DISABLED_BUTTON = createRenamedItemStack(Material.RED_STAINED_GLASS_PANE, "&c&lOFF");
-	private static final Set<Inventory> settingsMenus = new HashSet<>();
+	private static final ItemStack ENABLED_BUTTON = createRenamedItemStack(Material.GREEN_WOOL, "&a&lON");
+	private static final ItemStack DISABLED_BUTTON = createRenamedItemStack(Material.RED_WOOL, "&c&lOFF");
+
+	private static GuiItem keepInventoryButton(final boolean keepingInventory) {
+		return ItemBuilder
+				.from(keepingInventory ? ENABLED_BUTTON.getType() : DISABLED_BUTTON.getType())
+				.setName(Utilities.colorize("&e&lKeep Inventory")).glow(true)
+				.setLore(keepingInventory ? Utilities.colorize("&a&lON") : Utilities.colorize("&c&lOFF"),
+						Utilities.colorize("<#8f8d8d>Toggle item dropping on death."))
+				.asGuiItem();
+	}
+
+	private static GuiItem sitOnStairsButton(final boolean sittingOnStairs) {
+		return ItemBuilder
+				.from(sittingOnStairs ? ENABLED_BUTTON.getType() : DISABLED_BUTTON.getType())
+				.setLore(sittingOnStairs ? Utilities.colorize("&a&lON") : Utilities.colorize("&c&lOFF"),
+						Utilities.colorize("<#8f8d8d>Toggle \"sitting\" on a stair block when right clicking it."))
+				.setName(Utilities.colorize("&e&lSit on stairs")).glow(true)
+				.asGuiItem();
+	}
+
+	private static GuiItem pvpButton(final boolean pvp) {
+		return ItemBuilder
+				.from(pvp ? ENABLED_BUTTON.getType() : DISABLED_BUTTON.getType())
+				.setLore(pvp ? Utilities.colorize("&a&lON") : Utilities.colorize("&c&lOFF"),
+						Utilities.colorize("<#8f8d8d>Toggle if you want to fight with other players!"))
+				.setName(Utilities.colorize("&e&lPvP")).glow(true)
+				.asGuiItem();
+	}
 
 	@Default
-	private void openGUI(final Player player) {
-
-		final var ui = Bukkit.createInventory(null, 9, Utilities.colorize("#02A122&lSurvivalEU &e&lSettings"));
+	protected static void settingsUI(final Player player) {
 
 		final var playerData = PlayerData.getPlayerData(player);
 
-		{
-			//keep inventory button
-			final ItemStack keepInvButton;
+		final var settingsMenu = new Gui(1, Utilities.colorize("<g:#ff8000:#31bd1d>Settings Menu"));
+		settingsMenu.setDefaultClickAction(event -> {
+					event.setCancelled(true);
+				}
+		);
 
-			if (playerData.keepingInventory) {
-				keepInvButton = ENABLED_BUTTON;
-			} else {
-				keepInvButton = DISABLED_BUTTON;
-			}
-
-			keepInvButton.setLore(Collections.singletonList(Utilities.colorize("&e&lKeep Inventory")));
-
-			ui.setItem(3, keepInvButton);
-		}
-
-		{
-			//sit on stairs button
-
-			final ItemStack sitOnStairsButton;
-
-			if (playerData.sittingOnStairs) {
-				sitOnStairsButton = ENABLED_BUTTON;
-			} else {
-				sitOnStairsButton = DISABLED_BUTTON;
-			}
-
-			sitOnStairsButton.setLore(Collections.singletonList(Utilities.colorize("&e&lSit on stairs")));
-
-			ui.setItem(4, sitOnStairsButton);
-
-		}
-		{
-			//sit on stairs button
-
-			final ItemStack pvp;
-
-			if (playerData.pvp) {
-				pvp = ENABLED_BUTTON;
-			} else {
-				pvp = DISABLED_BUTTON;
-			}
-
-			pvp.setLore(Collections.singletonList(Utilities.colorize("&e&lPvP")));
-
-			ui.setItem(5, pvp);
-
-		}
-
-		{
-			//close button
-			ui.setItem(8, createRenamedItemStack(Material.BARRIER, "&c&lExit"));
-		}
-
-		player.openInventory(ui);
-
-		settingsMenus.add(ui);
-
-	}
-
-	@EventHandler
-	private void disableDrag(final InventoryDragEvent e) {
-		if (settingsMenus.contains(e.getInventory())) {
-			e.setCancelled(true);
-		}
-	}
-
-	@EventHandler
-	private void removeInventory(final InventoryCloseEvent e) {
-		settingsMenus.remove(e.getInventory());
-	}
-
-
-	// =========== ui handler =============
-	@EventHandler
-	private void menuHandler(final InventoryClickEvent e) {
-
-		if (!settingsMenus.contains(e.getInventory())) {
-			return;
-		}
-
-		e.setCancelled(true);
-
-
-		final var itemStackClicked = e.getInventory().getItem(e.getRawSlot());
-
-		if (itemStackClicked == null) {
-			return;
-		}
-
-		final var player = ((Player) e.getWhoClicked());
-		final var clickedMaterial = itemStackClicked.getType();
-		final var playerData = PlayerData.getPlayerData(player);
-
-		if (e.getRawSlot() == 3) {
-			//compare to material clicked. if green glass then its ON (true) so !true == true = false
-			playerData.keepingInventory = !clickedMaterial.equals(ENABLED_BUTTON.getType());
+		//add slot actions outside itemset to update them on click
+		settingsMenu.addSlotAction(2, event -> {
+			playerData.keepingInventory = !playerData.keepingInventory;
 			PlayerData.updatePlayerData(player, playerData);
-			openGUI(player);
-		}
+			settingsMenu.updateItem(2, keepInventoryButton(playerData.keepingInventory));
+		});
 
-		if (e.getRawSlot() == 4) {
-			playerData.sittingOnStairs = !clickedMaterial.equals(ENABLED_BUTTON.getType());
+		settingsMenu.addSlotAction(3, event -> {
+			playerData.sittingOnStairs = !playerData.sittingOnStairs;
 			PlayerData.updatePlayerData(player, playerData);
-			openGUI(player);
-		}
+			settingsMenu.updateItem(3, sitOnStairsButton(playerData.sittingOnStairs));
+		});
 
-		if (e.getRawSlot() == 5) {
+		settingsMenu.addSlotAction(4, event -> {
 			if (DonationBenefitCommand.hasDonationPotions(player)) {
 				Utilities.sendMsg(player, Language.PVP_DONATION_POTIONS_DENIED.getTranslation(player));
 				return;
 			}
-			playerData.pvp = !clickedMaterial.equals(ENABLED_BUTTON.getType());
 			PlayerData.updatePlayerData(player, playerData);
-			openGUI(player);
-		}
+			playerData.pvp = !playerData.pvp;
+			PlayerData.updatePlayerData(player, playerData);
+			settingsMenu.updateItem(4, pvpButton(playerData.pvp));
+		});
 
-		if (e.getRawSlot() == 8) {
-			player.closeInventory();
-		}
+		//add items to menu
+		settingsMenu.setItem(2, keepInventoryButton(playerData.keepingInventory));
 
+		settingsMenu.setItem(3, sitOnStairsButton(playerData.sittingOnStairs));
+
+		settingsMenu.setItem(4, pvpButton(playerData.pvp));
+
+		settingsMenu.setItem(8, ItemBuilder.from(Material.BARRIER)
+				.setName(Utilities.colorize("&4&lExit")).glow(true)
+				.asGuiItem(event -> settingsMenu.close(event.getWhoClicked()))
+		);
+
+		settingsMenu.setItem(5,ItemBuilder.from(Material.PAPER)
+				.setName(Utilities.colorize("<r>Change chat color"))
+				.setLore(Utilities.colorize("<#848eab>&lCurrent color: &" + playerData.chatColor +
+						Utilities.readableEnumName(ChatColor.getByChar(playerData.chatColor).name())))
+				.glow(true)
+				.asGuiItem(event -> {
+					ChatColorMenu.colorUI(((Player) event.getWhoClicked()),settingsMenu);
+				})
+		);
+
+		settingsMenu.open(player);
 	}
 
 	@Subcommand("setsupportpin")

@@ -1,14 +1,20 @@
 package me.aggellos2001.survivaleuplugin.hooks;
 
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
+import me.mattstudios.mfmsg.base.MessageOptions;
+import me.mattstudios.mfmsg.base.internal.Format;
+import me.mattstudios.mfmsg.bukkit.BukkitMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.group.Group;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -84,18 +90,15 @@ public final class LuckPermsHook extends PluginActivity {
 		return getPlayerRank(p).isStaff;
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void formatChat(final AsyncPlayerChatEvent e) {
-		final var player = e.getPlayer();
-		final String rank = getPlayerRank(player).format;
-		final String chatColor = rank.substring(0, 2);
-		e.setFormat(Utilities.colorize(rank + "&r %s:&r %s "));
-		if (isStaff(player) || player.isOp()) {
-			e.setMessage(Utilities.colorize(e.getMessage()));
-			e.setFormat(Utilities.colorize(rank + "&r %s:&r" + chatColor + " %s "));
-		}
-		e.setMessage(e.getMessage().replace("&k", " "));
-
+		var data = PlayerData.getPlayerData(e.getPlayer());
+		var chatOptions = MessageOptions.builder().removeFormat(Format.LEGACY_OBFUSCATED,Format.OBFUSCATED).build();
+		var colorize = BukkitMessage.create(chatOptions);
+		var rank = getPlayerRank(e.getPlayer()).format;
+		var chatColor = "&" + data.chatColor;
+		e.setFormat(colorize.parse(rank + "&r %s:&r %s").toString());
+		e.setMessage(colorize.parse(chatColor + e.getMessage()).toString());
 	}
 
 	public static void setup() {

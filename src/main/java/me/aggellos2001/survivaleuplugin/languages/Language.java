@@ -152,16 +152,16 @@ public enum Language {
 					"&aYour ping: %s\n" +
 					"&cΟ server κολλάει λίγο. Περίμενε λίγα λεπτά και συνήθως σταματάει να κολλάει!"
 	),
-	VOTEKICK_STARTED(Utilities.getHexColor("#ffc403") +
-			"&lA votekick has been started for player &e %s " + Utilities.getHexColor("#ffc403") + "&lby&e %s\n" +
-			Utilities.getHexColor("#ffc403") + "/votekick yes\n" +
-			Utilities.getHexColor("#ff0314") + "/votekick no\n" +
+	VOTEKICK_STARTED(Utilities.colorize("#ffc403") +
+			"&lA votekick has been started for player &e %s " + Utilities.colorize("#ffc403") + "&lby&e %s\n" +
+			Utilities.colorize("#ffc403") + "/votekick yes\n" +
+			Utilities.colorize("#ff0314") + "/votekick no\n" +
 			"&eVote ends in 60 seconds!",
 
-			Utilities.getHexColor("#ffc403") +
-					"&lΨηφοφορία για kick άρχισε για τον παίκτη &e %s " + Utilities.getHexColor("#ffc403") + "&lαπό τον παίκτη&e %s\n" +
-					Utilities.getHexColor("#ffc403") + "/votekick yes\n" +
-					Utilities.getHexColor("#ff0314") + "/votekick no\n" +
+			Utilities.colorize("#ffc403") +
+					"&lΨηφοφορία για kick άρχισε για τον παίκτη &e %s " + Utilities.colorize("#ffc403") + "&lαπό τον παίκτη&e %s\n" +
+					Utilities.colorize("#ffc403") + "/votekick yes\n" +
+					Utilities.colorize("#ff0314") + "/votekick no\n" +
 					"&eΗ ψηφοφορία λήγει σε 60 δευτερόλεπτα!"),
 	VOTEKICK_CANNOT_KICK_SELF("&cYou cannot votekick yourself!", "&cΔεν μπορείς να ξεκινήσεις ψηφοφορία για τον εαυτό σου!"),
 	VOTEKICK_FAILED("&cThe votekicked was failed. Not enough votes!",
