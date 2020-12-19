@@ -8,6 +8,7 @@ import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public final class EssentialsXHook {
 
@@ -16,7 +17,7 @@ public final class EssentialsXHook {
 	public static void subtractPlayerBalance(final Player player, final double amount) {
 		final var user = ESSENTIALS.getUser(player);
 		try {
-			Economy.subtract(user,new BigDecimal(amount));
+			Economy.subtract(user, new BigDecimal(amount));
 		} catch (final NoLoanPermittedException ignored) {
 
 		}
@@ -49,7 +50,13 @@ public final class EssentialsXHook {
 		return Economy.hasLess(user, new BigDecimal(amount));
 	}
 
-	public static boolean isAFK(Player player){
+	public static boolean isAFK(final Player player) {
 		return ESSENTIALS.getUser(player).isAfk();
+	}
+
+	public static String getEssentialsPlayerName(final UUID uuid) {
+		final var user = ESSENTIALS.getUser(uuid);
+		if (user == null) return null;
+		return ESSENTIALS.getUser(uuid).getName();
 	}
 }

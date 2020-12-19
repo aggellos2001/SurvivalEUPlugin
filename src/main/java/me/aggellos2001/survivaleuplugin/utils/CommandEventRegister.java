@@ -61,7 +61,8 @@ public final class CommandEventRegister {
 				new KeepInventoryEvent(),
 				new PlayMusicCommand(),
 				new ServerSnow(),
-				new ReportPlayerCommand()
+				new ReportPlayerCommand(),
+				new PlayerFinder()
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

@@ -90,6 +90,10 @@ public class Utilities {
 		sender.sendMessage(colorize(message, true));
 	}
 
+	public static void sendMsg(final CommandSender sender, final String message, final boolean removePrefix) {
+		sender.sendMessage(colorize(message, removePrefix));
+	}
+
 	public static ItemStack createRenamedItemStack(final Material material, final String displayName) {
 		final var stack = new ItemStack(material);
 		final ItemMeta meta = stack.getItemMeta();

@@ -19,43 +19,43 @@ public class Config {
 	private final JavaPlugin plugin;
 
 
-	public void addDefaults(String... paths) {
-		PATHS.addAll(Arrays.asList(paths));
+	public void addDefaults(final String... paths) {
+		this.PATHS.addAll(Arrays.asList(paths));
 		initializeConfig();
 	}
 
-	public Config(String name, JavaPlugin plugin, File pluginDataFolder) {
+	public Config(final String name, final JavaPlugin plugin, final File pluginDataFolder) {
 		this.name = name;
 		this.plugin = plugin;
-		CONFIG = new YamlConfig(pluginDataFolder, this.name);
-		CONFIG.createConfig();
+		this.CONFIG = new YamlConfig(pluginDataFolder, this.name);
+		this.CONFIG.createConfig();
 	}
 
 	private void initializeConfig() {
 
-		for (String value : PATHS) {
-			CONFIG_CACHE.put(value, CONFIG.getConfig().get(value));
+		for (final String value : this.PATHS) {
+			this.CONFIG_CACHE.put(value, this.CONFIG.getConfig().get(value));
 		}
 
-		plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateConfigFileFromCache(), Utilities.TicksDuration.MINUTE.getTime(1), Utilities.TicksDuration.MINUTE.getTime(30));
+		this.plugin.getServer().getScheduler().scheduleSyncRepeatingTask(this.plugin, new UpdateConfigFileFromCache(), Utilities.TicksDuration.MINUTE.getTime(1), Utilities.TicksDuration.HOUR.getTime(5));
 	}
 
-	public Object getValue(String path) {
-		return CONFIG_CACHE.get(path);
+	public Object getValue(final String path) {
+		return this.CONFIG_CACHE.get(path);
 	}
 
-	public void setValue(String path, Object value) {
-		CONFIG_CACHE.put(path, value);
+	public void setValue(final String path, final Object value) {
+		this.CONFIG_CACHE.put(path, value);
 	}
 
 	public void saveConfig() {
-		if (PATHS.size() == 0 ){
+		if (this.PATHS.size() == 0) {
 			return;
 		}
-		for (String path : PATHS) {
-			CONFIG.getConfig().set(path, CONFIG_CACHE.get(path));
+		for (final String path : this.PATHS) {
+			this.CONFIG.getConfig().set(path, this.CONFIG_CACHE.get(path));
 		}
-		CONFIG.save();
+		this.CONFIG.save();
 	}
 
 	private class UpdateConfigFileFromCache implements Runnable {
