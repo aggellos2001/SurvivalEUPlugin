@@ -1,9 +1,13 @@
 package me.aggellos2001.survivaleuplugin.utils;
 
+import me.mattstudios.mfmsg.base.MessageOptions;
+import me.mattstudios.mfmsg.base.internal.Format;
 import me.mattstudios.mfmsg.bukkit.BukkitMessage;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -13,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class Utilities {
 
@@ -20,7 +25,7 @@ public class Utilities {
 	 * Simple way to get tick values from real time values.
 	 */
 
-	private static final BukkitMessage messageParser = BukkitMessage.create();
+	private static final BukkitMessage messageParser = BukkitMessage.create(MessageOptions.builder().removeFormat(Format.ITALIC).build());
 
 	public enum TicksDuration {
 
@@ -42,6 +47,11 @@ public class Utilities {
 		}
 	}
 
+	public static String colorize(final String s, Format... disableFormat){
+		var parser = BukkitMessage.create(MessageOptions.builder().removeFormat(disableFormat).build());
+		return parser.parse(s).toString();
+	}
+
 	public static String colorize(final String s) {
 		return messageParser.parse(s).toString();
 	}
@@ -50,6 +60,13 @@ public class Utilities {
 		if (addPrefix) {
 			return messageParser.parse("&6[&bSurvivalEU&6]&r " + s).toString();
 		} else return colorize(s);
+	}
+
+	public static String[] colorize(final String... s) {
+		for (int i = 0; i < s.length; i++) {
+			s[i] = colorize(s[i]);
+		}
+		return s;
 	}
 
 	@Nullable
@@ -90,8 +107,20 @@ public class Utilities {
 		sender.sendMessage(colorize(message, true));
 	}
 
-	public static void sendMsg(final CommandSender sender, final String message, final boolean removePrefix) {
-		sender.sendMessage(colorize(message, removePrefix));
+	public static void sendMsg(final CommandSender sender, final String message, final boolean addPrefix) {
+		sender.sendMessage(colorize(message, addPrefix));
+	}
+
+	public static void sendMsg(Collection<? extends Player> players, final String message) {
+		for (Player player : players) {
+			player.sendMessage(colorize(message, true));
+		}
+	}
+
+	public static void sendMsg(Collection<? extends Player> players, final String message, final boolean addPrefix) {
+		for (Player player : players) {
+			player.sendMessage(colorize(message, addPrefix));
+		}
 	}
 
 	public static ItemStack createRenamedItemStack(final Material material, final String displayName) {
@@ -132,4 +161,68 @@ public class Utilities {
 		enumValue = StringUtils.capitalize(enumValue);
 		return enumValue;
 	}
+
+	public static boolean isLiquid(Material material) {
+		switch (material) {
+			case LAVA:
+			case WATER:
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isSafeLocation(final Location location) {
+
+		// feet block and head block must be non solid (air) and non liquid (we dont want to be drawned to be burned)
+
+		//block of half down of the player
+		var feetBlock = location.getBlock().getType();
+		if (feetBlock.isSolid() || feetBlock == Material.TRIPWIRE || isLiquid(feetBlock))
+			return false; //not safe if its solid or liquid (lava or water)
+
+
+		//block half up of the player
+		var headBlock = location.getBlock().getRelative(BlockFace.UP).getType();
+		if (headBlock.isSolid() || isLiquid(headBlock)) {
+			return false; // not safe if its solid or liquid (lava or water)
+		}
+		//block under legs
+		var groundBlock = location.getBlock().getRelative(BlockFace.DOWN).getType();
+		if (!groundBlock.isSolid())
+			return false; //must be solid for player to stand
+
+		/* also the ground block must also not be a pressure plate or a tripwire for example
+		   so we can avoid traps. also no leaves so we do not spawn on top of a tree if we use
+		   this in a (wild) command for example.
+		 */
+		switch (groundBlock) {
+			case ACACIA_PRESSURE_PLATE:
+			case BIRCH_PRESSURE_PLATE:
+			case CRIMSON_PRESSURE_PLATE:
+			case DARK_OAK_PRESSURE_PLATE:
+			case HEAVY_WEIGHTED_PRESSURE_PLATE:
+			case JUNGLE_PRESSURE_PLATE:
+			case LIGHT_WEIGHTED_PRESSURE_PLATE:
+			case OAK_PRESSURE_PLATE:
+			case POLISHED_BLACKSTONE_PRESSURE_PLATE:
+			case SPRUCE_PRESSURE_PLATE:
+			case STONE_PRESSURE_PLATE:
+			case WARPED_PRESSURE_PLATE:
+			case LAVA:
+			case WATER:
+			case MAGMA_BLOCK:
+			case ACACIA_LEAVES:
+			case BIRCH_LEAVES:
+			case DARK_OAK_LEAVES:
+			case JUNGLE_LEAVES:
+			case OAK_LEAVES:
+			case SPRUCE_LEAVES:
+				return false;
+		}
+
+		// return true if location provided (assuming is a block location probably) is safe to tp.
+		return true;
+	}
+
+
 }

@@ -23,7 +23,7 @@ public class IpInfoPrivacy {
 
 	private PrivacyAPI requestAPI(@NotNull final String hostAddress) {
 		var token = (String) SurvivalEUPlugin.config.getValue("ip-key");
-		if (token.equalsIgnoreCase("REPLACE_WITH_API_TOKEN")){
+		if (token.equalsIgnoreCase("REPLACE_WITH_API_TOKEN")) {
 			Bukkit.getServer().getLogger().info("IP INFO API KEY NOT CONFIGURED!");
 			return PrivacyAPI.DEFAULT_RESPONSE;
 		}

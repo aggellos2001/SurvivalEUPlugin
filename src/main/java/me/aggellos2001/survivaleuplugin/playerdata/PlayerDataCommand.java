@@ -98,13 +98,13 @@ public final class PlayerDataCommand extends PluginActivity {
 				.asGuiItem(event -> settingsMenu.close(event.getWhoClicked()))
 		);
 
-		settingsMenu.setItem(5,ItemBuilder.from(Material.PAPER)
+		settingsMenu.setItem(5, ItemBuilder.from(Material.PAPER)
 				.setName(Utilities.colorize("<r>Change chat color"))
 				.setLore(Utilities.colorize("<#848eab>&lCurrent color: &" + playerData.chatColor +
 						Utilities.readableEnumName(ChatColor.getByChar(playerData.chatColor).name())))
 				.glow(true)
 				.asGuiItem(event -> {
-					ChatColorMenu.colorUI(((Player) event.getWhoClicked()),settingsMenu);
+					ChatColorMenu.colorUI(((Player) event.getWhoClicked()), settingsMenu);
 				})
 		);
 

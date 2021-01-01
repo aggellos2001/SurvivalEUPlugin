@@ -20,10 +20,10 @@ public final class PlayerLanguage extends PluginActivity {
 		SurvivalEUPlugin.instance.getServer().getScheduler().runTaskLater(SurvivalEUPlugin.instance, () -> {
 			if (e.getPlayer().getLocale().toLowerCase().equals("el_gr")) {
 				LANGUAGE_MAP.put(e.getPlayer(), "greek");
-				Utilities.sendMsg(e.getPlayer(),"&aΗ γλώσσα ορίστηκε σε Ελληνικά!");
+				Utilities.sendMsg(e.getPlayer(), "&aΗ γλώσσα ορίστηκε σε Ελληνικά!");
 			} else {
 				LANGUAGE_MAP.put(e.getPlayer(), "english");
-				Utilities.sendMsg(e.getPlayer(),"&aYour language was set to English!");
+				Utilities.sendMsg(e.getPlayer(), "&aYour language was set to English!");
 			}
 		}, 3 * 20L);
 	}

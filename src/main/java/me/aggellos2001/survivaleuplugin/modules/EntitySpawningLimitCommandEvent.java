@@ -59,8 +59,8 @@ public final class EntitySpawningLimitCommandEvent extends PluginActivity {
 			Utilities.sendMsg(player, "&b/entitylimit {newLimit}\n" +
 					"&bCurrent limit &e: " + limit);
 		} else {
-				SurvivalEUPlugin.config.setValue("entity-limit", newLimit);
-				Utilities.sendMsg(player,"&aEntity limiter was set to &e" + newLimit);
+			SurvivalEUPlugin.config.setValue("entity-limit", newLimit);
+			Utilities.sendMsg(player, "&aEntity limiter was set to &e" + newLimit);
 		}
 	}
 }

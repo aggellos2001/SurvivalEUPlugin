@@ -51,7 +51,7 @@ public final class AntiSwearingEvent extends PluginActivity {
 			if (arguments[i].startsWith("/")) continue;
 			for (final String swear : BAD_WORDS) {
 				if (arguments[i].toLowerCase().startsWith(swear) || arguments[i].toLowerCase().contains(swear)) {
-					arguments[i] = "#".repeat(arguments[i].length());
+					arguments[i] = "#" .repeat(arguments[i].length());
 					foundBadWord = true;
 					break;
 				}
@@ -60,7 +60,7 @@ public final class AntiSwearingEvent extends PluginActivity {
 		if (foundBadWord) {
 			for (final Player player : Bukkit.getOnlinePlayers()) {
 				if (player.hasPermission("seu.swear.notify")) {
-					Utilities.sendMsg(player,"&c[Swear]&4 O παίκτης " + e.getPlayer().getName() + " προσπάθησε να πει: &e" + e.getMessage());
+					Utilities.sendMsg(player, "&c[Swear]&4 O παίκτης " + e.getPlayer().getName() + " προσπάθησε να πει: &e" + e.getMessage());
 				}
 			}
 			e.setMessage(String.join(" ", arguments));

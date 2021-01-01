@@ -9,9 +9,6 @@ import me.mattstudios.mfmsg.base.internal.Format;
 import me.mattstudios.mfmsg.bukkit.BukkitMessage;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.model.group.Group;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,7 +52,7 @@ public final class LuckPermsHook extends PluginActivity {
 		private static final String[] POSSIBLE_GROUPS = new String[]{
 				"owner", "coowner", "administrator", "moderator", "trainee", "helper",
 				"emerald", "diamond", "iron", "coal",
-				"twitch", "youtube", "builder","default"
+				"twitch", "youtube", "builder", "default"
 		};
 
 		Ranks(final String format, final String permission, final boolean isStaff) {
@@ -86,14 +83,14 @@ public final class LuckPermsHook extends PluginActivity {
 		PERM_CACHE.remove(e.getPlayer());
 	}
 
-	private boolean isStaff(final Player p) {
+	public boolean isStaff(final Player p) {
 		return getPlayerRank(p).isStaff;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void formatChat(final AsyncPlayerChatEvent e) {
 		var data = PlayerData.getPlayerData(e.getPlayer());
-		var chatOptions = MessageOptions.builder().removeFormat(Format.LEGACY_OBFUSCATED,Format.OBFUSCATED).build();
+		var chatOptions = MessageOptions.builder().removeFormat(Format.LEGACY_OBFUSCATED, Format.OBFUSCATED).build();
 		var colorize = BukkitMessage.create(chatOptions);
 		var rank = getPlayerRank(e.getPlayer()).format;
 		var chatColor = "&" + data.chatColor;
@@ -117,13 +114,13 @@ public final class LuckPermsHook extends PluginActivity {
 		if (player.getName().equals("GGRLX")) {
 			return Ranks.COOWNER;
 		}
-		if (player.getName().equals("alexandroulis")){
+		if (player.getName().equals("alexandroulis")) {
 			return Ranks.ADMINISTRATOR;
 		}
-		if (player.getName().equals("SchachShaolin78")){
+		if (player.getName().equals("SchachShaolin78")) {
 			return Ranks.ADMINISTRATOR;
 		}
-		if (player.getName().equals("BIGTOM2002")){
+		if (player.getName().equals("BIGTOM2002")) {
 			return Ranks.ADMINISTRATOR;
 		}
 

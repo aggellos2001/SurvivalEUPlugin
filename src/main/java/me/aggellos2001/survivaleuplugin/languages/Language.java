@@ -176,7 +176,7 @@ public enum Language {
 	VOTEKICK_VOTED_NO("&aYou have voted NO!", "&aΨήφισες &c&lΟΧΙ"),
 	VOTEKICK_ALREADY_VOTED("&cYou have already voted on this vote!", "&cΈχεις ήδη ψηφίσει σε αυτό αυτή την ψηφοφορία"),
 	VOTEKICK_VOTE_ALREADY_ONGOING("&cThere is a vote ongoing for player &e%s &c.", "&cΕίναι σε εξέλιξη ήδη μια ψηφοφορία για τον παίκτη &e%s &c."),
-	REPORT_SELFREPORT("&cYou cannot report yourself!","&cΔεν μπορείς να κάνεις αναφορά στον εαυτό σου!");
+	REPORT_SELFREPORT("&cYou cannot report yourself!", "&cΔεν μπορείς να κάνεις αναφορά στον εαυτό σου!");
 
 
 	Language(

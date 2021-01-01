@@ -5,6 +5,7 @@ import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChainFactory;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.modules.AdvertisementScheduler;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerWarp;
 import me.aggellos2001.survivaleuplugin.utils.CommandEventRegister;
 import me.aggellos2001.survivaleuplugin.utils.Config;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
@@ -26,9 +27,9 @@ public class SurvivalEUPlugin extends JavaPlugin {
 
 		instance = this;
 
-		chainFactory =  BukkitTaskChainFactory.create(this);
+		chainFactory = BukkitTaskChainFactory.create(this); //task chain init
 
-		COMMAND_MANAGER = new PaperCommandManager(this);
+		COMMAND_MANAGER = new PaperCommandManager(this); //acf command manager init
 
 		config = new Config("config", this, this.getDataFolder());
 		config.addDefaults(config.CONFIG.addDefaultInt("entity-limit", 10),
@@ -45,13 +46,15 @@ public class SurvivalEUPlugin extends JavaPlugin {
 
 		LuckPermsHook.setup();
 
-		Plugin essentials =  Bukkit.getPluginManager().getPlugin("Essentials");
-		if (essentials == null){
+		final Plugin essentials = Bukkit.getPluginManager().getPlugin("Essentials");
+		if (essentials == null) {
 			throw new IllegalStateException("Essentials plugin missing!");
 		}
 		IEssentials = (IEssentials) essentials;
 
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new AdvertisementScheduler(), 30 * 20, 3600 * 20);
+
+		PlayerWarp.loadPlayerWarps(); // load warps from file playerWarps.dat
 
 		getLogger().info(Utilities.colorize("&aPlugin loaded!"));
 
@@ -61,6 +64,7 @@ public class SurvivalEUPlugin extends JavaPlugin {
 	public void onDisable() {
 		getServer().getScheduler().cancelTasks(instance);
 		config.saveConfig();
+		PlayerWarp.savePlayerWarps(); //save warps to file playerWarps.dat
 		instance = null;
 		getLogger().info(Utilities.colorize("&cPlugin unloaded!"));
 	}

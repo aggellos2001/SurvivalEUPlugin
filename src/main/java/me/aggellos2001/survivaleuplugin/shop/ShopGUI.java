@@ -29,9 +29,6 @@ public class ShopGUI extends PluginActivity {
 	public static final Set<Inventory> purchaseShopUISet = new HashSet<>();
 
 
-
-
-
 	public ShopGUI() {
 		//Possible sizes 9, 18, 27, 36, 45,54
 	}
@@ -110,7 +107,6 @@ public class ShopGUI extends PluginActivity {
 	public static void openPurchaseMenu(final Player player, final Material material) {
 
 		final var inventory = createInventory(null, 9, Utilities.colorize("#02A122&lSurvivalEU &e&lShop"));
-
 
 
 		//back button

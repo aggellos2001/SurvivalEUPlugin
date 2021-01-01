@@ -10,9 +10,6 @@ import org.bukkit.entity.Player;
 public final class Shop extends PluginActivity {
 
 
-
-
-
 	public enum ShopPrices {
 		//<editor-fold desc="Prices" defaultstate="collapsed">
 

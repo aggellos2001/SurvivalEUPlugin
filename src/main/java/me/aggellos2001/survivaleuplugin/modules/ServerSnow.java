@@ -7,6 +7,7 @@ import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -19,23 +20,26 @@ import java.util.concurrent.ThreadLocalRandom;
 @CommandAlias("snowfall")
 public class ServerSnow extends PluginActivity {
 
-	private static Set<Player> snowPlayers = new HashSet<>();
-	private static ThreadLocalRandom random = ThreadLocalRandom.current();
+	private static final Set<Player> snowPlayers = new HashSet<>();
+	private static final ThreadLocalRandom random = ThreadLocalRandom.current();
 
 	static {
 		//snow spawning runnable
-		var snowRunnable = new Runnable() {
+		final var snowRunnable = new Runnable() {
 			@Override
 			public void run() {
 				if (snowPlayers.size() == 0) return;
-				for (Player player : snowPlayers) {
+				for (final Player player : snowPlayers) {
+					if (player.getLocation().getWorld().getEnvironment() != World.Environment.NORMAL) {
+						return;
+					}
 					if (player.getLocation().getBlockY() < player.getWorld().getHighestBlockYAt(player.getLocation())) {
 						continue;
 					}
-					var x = player.getLocation().getX() + random.nextInt(-35,35);
-					var y = player.getLocation().getY() + 10;
-					var z = player.getLocation().getZ() + random.nextInt(-35,35);
-					player.spawnParticle(Particle.FIREWORKS_SPARK, x, y, z,300,35,0,35,0.65);
+					final var x = player.getLocation().getX() + random.nextInt(-35, 35);
+					final var y = player.getLocation().getY() + 20;
+					final var z = player.getLocation().getZ() + random.nextInt(-35, 35);
+					player.spawnParticle(Particle.FIREWORKS_SPARK, x, y, z, 300, 30, 15, 30, 0.01);
 				}
 			}
 		};
@@ -44,19 +48,19 @@ public class ServerSnow extends PluginActivity {
 	}
 
 	@EventHandler
-	private void spawnFakeSnow(PlayerJoinEvent event) {
-		var player = event.getPlayer();
+	private void spawnFakeSnow(final PlayerJoinEvent event) {
+		final var player = event.getPlayer();
 		snowPlayers.add(player);
 	}
 
 	@EventHandler
-	private void removePlayer(PlayerQuitEvent event) {
-		var player = event.getPlayer();
+	private void removePlayer(final PlayerQuitEvent event) {
+		final var player = event.getPlayer();
 		snowPlayers.remove(player);
 	}
 
 	@Default
-	private void onSnowFallCommand(Player player) {
+	private void onSnowFallCommand(final Player player) {
 		if (player == null) {
 			return;
 		}

@@ -31,9 +31,9 @@ public final class BlockVPN extends PluginActivity {
 	}
 
 	@Default
-	private void onAddingAPIKey(CommandSender sender, @Single String apiKey) {
+	private void onAddingAPIKey(final CommandSender sender, @Single final String apiKey) {
 		SurvivalEUPlugin.config.setValue("ip-key", apiKey);
-		Utilities.sendMsg(sender, "&aSet api key successfully to " + apiKey +"!");
+		Utilities.sendMsg(sender, "&aSet api key successfully to " + apiKey + "!");
 	}
 
 }

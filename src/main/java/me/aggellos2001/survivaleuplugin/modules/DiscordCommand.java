@@ -12,7 +12,7 @@ public final class DiscordCommand extends PluginActivity {
 
 	@Default
 	public boolean onCommand(final CommandSender sender) {
-		Utilities.sendMsg(sender,"&6Discord server: &e&lhttp://discord.survivaleu.com/");
+		Utilities.sendMsg(sender, "&6Discord server: &e&lhttp://discord.survivaleu.com/");
 		return true;
 	}
 }

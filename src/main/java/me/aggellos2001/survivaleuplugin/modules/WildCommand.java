@@ -7,10 +7,7 @@ import me.aggellos2001.survivaleuplugin.hooks.EssentialsXHook;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static me.aggellos2001.survivaleuplugin.utils.Utilities.isSafeLocation;
 
 @CommandAlias("wild")
 public class WildCommand extends PluginActivity {
@@ -48,40 +47,40 @@ public class WildCommand extends PluginActivity {
 		}
 	}
 
-
-	private boolean isSuitable(final Block block) {
-		final boolean isBlockSafe;
-		final boolean isBlockDownSafe;
-		final boolean isTwoBlockUpSafe;
-		final boolean isBlockUpSafe;
-		final boolean isThreeBlockUpSafe;
-
-
-		switch (block.getRelative(BlockFace.DOWN).getState().getType()) {
-			case AIR:
-			case CAVE_AIR:
-			case WATER:
-			case LAVA:
-			case MAGMA_BLOCK:
-			case WITHER_ROSE:
-			case POTTED_WITHER_ROSE:
-			case VOID_AIR:
-				isBlockDownSafe = false;
-				break;
-			default:
-				isBlockDownSafe = true;
-		}
-
-		isBlockUpSafe = block.getRelative(BlockFace.UP).getState().getType() == Material.AIR;
-
-		isTwoBlockUpSafe = block.getRelative(BlockFace.UP).getRelative(BlockFace.UP).getState().getType() == Material.AIR;
-
-		isBlockSafe = block.getType() == Material.AIR;
-
-		isThreeBlockUpSafe = block.getRelative(BlockFace.UP).getRelative(BlockFace.UP).getRelative(BlockFace.UP).getState().getType() == Material.AIR;
-
-		return isBlockDownSafe && isBlockUpSafe && isTwoBlockUpSafe && isBlockSafe && isThreeBlockUpSafe;
-	}
+// Now using Utilities.isSafeLocation(block.getLocation()) to determine if the teleportation is safe!
+//	private boolean isSuitable(final Block block) {
+//		final boolean isBlockSafe;
+//		final boolean isBlockDownSafe;
+//		final boolean isTwoBlockUpSafe;
+//		final boolean isBlockUpSafe;
+//		final boolean isThreeBlockUpSafe;
+//
+//
+//		switch (block.getRelative(BlockFace.DOWN).getState().getType()) {
+//			case AIR:
+//			case CAVE_AIR:
+//			case WATER:
+//			case LAVA:
+//			case MAGMA_BLOCK:
+//			case WITHER_ROSE:
+//			case POTTED_WITHER_ROSE:
+//			case VOID_AIR:
+//				isBlockDownSafe = false;
+//				break;
+//			default:
+//				isBlockDownSafe = true;
+//		}
+//
+//		isBlockUpSafe = block.getRelative(BlockFace.UP).getState().getType() == Material.AIR;
+//
+//		isTwoBlockUpSafe = block.getRelative(BlockFace.UP).getRelative(BlockFace.UP).getState().getType() == Material.AIR;
+//
+//		isBlockSafe = block.getType() == Material.AIR;
+//
+//		isThreeBlockUpSafe = block.getRelative(BlockFace.UP).getRelative(BlockFace.UP).getRelative(BlockFace.UP).getState().getType() == Material.AIR;
+//
+//		return isBlockDownSafe && isBlockUpSafe && isTwoBlockUpSafe && isBlockSafe && isThreeBlockUpSafe;
+//	}
 
 	private void teleportToRandomLocationAsync(final Player player, final int maxDistance, final int maxRetries) {
 		if (maxRetries == 0) {
@@ -97,8 +96,8 @@ public class WildCommand extends PluginActivity {
 				final var randomXforChunk = this.random.nextInt(16);
 				final var randomZforChunk = this.random.nextInt(16);
 				final var y = chunk.getChunkSnapshot().getHighestBlockYAt(randomXforChunk, randomZforChunk);
-				final var block = chunk.getBlock(randomXforChunk, y + 1, randomZforChunk);
-				if (isSuitable(block)) {
+				final var block = chunk.getBlock(randomXforChunk, y, randomZforChunk);
+				if (/*isSuitable(block)*/ isSafeLocation(block.getLocation())) {
 					player.teleportAsync(block.getLocation());
 					Utilities.sendMsg(player, Language.WILD_SUCCESS_TP.getTranslation(player));
 					final var wildCost = (int) SurvivalEUPlugin.config.getValue("wild-cost");
