@@ -1,6 +1,6 @@
 package me.aggellos2001.survivaleuplugin.modules;
 
-import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
+import me.aggellos2001.survivaleuplugin.config.Config;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,7 +28,7 @@ public final class CommandCoolDownEvent extends PluginActivity {
 			LAST_TIME_EXECUTED_COMMAND.put(player, System.currentTimeMillis());
 			return;
 		}
-		final var delay = (int) SurvivalEUPlugin.config.getValue("slowmode") * 1000; //make delay to milliseconds
+		final var delay = Duration.ofSeconds(Config.getConfig().slowModeDelay).toMillis(); //make delay to milliseconds
 		if (diff < delay) {
 			e.setCancelled(true);
 			Utilities.sendMsg(player, String.format(Language.SLOW_COMMAND.getTranslation(player), (delay - diff) / 1000));

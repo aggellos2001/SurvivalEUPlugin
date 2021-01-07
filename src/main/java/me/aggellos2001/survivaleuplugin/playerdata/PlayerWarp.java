@@ -12,6 +12,8 @@ import java.util.Set;
 
 public class PlayerWarp extends PluginActivity implements Serializable {
 
+	//TODO Use Gson in feature and also make it async
+
 	private final transient static Set<PlayerWarp> playerWarps = new HashSet<>(); //loads from file on startup
 
 	//serialized fields
@@ -27,7 +29,7 @@ public class PlayerWarp extends PluginActivity implements Serializable {
 		playerWarps.add(warp);
 	}
 
-	public static void removeWarp(PlayerWarp warps) {
+	public static void removeWarp(final PlayerWarp warps) {
 		playerWarps.remove(warps);
 	}
 
@@ -44,19 +46,14 @@ public class PlayerWarp extends PluginActivity implements Serializable {
 		return playerWarps;
 	}
 
-	public static PlayerWarp getWarpByName(String warpName) {
-		for (PlayerWarp playerWarp : playerWarps) {
+	public static PlayerWarp getWarpByName(final String warpName) {
+		for (final PlayerWarp playerWarp : playerWarps) {
 			if (playerWarp.warpName.equalsIgnoreCase(warpName)) {
 				return playerWarp;
 			}
 		}
 		return null;
 	}
-
-	//returns null sometimes so we dont need that
-//	public Player getPlayer() {
-//		return Bukkit.getPlayer(this.player);
-//	}
 
 	public String getPlayerName() {
 		return this.player;
@@ -72,7 +69,7 @@ public class PlayerWarp extends PluginActivity implements Serializable {
 
 
 	public static void loadPlayerWarps() {
-		final var file = new File(PlayerData.Directory, java.io.File.separator + "playerWarps.dat");
+		final var file = new File(PlayerData.Directory, "playerWarps.dat");
 		if (!file.exists() || file.length() == 0) return;
 		try (var objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
 			do {
@@ -85,7 +82,7 @@ public class PlayerWarp extends PluginActivity implements Serializable {
 
 	@EventHandler
 	public static void savePlayerWarps() {
-		final var file = new File(PlayerData.Directory, java.io.File.separator + "playerWarps.dat");
+		final var file = new File(PlayerData.Directory, "playerWarps.dat");
 		try (var objectOutputStream = new ObjectOutputStream(new FileOutputStream(file))) {
 			for (final PlayerWarp playerWarp : playerWarps) {
 				objectOutputStream.writeObject(playerWarp);

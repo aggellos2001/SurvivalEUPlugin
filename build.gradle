@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
     implementation "me.mattstudios.utils:matt-framework-gui:2.0.3"
     implementation "me.mattstudios:mf-msg-bukkit:2.0.1"
-//    implementation "com:skinsrestorer:13.8.4-SNAPSHOT" leave in case needed in feature
+
 }
 
 
@@ -52,6 +52,7 @@ tasks.withType(Jar) {
 }
 
 shadowJar {
+    archiveFileName = "SurvivalEUPlugin-1.16.4.jar"
     destinationDirectory = file("C:/Users/aggel/Desktop/Minecraft_Test_Servers/Test_server/plugins")
     relocate 'co.aikar.commands', 'me.aggellos2001.survivaleuplugin.acf'
     relocate 'co.aikar.locales', 'me.aggellos2001.survivaleuplugin.locales'

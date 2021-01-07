@@ -2,3 +2,5 @@
 build/
 .gradle/
 ReportPlayerCommand.java
+PCDetection.java
+BlockVPN.java

@@ -3,24 +3,40 @@ package me.aggellos2001.survivaleuplugin;
 import co.aikar.commands.PaperCommandManager;
 import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChainFactory;
+import me.aggellos2001.survivaleuplugin.config.Config;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.modules.AdvertisementScheduler;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerWarp;
 import me.aggellos2001.survivaleuplugin.utils.CommandEventRegister;
-import me.aggellos2001.survivaleuplugin.utils.Config;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 public class SurvivalEUPlugin extends JavaPlugin {
 
 	public static SurvivalEUPlugin instance = null;
-	public static Config config;
+	//	public static Config config;
 	public static PaperCommandManager COMMAND_MANAGER;
 	public static TaskChainFactory chainFactory;
 	public static IEssentials IEssentials;
+
+	@Override
+	public void onLoad() {
+		try {
+			//Make sure the directories are created. Nothing happens if they exist already.
+			var dataFolder = Files.createDirectories(Path.of(this.getDataFolder().toURI()));
+			var playerDataDir = Files.createDirectories(Path.of(this.getDataFolder() + File.separator + "playerData"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void onEnable() {
@@ -31,16 +47,7 @@ public class SurvivalEUPlugin extends JavaPlugin {
 
 		COMMAND_MANAGER = new PaperCommandManager(this); //acf command manager init
 
-		config = new Config("config", this, this.getDataFolder());
-		config.addDefaults(config.CONFIG.addDefaultInt("entity-limit", 10),
-				config.CONFIG.addDefaultInt("xp-multiplier", 3),
-				config.CONFIG.addDefaultInt("slowmode", 3),
-				config.CONFIG.addDefaultInt("wild-distance", 100000),
-				config.CONFIG.addDefaultInt("wild-cost", 5),
-				config.CONFIG.addDefaultInt("wild-retries", 5),
-				config.CONFIG.addDefaultInt("wild-delay", 300000),
-				config.CONFIG.addDefault("vote-key", "REPLACE_WITH_API_TOKEN"),
-				config.CONFIG.addDefault("ip-key", "REPLACE_WITH_API_TOKEN"));
+		Config.loadConfig(this.getDataFolder());
 
 		CommandEventRegister.registerCommandsAndListeners();
 
@@ -63,7 +70,7 @@ public class SurvivalEUPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		getServer().getScheduler().cancelTasks(instance);
-		config.saveConfig();
+		Config.saveConfig(this.getDataFolder());
 		PlayerWarp.savePlayerWarps(); //save warps to file playerWarps.dat
 		instance = null;
 		getLogger().info(Utilities.colorize("&cPlugin unloaded!"));

@@ -113,6 +113,11 @@ public class PlayerWarpCommand extends PluginActivity {
 			return;
 		}
 
+		if (!Utilities.isSafeLocation(player.getLocation())) {
+			Utilities.sendMsg(player, "&cUnsafe location!");
+			return;
+		}
+
 		final var warp = new PlayerWarp(warpName, player.getName(), player.getLocation());
 
 		for (final PlayerWarp playerWarp : PlayerWarp.getPlayerWarps()) {

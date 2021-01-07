@@ -6,6 +6,7 @@ import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
+import me.aggellos2001.survivaleuplugin.config.Config;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.MessageActionHandler;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
@@ -29,13 +30,13 @@ public final class VoteCommand extends PluginActivity {
 
 	private String checkIfVoted(final Player p) {
 		//get vote key from config
-		var voteKey = (String) SurvivalEUPlugin.config.getValue("vote-key");
-		if (voteKey.equalsIgnoreCase("REPLACE_WITH_API_TOKEN")) {
+		final var voteKey = Config.getConfig().voteAPIToken;
+		if (voteKey.equalsIgnoreCase("null")) {
 			Bukkit.getServer().getLogger().info("VOTE KEY API NOT CONFIGURED");
 			return null;
 		}
 		try {
-			var request = HttpRequest.newBuilder()
+			final var request = HttpRequest.newBuilder()
 					.uri(new URI("https://minecraft-mp.com/api/?object=votes&element=claim&key=" + voteKey + "&username=" + p.getName()))
 					.version(HttpClient.Version.HTTP_2)
 					.timeout(Duration.ofSeconds(10))
@@ -52,14 +53,14 @@ public final class VoteCommand extends PluginActivity {
 	// -----------------
 	private String checkIfClaimed(final Player p) {
 
-		var voteKey = (String) SurvivalEUPlugin.config.getValue("vote-key");
-		if (voteKey.equalsIgnoreCase("REPLACE_WITH_API_TOKEN")) {
+		final var voteKey = Config.getConfig().voteAPIToken;
+		if (voteKey.equalsIgnoreCase("null")) {
 			Bukkit.getServer().getLogger().info("VOTE KEY API NOT CONFIGURED");
 			return null;
 		}
 
 		try {
-			var requestToClaimReward = HttpRequest.newBuilder()
+			final var requestToClaimReward = HttpRequest.newBuilder()
 					.uri(new URI("https://minecraft-mp.com/api/?action=post&object=votes&element=claim&key=" + voteKey + "&username=" + p.getName()))
 					.timeout(Duration.ofSeconds(10))
 					.POST(HttpRequest.BodyPublishers.noBody())
@@ -80,7 +81,7 @@ public final class VoteCommand extends PluginActivity {
 	@CommandCompletion("@players")
 	private void onVoteCheck(final Player player, @Optional final OnlinePlayer playerToCheck) {
 		if (playerToCheck == null) {
-			var chain = SurvivalEUPlugin.chainFactory.newChain();
+			final var chain = SurvivalEUPlugin.chainFactory.newChain();
 			chain.asyncFirst(() -> checkIfVoted(player))
 					.abortIfNull(new MessageActionHandler(), player, Language.VOTE_ERROR.getTranslation(player))
 					.syncLast(result -> {
@@ -126,7 +127,7 @@ public final class VoteCommand extends PluginActivity {
 			Utilities.sendMsg(player, Language.VOTE_NO_INV_SPACE.getTranslation(player));
 			return;
 		}
-		var chain = SurvivalEUPlugin.chainFactory.newChain();
+		final var chain = SurvivalEUPlugin.chainFactory.newChain();
 		chain.asyncFirst(() -> checkIfVoted(player))
 				.abortIfNull(new MessageActionHandler(), player, Language.VOTE_ERROR.getTranslation(player))
 				.storeAsData("checkIfVoted")
@@ -134,8 +135,8 @@ public final class VoteCommand extends PluginActivity {
 				.abortIfNull(new MessageActionHandler(), player, Language.VOTE_ERROR.getTranslation(player))
 				.storeAsData("checkIfClaimed")
 				.sync(() -> {
-					var checkIfVoted = Utilities.toIntOrNull(chain.getTaskData("checkIfVoted"));
-					var checkIfClaimed = Utilities.toIntOrNull(chain.getTaskData("checkIfClaimed"));
+					final var checkIfVoted = Utilities.toIntOrNull(chain.getTaskData("checkIfVoted"));
+					final var checkIfClaimed = Utilities.toIntOrNull(chain.getTaskData("checkIfClaimed"));
 					if (checkIfVoted == null || checkIfClaimed == null) {
 						Utilities.sendMsg(player, Utilities.colorize(Language.VOTE_ERROR.getTranslation(player)));
 						return;
@@ -159,18 +160,11 @@ public final class VoteCommand extends PluginActivity {
 						Utilities.sendMsg(player, Language.VOTE_REWARDS.getTranslation(player));
 						Utilities.sendMsg(player, Language.VOTE_REWARD_RECEIVED.getTranslation(player));
 						// everyone that the player voted
-						for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+						for (final Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 							Utilities.sendMsg(onlinePlayer, Utilities.colorize(String.format(Language.VOTE_BROADCAST.getTranslation(onlinePlayer), player.getName())));
 						}
 					}
 				}).execute();
-	}
-
-	@Subcommand("apikey")
-	@CommandPermission("seu.votekey")
-	private void changeAPIKey(Player player, @Single String apiKey) {
-		SurvivalEUPlugin.config.setValue("vote-key", apiKey);
-		Utilities.sendMsg(player, "&aVote api key set to " + apiKey + "!");
 	}
 }
 

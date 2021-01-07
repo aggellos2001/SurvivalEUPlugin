@@ -25,7 +25,7 @@ public class Utilities {
 	 * Simple way to get tick values from real time values.
 	 */
 
-	private static final BukkitMessage messageParser = BukkitMessage.create(MessageOptions.builder().removeFormat(Format.ITALIC).build());
+	private static final BukkitMessage messageParser = BukkitMessage.create(MessageOptions.builder().removeFormat(Format.ITALIC, Format.LEGACY_ITALIC).build());
 
 	public enum TicksDuration {
 
@@ -47,7 +47,7 @@ public class Utilities {
 		}
 	}
 
-	public static String colorize(final String s, Format... disableFormat){
+	public static String colorize(final String s, Format... disableFormat) {
 		var parser = BukkitMessage.create(MessageOptions.builder().removeFormat(disableFormat).build());
 		return parser.parse(s).toString();
 	}

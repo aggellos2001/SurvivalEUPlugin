@@ -3,7 +3,6 @@ package me.aggellos2001.survivaleuplugin.utils;
 import co.aikar.commands.annotation.CommandAlias;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import me.aggellos2001.survivaleuplugin.discordreport.ReportPlayerCommand;
-import me.aggellos2001.survivaleuplugin.holidayevents.FestiveFireworks;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
 import me.aggellos2001.survivaleuplugin.modules.*;
@@ -12,6 +11,7 @@ import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
 import me.aggellos2001.survivaleuplugin.ui.PlayMusicCommand;
 import me.aggellos2001.survivaleuplugin.ui.WarpUICommand;
+import me.aggellos2001.survivaleuplugin.vpnprotection.BlockVPN;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 
@@ -29,7 +29,6 @@ public final class CommandEventRegister {
 				new AlertCommand(),
 				new AntiCapsEvent(),
 				new AntiSwearingEvent(),
-//				new BlockVPN(),
 				new CommandCoolDownEvent(),
 				new DeathMessagesEvent(),
 				new DiscordCommand(),
@@ -69,7 +68,8 @@ public final class CommandEventRegister {
 				new WarpUICommand(),
 				new PlayerWarpCommand(),
 				new SignEditorCommand(),
-				new FestiveFireworks()
+				new BlockVPN()
+//				new FestiveFireworks()
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

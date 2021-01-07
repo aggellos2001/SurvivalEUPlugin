@@ -51,7 +51,7 @@ public final class AntiSwearingEvent extends PluginActivity {
 			if (arguments[i].startsWith("/")) continue;
 			for (final String swear : BAD_WORDS) {
 				if (arguments[i].toLowerCase().startsWith(swear) || arguments[i].toLowerCase().contains(swear)) {
-					arguments[i] = "#" .repeat(arguments[i].length());
+					arguments[i] = "#".repeat(arguments[i].length());
 					foundBadWord = true;
 					break;
 				}
