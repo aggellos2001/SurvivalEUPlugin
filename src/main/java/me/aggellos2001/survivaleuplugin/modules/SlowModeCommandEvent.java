@@ -26,7 +26,7 @@ public final class SlowModeCommandEvent extends PluginActivity {
 
 		if (lastTimeChatted != 0L && difference < coolDown && coolDown > 0 && !e.getPlayer().hasPermission("seu.slowmode.bypass")) {
 			e.setCancelled(true);
-			Utilities.sendMsg(e.getPlayer(), String.format(Language.SLOW_MODE_COOLDOWN.getTranslation(e.getPlayer()), (coolDown - (difference / 1000))));
+			Utilities.sendMsg(e.getPlayer(), String.format(Language.SLOW_MODE_COOLDOWN.getTranslation(e.getPlayer()), (coolDown - difference) / 1000.0));
 		} else {
 			this.LAST_TIME_CHATTED.put(UUID, System.currentTimeMillis());
 		}
