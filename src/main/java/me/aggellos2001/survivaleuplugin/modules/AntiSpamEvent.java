@@ -29,7 +29,7 @@ public class AntiSpamEvent extends PluginActivity {
 		final var before_previous_message = BEFORE_PREVIOUS_MESSAGE.getOrDefault(player, null);
 		final var levenshteinDistance = new LevenshteinDistance().apply(previousMessage, message);
 		final var jaroWinkler = new JaroWinklerDistance().apply(previousMessage, message);
-		if (levenshteinDistance < 2 || jaroWinkler >= 0.80) {
+		if (levenshteinDistance < 2 || jaroWinkler >= 0.90) {
 			Utilities.sendMsg(player, "&cPlease do not repeat the same message!");
 			e.setCancelled(true);
 			return;
@@ -37,7 +37,7 @@ public class AntiSpamEvent extends PluginActivity {
 		if (before_previous_message != null) {
 			final var levenshteinDistanceBefore = new LevenshteinDistance().apply(before_previous_message, message);
 			final var jaroWinklerBefore = new JaroWinklerDistance().apply(before_previous_message, message);
-			if (levenshteinDistanceBefore < 2 || jaroWinklerBefore >= 0.80) {
+			if (levenshteinDistanceBefore < 2 || jaroWinklerBefore >= 0.90) {
 				Utilities.sendMsg(player, "&cPlease do not repeat the same message!");
 				e.setCancelled(true);
 				return;
