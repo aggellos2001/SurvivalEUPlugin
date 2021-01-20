@@ -11,6 +11,9 @@ import me.aggellos2001.survivaleuplugin.utils.CommandEventRegister;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public class SurvivalEUPlugin extends JavaPlugin {
 
@@ -76,4 +80,31 @@ public class SurvivalEUPlugin extends JavaPlugin {
 		getLogger().info(Utilities.colorize("&cPlugin unloaded!"));
 	}
 
+//	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+//
+//		boolean isPlayer = sender instanceof Player;
+////		String user = sender instanceof Player ? ((Player) sender).getName() : "Console";
+//		String user;
+//		if (sender instanceof Player) {
+//			user = ((Player) sender).getName();
+//		} else {
+//			user = "Console";
+//		}
+////		if (player == null)
+////			return false;
+////
+//		if (!(sender instanceof Player)) {
+//			return false;
+//		}
+//		Player player = ((Player) sender);
+//
+//		String message = String.join(" ", args);
+//		for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+//			if (onlinePlayer.hasPermission("your.permission")) {
+//				onlinePlayer.sendMessage(message);
+//			}
+//		}
+//		Arrays.toString(args);
+//		return true;
+//	}
 }

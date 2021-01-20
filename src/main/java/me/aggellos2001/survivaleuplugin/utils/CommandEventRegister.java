@@ -28,7 +28,7 @@ public final class CommandEventRegister {
 		final var commandsEvents = new PluginActivity[]{
 				new AlertCommand(),
 				new AntiCapsEvent(),
-				new AntiSwearingEvent(),
+				new SwearFilterEvent(),
 				new CommandCoolDownEvent(),
 				new DeathMessagesEvent(),
 				new DiscordCommand(),
@@ -68,8 +68,10 @@ public final class CommandEventRegister {
 				new WarpUICommand(),
 				new PlayerWarpCommand(),
 				new SignEditorCommand(),
-				new BlockVPN()
+				new BlockVPN(),
 //				new FestiveFireworks()
+				new StaffChatCommand(),
+				new AntiSpamEvent(),
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

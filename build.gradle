@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'me.aggellos2001.survivaleuplugin'
-version '1.16.4-1'
+version '1.16.5'
 
 sourceCompatibility = targetCompatibility = 11
 compileJava.options.encoding = 'UTF-8'
@@ -30,7 +30,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
     implementation 'com.github.ipinfo:java:ipinfo-api-1.1'
     implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly 'net.luckperms:api:5.0'
@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.5'
     implementation "me.mattstudios.utils:matt-framework-gui:2.0.3"
     implementation "me.mattstudios:mf-msg-bukkit:2.0.1"
+    implementation 'org.apache.commons:commons-text:1.9'
 
 }
 
@@ -52,7 +53,7 @@ tasks.withType(Jar) {
 }
 
 shadowJar {
-    archiveFileName = "SurvivalEUPlugin-1.16.4.jar"
+    archiveFileName = "SurvivalEUPlugin-1.16.5.jar"
     destinationDirectory = file("C:/Users/aggel/Desktop/Minecraft_Test_Servers/Test_server/plugins")
     relocate 'co.aikar.commands', 'me.aggellos2001.survivaleuplugin.acf'
     relocate 'co.aikar.locales', 'me.aggellos2001.survivaleuplugin.locales'

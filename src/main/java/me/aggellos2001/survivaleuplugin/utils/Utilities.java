@@ -47,8 +47,8 @@ public class Utilities {
 		}
 	}
 
-	public static String colorize(final String s, Format... disableFormat) {
-		var parser = BukkitMessage.create(MessageOptions.builder().removeFormat(disableFormat).build());
+	public static String colorize(final String s, final Format... disableFormat) {
+		final var parser = BukkitMessage.create(MessageOptions.builder().removeFormat(disableFormat).build());
 		return parser.parse(s).toString();
 	}
 
@@ -111,15 +111,28 @@ public class Utilities {
 		sender.sendMessage(colorize(message, addPrefix));
 	}
 
-	public static void sendMsg(Collection<? extends Player> players, final String message) {
-		for (Player player : players) {
+	public static void sendMsg(final Collection<? extends Player> players, final String message) {
+		for (final Player player : players) {
 			player.sendMessage(colorize(message, true));
 		}
 	}
 
-	public static void sendMsg(Collection<? extends Player> players, final String message, final boolean addPrefix) {
-		for (Player player : players) {
+	public static void sendMsg(final Collection<? extends Player> players, final String message, final boolean addPrefix) {
+		for (final Player player : players) {
 			player.sendMessage(colorize(message, addPrefix));
+		}
+	}
+
+	public static void sendPermissionMsg(final Player player, final String permission, final String message, final boolean addPrefix) {
+		if (player.hasPermission(permission))
+			player.sendMessage(colorize(message, addPrefix));
+	}
+
+
+	public static void sendPermissionMsg(final Collection<? extends Player> players, final String permission, final String message, final boolean addPrefix) {
+		for (final Player player : players) {
+			if (player.hasPermission(permission))
+				player.sendMessage(colorize(message, addPrefix));
 		}
 	}
 
@@ -162,7 +175,7 @@ public class Utilities {
 		return enumValue;
 	}
 
-	public static boolean isLiquid(Material material) {
+	public static boolean isLiquid(final Material material) {
 		switch (material) {
 			case LAVA:
 			case WATER:
@@ -176,18 +189,18 @@ public class Utilities {
 		// feet block and head block must be non solid (air) and non liquid (we dont want to be drawned to be burned)
 
 		//block of half down of the player
-		var feetBlock = location.getBlock().getType();
+		final var feetBlock = location.getBlock().getType();
 		if (feetBlock.isSolid() || feetBlock == Material.TRIPWIRE || isLiquid(feetBlock))
 			return false; //not safe if its solid or liquid (lava or water)
 
 
 		//block half up of the player
-		var headBlock = location.getBlock().getRelative(BlockFace.UP).getType();
+		final var headBlock = location.getBlock().getRelative(BlockFace.UP).getType();
 		if (headBlock.isSolid() || isLiquid(headBlock)) {
 			return false; // not safe if its solid or liquid (lava or water)
 		}
 		//block under legs
-		var groundBlock = location.getBlock().getRelative(BlockFace.DOWN).getType();
+		final var groundBlock = location.getBlock().getRelative(BlockFace.DOWN).getType();
 		if (!groundBlock.isSolid())
 			return false; //must be solid for player to stand
 

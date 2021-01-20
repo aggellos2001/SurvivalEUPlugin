@@ -28,10 +28,10 @@ public class SignEditorCommand extends PluginActivity {
 			Utilities.sendMsg(player, "&cValid numbers are 1,2,3,4!");
 			return;
 		}
-		final var block = player.getTargetBlock(2);
+		final var block = player.getTargetBlock(4);
 		if (block == null) return;
 		if (!(block.getState() instanceof Sign)) {
-			Utilities.sendMsg(player, "&cCannot find a sign where you look at! (&othe sign must be within 2 blocks near you!&r&c)");
+			Utilities.sendMsg(player, "&cCannot find a sign where you look at! (&othe sign must be within 4 blocks near you!&r&c)");
 			return;
 		}
 		final var sign = ((Sign) block.getState());
