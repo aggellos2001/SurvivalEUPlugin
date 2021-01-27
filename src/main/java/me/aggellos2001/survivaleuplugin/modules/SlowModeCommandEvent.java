@@ -5,6 +5,7 @@ import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.time.Duration;
@@ -16,7 +17,7 @@ public final class SlowModeCommandEvent extends PluginActivity {
 
 	private final Map<UUID, Long> LAST_TIME_CHATTED = new HashMap<>();
 
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.LOW) //run this before antispam to prevent issues!
 	private void onPlayerChat(final AsyncPlayerChatEvent e) {
 
 		final var UUID = e.getPlayer().getUniqueId();

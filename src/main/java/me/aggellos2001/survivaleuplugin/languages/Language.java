@@ -15,9 +15,9 @@ public enum Language {
 	WILD_SEARCHING_FOR_LOCATION("&aYou will be teleported shortly! Please wait!", "&aΘα τηλεμεταφερθείς σύντομα! Παρακαλώ περίμενε!"),
 	WELCOME_MESSAGE(
 			"&6Season 3 is here!\n" + "&bThe server is &aSurvival&r.&b Do &c&l/wild&r&b to get teleported randomly into the world!\n"
-					+ "Join our Discord Server: &e&lhttps://discord.gg/cVjZbvt",
+					+ "Join our Discord Server: &e&lhttps://discord.survivaleu.com/",
 			"&6Η Season 3 είναι εδώ!\n" + "&bΟ server είναι &aSurvival&r.&b Κάνε &c&l/wild&r&b για να βρεις ένα τυχαίο μέρος για να κάνεις το σπίτι σου!\n"
-					+ "Discord Server: &e&lhttps://discord.gg/cVjZbvt"),
+					+ "Discord Server: &e&lhttps://discord.survivaleu.com/"),
 	BLOCK_VPN_REJECTED("&cUsing a VPN is not allowed!", "&cΗ χρήση του VPN δεν επιτρέπεται!"),
 	DONATION_INFO(
 			"&3&l&m                               \n" +

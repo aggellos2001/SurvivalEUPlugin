@@ -28,7 +28,7 @@ public final class CommandEventRegister {
 		final var commandsEvents = new PluginActivity[]{
 				new AlertCommand(),
 				new AntiCapsEvent(),
-				new SwearFilterEvent(),
+//				new SwearFilterEvent(),
 				new CommandCoolDownEvent(),
 				new DeathMessagesEvent(),
 				new DiscordCommand(),
@@ -61,7 +61,7 @@ public final class CommandEventRegister {
 				new VoteKickCommand(),
 				new KeepInventoryEvent(),
 				new PlayMusicCommand(),
-				new ServerSnow(),
+//				new ServerSnow(),
 				new ReportPlayerCommand(),
 				new PlayerFinder(),
 				new VoteKickCommand(),
@@ -72,6 +72,7 @@ public final class CommandEventRegister {
 //				new FestiveFireworks()
 				new StaffChatCommand(),
 				new AntiSpamEvent(),
+				new AdFilterEvent(),
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

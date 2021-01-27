@@ -17,14 +17,18 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class LuckPermsHook extends PluginActivity {
 
 	public static final LuckPermsHook INSTANCE = new LuckPermsHook();
 
-	private static final HashMap<Player, Ranks> PERM_CACHE = new HashMap<>();
-
 	public static LuckPerms permissionAPI;
+
+	public static Set<Player> mobileUser = new HashSet<>();
+
+	private static final HashMap<Player, Ranks> PERM_CACHE = new HashMap<>();
 
 	private LuckPermsHook() {
 	}
@@ -81,6 +85,7 @@ public final class LuckPermsHook extends PluginActivity {
 	private void removePlayerFromCache(final PlayerQuitEvent e) {
 		e.setQuitMessage(Utilities.colorize(LuckPermsHook.getPlayerRank(e.getPlayer()).format + "&b " + e.getPlayer().getName() + " &c&lleft the server!", true));
 		PERM_CACHE.remove(e.getPlayer());
+		mobileUser.remove(e.getPlayer()); //remove from list!
 	}
 
 	public boolean isStaff(final Player p) {
@@ -94,7 +99,10 @@ public final class LuckPermsHook extends PluginActivity {
 		var colorize = BukkitMessage.create(chatOptions);
 		var rank = getPlayerRank(e.getPlayer()).format;
 		var chatColor = "&" + data.chatColor;
-		e.setFormat(colorize.parse(rank + "&r %s:&r %s").toString());
+		if (mobileUser.contains(e.getPlayer()))
+			e.setFormat(colorize.parse("&b✆&r "+ rank + "&r %s:&r %s").toString());
+		else
+			e.setFormat(colorize.parse(rank + "&r %s:&r %s").toString());
 		e.setMessage(colorize.parse(chatColor + e.getMessage()).toString());
 	}
 

@@ -4,3 +4,4 @@ build/
 ReportPlayerCommand.java
 PCDetection.java
 BlockVPN.java
+AdFilterEvent.java

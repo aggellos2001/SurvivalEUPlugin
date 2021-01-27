@@ -7,12 +7,14 @@ import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.command.CommandSender;
 
-@CommandAlias("discord")
+@CommandAlias("discord|twitter")
 public final class DiscordCommand extends PluginActivity {
 
 	@Default
 	public boolean onCommand(final CommandSender sender) {
-		Utilities.sendMsg(sender, "&6Discord server: &e&lhttps://discord.com/invite/cVjZbvt");
+		Utilities.sendMsg(sender, "&6Social Media:\n" +
+				"&eDiscord:&a&l https://discord.survivaleu.com/&r\n" +
+				"&eTwitter:&b&l https://twitter.com/SurvivalEUMC");
 		return true;
 	}
 }

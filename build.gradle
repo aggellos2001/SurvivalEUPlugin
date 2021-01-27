@@ -31,7 +31,6 @@ repositories {
 
 dependencies {
     compileOnly 'com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT'
-    implementation 'com.github.ipinfo:java:ipinfo-api-1.1'
     implementation 'org.jetbrains:annotations:19.0.0'
     compileOnly 'net.luckperms:api:5.0'
     compile fileTree(include: ['*.jar'], dir: 'localapi')
@@ -44,6 +43,7 @@ dependencies {
     implementation "me.mattstudios.utils:matt-framework-gui:2.0.3"
     implementation "me.mattstudios:mf-msg-bukkit:2.0.1"
     implementation 'org.apache.commons:commons-text:1.9'
+    implementation 'com.github.linkedin:URL-Detector:-SNAPSHOT'
 
 }
 

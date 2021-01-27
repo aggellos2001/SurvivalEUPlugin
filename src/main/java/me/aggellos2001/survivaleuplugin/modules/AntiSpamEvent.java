@@ -16,10 +16,14 @@ public class AntiSpamEvent extends PluginActivity {
 	private static final HashMap<Player, String> BEFORE_PREVIOUS_MESSAGE = new HashMap<>();
 	private static final HashMap<Player, String> PREVIOUS_MESSAGE = new HashMap<>();
 
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+	//normal so slowmodeevent does not trigger this
 	private void stopSimilarMessages(final AsyncPlayerChatEvent e) {
 
 		final var player = e.getPlayer();
+
+		if (player.isOp() || player.hasPermission("seu.staff")) return;
+
 		final var message = e.getMessage();
 		final var previousMessage = PREVIOUS_MESSAGE.getOrDefault(player, null);
 		if (previousMessage == null) {

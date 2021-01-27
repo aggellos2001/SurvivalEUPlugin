@@ -177,7 +177,7 @@ public final class DeathMessagesEvent extends PluginActivity {
 						deathMessage = killerRankFormatted + " used magic to kill " + deadPlayerRankFormatted;
 					}
 				} else {
-					deathMessage = deadPlayerRankFormatted + " died from magic";
+					deathMessage = deadPlayerRankFormatted + " died from magic!";
 				}
 				break;
 			}
@@ -186,7 +186,11 @@ public final class DeathMessagesEvent extends PluginActivity {
 				break;
 			}
 			case FALLING_BLOCK: {
-				deathMessage = deadPlayerRankFormatted + " was severely hit by a falling block!";
+				if (randomNumber == 0) {
+					deathMessage = deadPlayerRankFormatted + " was severely hit by a falling block!";
+				} else {
+					deathMessage = deadPlayerRankFormatted + " was killed by a falling piano! Uh I mean anvil!";
+				}
 				break;
 			}
 			case THORNS: {

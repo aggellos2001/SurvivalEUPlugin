@@ -18,7 +18,7 @@ public final class PlayerLanguage extends PluginActivity {
 	@EventHandler(ignoreCancelled = true)
 	private void addPlayerLanguage(final PlayerJoinEvent e) {
 		SurvivalEUPlugin.instance.getServer().getScheduler().runTaskLater(SurvivalEUPlugin.instance, () -> {
-			if (e.getPlayer().getLocale().toLowerCase().equals("el_gr")) {
+			if (e.getPlayer().getLocale().equalsIgnoreCase("el_gr")) {
 				LANGUAGE_MAP.put(e.getPlayer(), "greek");
 				Utilities.sendMsg(e.getPlayer(), "&aΗ γλώσσα ορίστηκε σε Ελληνικά!");
 			} else {
