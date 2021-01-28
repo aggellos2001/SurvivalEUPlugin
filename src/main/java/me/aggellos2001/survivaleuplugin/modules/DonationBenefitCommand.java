@@ -99,7 +99,7 @@ public final class DonationBenefitCommand extends PluginActivity {
 			return;
 		}
 
-		if (PvPCommand.hasPvPOn(player)) {
+		if (PvPCommandEvent.hasPvPOn(player)) {
 			Utilities.sendMsg(player, Language.DONATION_POTION_ENABLE_FAIL_PVP.getTranslation(player));
 		}
 

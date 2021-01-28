@@ -40,7 +40,7 @@ public final class CommandEventRegister {
 				new NoEmptyHomeEvent(),
 				new PaySelfExploitEvent(),
 				new ProtectTamedEvent(),
-				new PvPCommand(),
+				new PvPCommandEvent(),
 				new ReloadCommand(),
 				new SitOnStairsEventCommand(),
 				new SlimeChunkCommand(),

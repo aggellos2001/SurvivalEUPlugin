@@ -1,12 +1,16 @@
 package me.aggellos2001.survivaleuplugin.modules;
 
 
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -15,61 +19,40 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-//@CommandAlias("pvp")
-//@Conditions("cooldown:seconds=10")
-public final class PvPCommand extends PluginActivity {
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-//private static final List<Player> PVP_ON = new ArrayList<>();
+@CommandAlias("bypassPvP")
+@CommandPermission("seu.bypasspvp")
+public final class PvPCommandEvent extends PluginActivity {
+
+	private static final Set<Player> PVP_BYPASS = new HashSet<>();
 
 	/**
-	 * Package private gia na epitrefei se alles klaseis an o player exei pvp on
+	 * Returns true if player has pvp enabled
 	 *
 	 * @param p
-	 * @return an exei to pvp on
+	 * @return True if pvp is enabled
 	 */
-	static boolean hasPvPOn(final Player p) {
+	public static boolean hasPvPOn(final Player p) {
 		return PlayerData.getPlayerData(p).pvp;
 	}
 
-//	@Default
-//	private void onCommand(final Player player) {
-//		if (PVP_ON.contains(player)) {
-//			PVP_ON.remove(player);
-//			Utilities.sendMsg(player, Language.PVP_DISABLED.getTranslation(player));
-//		} else {
-//			if (DonationBenefitCommand.hasDonationPotions(player)) {
-//				Utilities.sendMsg(player, Language.PVP_DONATION_POTIONS_DENIED.getTranslation(player));
-//				return;
-//			}
-//			PVP_ON.add(player);
-//			Utilities.sendMsg(player, Language.PVP_ENABLED.getTranslation(player));
-//		}
-//	}
-//
-//	@Subcommand("check")
-//	@CommandCompletion("@players")
-//	@CommandPermission("seu.pvp.other")
-//	private void onCheckPvP(final Player player, @Optional final OnlinePlayer playerToCheck) {
-//		if (playerToCheck == null) {
-//			final var hasPvP = hasPvPOn(player);
-//			if (hasPvP) {
-//				Utilities.sendMsg(player, "&aYour PvP status is: &lenabled!");
-//			} else {
-//				Utilities.sendMsg(player, "&aYour PvP status is: &c&ldisabled!");
-//			}
-//		} else {
-//			final var hasPvP = hasPvPOn(playerToCheck.getPlayer());
-//			if (hasPvP) {
-//				Utilities.sendMsg(player, String.format("&aPlayer %s PvP status is: &lenabled!", playerToCheck.player.getName()));
-//			} else {
-//				Utilities.sendMsg(player, String.format("&aPlayer %s PvP status is: &c&ldisabled!", playerToCheck.player.getName()));
-//			}
-//		}
-//	}
+	@Default
+	private void toggleBypass(Player player){
+		if (PVP_BYPASS.contains(player)){
+			PVP_BYPASS.remove(player);
+			Utilities.sendMsg(player,"&cYou are now respecting PvP protections!");
+		}else{
+			PVP_BYPASS.add(player);
+			Utilities.sendMsg(player,"&aYou are now ignoring PvP protections!");
+		}
+	}
 
-	/**
-	 * Σταματάει το PvP αν είναι OFF (από default είναι OFF)
-	 */
+
+	// Σταματάει το PvP αν είναι OFF (από default είναι OFF)
 	@EventHandler(ignoreCancelled = true)
 	private void onPvP(final EntityDamageByEntityEvent e) {
 
@@ -79,8 +62,10 @@ public final class PvPCommand extends PluginActivity {
 		final var attacker = (Player) e.getDamager();
 		final var defender = (Player) e.getEntity();
 
-		var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
-		var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
+
+		final var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
+		final var defenderPvP = PlayerData.getPlayerData(defender).pvp;
 
 		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
@@ -109,10 +94,12 @@ public final class PvPCommand extends PluginActivity {
 
 		if (attacker == null) return;
 
+		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
+
 		if (attacker.equals(defender)) return;
 
-		var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
-		var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+		final var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
+		final var defenderPvP = PlayerData.getPlayerData(defender).pvp;
 
 		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
@@ -135,9 +122,13 @@ public final class PvPCommand extends PluginActivity {
 
 		if (e.getBucket() != Material.LAVA_BUCKET) return;
 
+		var attacker = e.getPlayer();
+
+		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
+
 		for (final Player player : e.getBlockClicked().getLocation().getNearbyPlayers(4)) {
-			var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
-			if (!pvpOfPlayer && !player.equals(e.getPlayer())) {
+			final var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+			if (!pvpOfPlayer && !player.equals(attacker)) {
 				Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 				e.setCancelled(true);
 			}
@@ -154,10 +145,14 @@ public final class PvPCommand extends PluginActivity {
 		if (!e.hasItem() || !e.hasBlock() || e.getItem() == null) return;
 		if (e.getClickedBlock() == null) return;
 
+		var attacker = e.getPlayer();
+
+		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
+
 		if (e.getItem().getType().equals(Material.FLINT_AND_STEEL) || e.getItem().getType().equals(Material.TNT)) {
 			for (final Player player : e.getClickedBlock().getLocation().getNearbyPlayers(4)) {
-				var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
-				if (!pvpOfPlayer && player != e.getPlayer()) {
+				final var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+				if (!pvpOfPlayer && player != attacker) {
 					Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 					e.setCancelled(true);
 					return;
@@ -171,13 +166,45 @@ public final class PvPCommand extends PluginActivity {
 						e.getClickedBlock().getWorld().getEnvironment().equals(World.Environment.THE_END))) {
 
 			for (final Player player : e.getClickedBlock().getLocation().getNearbyPlayers(4)) {
-				var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
-				if (!pvpOfPlayer && player != e.getPlayer()) {
+				final var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+				if (!pvpOfPlayer && player != attacker) {
 					Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 					e.setCancelled(true);
 					return;
 				}
 			}
+		}
+	}
+
+	// patch to protect against lingering potions
+	@EventHandler
+	private void patchLingerPotions(final EntityDamageByEntityEvent e) {
+
+		if (!(e.getDamager() instanceof AreaEffectCloud)) return;
+		final var areaEffectCloud = (AreaEffectCloud) e.getDamager();
+		if (!(areaEffectCloud.getSource() instanceof Player)) return;
+
+		final var attacker = (Player) areaEffectCloud.getSource();
+		final var defender = (Player) e.getEntity();
+
+		if (attacker == null) return;
+
+		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
+
+		if (attacker.equals(defender)) return;
+
+		final var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
+		final var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+
+		if (!attackerPvP) {
+			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
+			e.setCancelled(true);
+			return;
+		}
+
+		if (!defenderPvP) {
+			Utilities.sendMsg(attacker, String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(attacker), defender.getName()));
+			e.setCancelled(true);
 		}
 	}
 }
