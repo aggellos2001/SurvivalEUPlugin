@@ -37,7 +37,6 @@ public class Config {
 
 	public static void loadConfig(File pluginDataFolder) {
 		var file = new File(pluginDataFolder, "config.json");
-
 		if (!file.exists()) {
 			config = DEFAULT;
 			return;

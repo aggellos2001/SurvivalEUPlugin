@@ -2,6 +2,7 @@ package me.aggellos2001.survivaleuplugin.hooks;
 
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import me.mattstudios.mfmsg.base.MessageOptions;
@@ -94,7 +95,7 @@ public final class LuckPermsHook extends PluginActivity {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	private void formatChat(final AsyncPlayerChatEvent e) {
-		var data = PlayerData.getPlayerData(e.getPlayer());
+		var data = PlayerDataEvent.getPlayerData(e.getPlayer());
 		var chatOptions = MessageOptions.builder().removeFormat(Format.LEGACY_OBFUSCATED, Format.OBFUSCATED).build();
 		var colorize = BukkitMessage.create(chatOptions);
 		var rank = getPlayerRank(e.getPlayer()).format;

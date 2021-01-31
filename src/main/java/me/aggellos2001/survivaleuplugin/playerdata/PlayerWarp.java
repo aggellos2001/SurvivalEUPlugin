@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class PlayerWarp extends PluginActivity implements Serializable {
 
-	//TODO Use Gson in feature and also make it async
+	//TODO Use Gson in feature and also make it async?
 
 	private final transient static Set<PlayerWarp> playerWarps = new HashSet<>(); //loads from file on startup
 
@@ -69,7 +69,7 @@ public class PlayerWarp extends PluginActivity implements Serializable {
 
 
 	public static void loadPlayerWarps() {
-		final var file = new File(PlayerData.Directory, "playerWarps.dat");
+		final var file = new File(PlayerDataEvent.Directory, "playerWarps.dat");
 		if (!file.exists() || file.length() == 0) return;
 		try (var objectInputStream = new ObjectInputStream(new FileInputStream(file))) {
 			do {
@@ -82,7 +82,7 @@ public class PlayerWarp extends PluginActivity implements Serializable {
 
 	@EventHandler
 	public static void savePlayerWarps() {
-		final var file = new File(PlayerData.Directory, "playerWarps.dat");
+		final var file = new File(PlayerDataEvent.Directory, "playerWarps.dat");
 		try (var objectOutputStream = new ObjectOutputStream(new FileOutputStream(file))) {
 			for (final PlayerWarp playerWarp : playerWarps) {
 				objectOutputStream.writeObject(playerWarp);

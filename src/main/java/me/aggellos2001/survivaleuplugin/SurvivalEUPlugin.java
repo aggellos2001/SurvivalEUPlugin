@@ -11,9 +11,6 @@ import me.aggellos2001.survivaleuplugin.utils.CommandEventRegister;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,7 +18,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class SurvivalEUPlugin extends JavaPlugin {
 

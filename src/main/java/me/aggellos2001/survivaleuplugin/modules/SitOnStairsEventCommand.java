@@ -3,6 +3,7 @@ package me.aggellos2001.survivaleuplugin.modules;
 
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Material;
@@ -40,7 +41,7 @@ public class SitOnStairsEventCommand extends PluginActivity {
 		if (!(clickedBlock.getBlockData() instanceof Stairs)) return;
 
 
-		final var playerData = PlayerData.getPlayerData(player);
+		final var playerData = PlayerDataEvent.getPlayerData(player);
 
 
 		if (!playerData.sittingOnStairs) return;

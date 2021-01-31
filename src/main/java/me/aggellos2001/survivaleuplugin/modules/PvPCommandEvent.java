@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.Material;
@@ -19,9 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @CommandAlias("bypassPvP")
@@ -37,7 +36,7 @@ public final class PvPCommandEvent extends PluginActivity {
 	 * @return True if pvp is enabled
 	 */
 	public static boolean hasPvPOn(final Player p) {
-		return PlayerData.getPlayerData(p).pvp;
+		return PlayerDataEvent.getPlayerData(p).pvp;
 	}
 
 	@Default
@@ -64,8 +63,8 @@ public final class PvPCommandEvent extends PluginActivity {
 
 		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
 
-		final var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
-		final var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+		final var attackerPvP = PlayerDataEvent.getPlayerData(attacker).pvp;
+		final var defenderPvP = PlayerDataEvent.getPlayerData(defender).pvp;
 
 		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
@@ -98,8 +97,8 @@ public final class PvPCommandEvent extends PluginActivity {
 
 		if (attacker.equals(defender)) return;
 
-		final var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
-		final var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+		final var attackerPvP = PlayerDataEvent.getPlayerData(attacker).pvp;
+		final var defenderPvP = PlayerDataEvent.getPlayerData(defender).pvp;
 
 		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));
@@ -127,7 +126,7 @@ public final class PvPCommandEvent extends PluginActivity {
 		if (PVP_BYPASS.contains(attacker)) return; //bypass protection
 
 		for (final Player player : e.getBlockClicked().getLocation().getNearbyPlayers(4)) {
-			final var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+			final var pvpOfPlayer = PlayerDataEvent.getPlayerData(player).pvp;
 			if (!pvpOfPlayer && !player.equals(attacker)) {
 				Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 				e.setCancelled(true);
@@ -151,7 +150,7 @@ public final class PvPCommandEvent extends PluginActivity {
 
 		if (e.getItem().getType().equals(Material.FLINT_AND_STEEL) || e.getItem().getType().equals(Material.TNT)) {
 			for (final Player player : e.getClickedBlock().getLocation().getNearbyPlayers(4)) {
-				final var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+				final var pvpOfPlayer = PlayerDataEvent.getPlayerData(player).pvp;
 				if (!pvpOfPlayer && player != attacker) {
 					Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 					e.setCancelled(true);
@@ -166,7 +165,7 @@ public final class PvPCommandEvent extends PluginActivity {
 						e.getClickedBlock().getWorld().getEnvironment().equals(World.Environment.THE_END))) {
 
 			for (final Player player : e.getClickedBlock().getLocation().getNearbyPlayers(4)) {
-				final var pvpOfPlayer = PlayerData.getPlayerData(player).pvp;
+				final var pvpOfPlayer = PlayerDataEvent.getPlayerData(player).pvp;
 				if (!pvpOfPlayer && player != attacker) {
 					Utilities.sendMsg(e.getPlayer(), String.format(Language.PVP_OTHER_DISABLED_WARNING.getTranslation(e.getPlayer()), player.getName()));
 					e.setCancelled(true);
@@ -193,8 +192,8 @@ public final class PvPCommandEvent extends PluginActivity {
 
 		if (attacker.equals(defender)) return;
 
-		final var attackerPvP = PlayerData.getPlayerData(attacker).pvp;
-		final var defenderPvP = PlayerData.getPlayerData(defender).pvp;
+		final var attackerPvP = PlayerDataEvent.getPlayerData(attacker).pvp;
+		final var defenderPvP = PlayerDataEvent.getPlayerData(defender).pvp;
 
 		if (!attackerPvP) {
 			Utilities.sendMsg(attacker, Language.PVP_DISABLED_WARNING.getTranslation(attacker));

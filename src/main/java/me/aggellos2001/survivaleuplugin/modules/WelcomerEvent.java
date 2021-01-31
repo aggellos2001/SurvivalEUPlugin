@@ -4,11 +4,8 @@ import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
 import me.aggellos2001.survivaleuplugin.languages.Language;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.util.Arrays;
 
 public final class WelcomerEvent extends PluginActivity {
 

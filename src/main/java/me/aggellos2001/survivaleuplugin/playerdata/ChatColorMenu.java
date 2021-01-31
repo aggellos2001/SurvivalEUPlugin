@@ -16,7 +16,7 @@ public class ChatColorMenu {
 		final var menu = new Gui(2, Utilities.colorize("<r:0.8:1.0>Chat Color Menu"));
 		menu.setDefaultClickAction(event -> event.setCancelled(true));
 
-		final var data = PlayerData.getPlayerData(player);
+		final var data = PlayerDataEvent.getPlayerData(player);
 
 		for (final ChatColor color : ChatColor.values()) {
 			if (!color.isColor()) continue;
@@ -25,7 +25,7 @@ public class ChatColorMenu {
 					.setName(Utilities.colorize(colorNameColored))
 					.asGuiItem(event -> {
 						data.chatColor = Character.toString(color.getChar());
-						PlayerData.updatePlayerData(player, data);
+						PlayerDataEvent.setPlayerData(player, data);
 						menu.close(player);
 						Utilities.sendMsg(player, "<#37a346>&lChat color changed to: &r&l" + colorNameColored);
 					})

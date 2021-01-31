@@ -54,7 +54,7 @@ public final class PlayerDataCommand extends PluginActivity {
 	@Default
 	protected static void settingsUI(final Player player) {
 
-		final var playerData = PlayerData.getPlayerData(player);
+		final var playerData = PlayerDataEvent.getPlayerData(player);
 
 		final var settingsMenu = new Gui(1, Utilities.colorize("<g:#ff8000:#31bd1d>Settings Menu"));
 		settingsMenu.setDefaultClickAction(event -> {
@@ -65,13 +65,13 @@ public final class PlayerDataCommand extends PluginActivity {
 		//add slot actions outside itemset to update them on click
 		settingsMenu.addSlotAction(2, event -> {
 			playerData.keepingInventory = !playerData.keepingInventory;
-			PlayerData.updatePlayerData(player, playerData);
+			PlayerDataEvent.setPlayerData(player, playerData);
 			settingsMenu.updateItem(2, keepInventoryButton(playerData.keepingInventory));
 		});
 
 		settingsMenu.addSlotAction(3, event -> {
 			playerData.sittingOnStairs = !playerData.sittingOnStairs;
-			PlayerData.updatePlayerData(player, playerData);
+			PlayerDataEvent.setPlayerData(player, playerData);
 			settingsMenu.updateItem(3, sitOnStairsButton(playerData.sittingOnStairs));
 		});
 
@@ -80,9 +80,9 @@ public final class PlayerDataCommand extends PluginActivity {
 				Utilities.sendMsg(player, Language.PVP_DONATION_POTIONS_DENIED.getTranslation(player));
 				return;
 			}
-			PlayerData.updatePlayerData(player, playerData);
+			PlayerDataEvent.setPlayerData(player, playerData);
 			playerData.pvp = !playerData.pvp;
-			PlayerData.updatePlayerData(player, playerData);
+			PlayerDataEvent.setPlayerData(player, playerData);
 			settingsMenu.updateItem(4, pvpButton(playerData.pvp));
 		});
 
@@ -117,9 +117,9 @@ public final class PlayerDataCommand extends PluginActivity {
 			Utilities.sendMsg(player, "&cSupport PIN must be a 4 digit number! (1000-9999)");
 			return;
 		}
-		final var playerDat = PlayerData.getPlayerData(player);
+		final var playerDat = PlayerDataEvent.getPlayerData(player);
 		playerDat.supportPIN = supportPin;
-		PlayerData.updatePlayerData(player, playerDat);
+		PlayerDataEvent.setPlayerData(player, playerDat);
 		Utilities.sendMsg(player, "&aSupport PIN set to &e" + supportPin + "&a!");
 	}
 
@@ -127,7 +127,7 @@ public final class PlayerDataCommand extends PluginActivity {
 	@Conditions("ConsoleOrOp") //only OP or console can check someones PIN
 	@CommandCompletion("@players @nothing")
 	private void getSupportPIN(final CommandSender sender, final OnlinePlayer player) {
-		final var dat = PlayerData.getPlayerData(player.getPlayer());
+		final var dat = PlayerDataEvent.getPlayerData(player.getPlayer());
 		if (dat == null || dat.supportPIN == 0) {
 			Utilities.sendMsg(sender, "&cPlayer " + player.getPlayer().getName() + " has no PIN set!");
 			return;

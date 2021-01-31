@@ -6,6 +6,7 @@ import me.aggellos2001.survivaleuplugin.discordreport.ReportPlayerCommand;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
 import me.aggellos2001.survivaleuplugin.modules.*;
+import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
