@@ -14,7 +14,7 @@ public final class HelpCommand extends PluginActivity {
 	private void onServerHelp(final PlayerCommandPreprocessEvent e) {
 		if (e.getMessage().equalsIgnoreCase("/help")) {
 			e.setCancelled(true);
-			Utilities.sendMsg(e.getPlayer(),"&e&lhttps://survivaleu.com/docs.html");
+			Utilities.sendMsg(e.getPlayer(), "&e&lhttps://survivaleu.com/docs.html");
 		}
 	}
 }

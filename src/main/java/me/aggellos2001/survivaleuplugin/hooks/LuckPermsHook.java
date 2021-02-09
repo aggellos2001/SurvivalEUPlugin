@@ -1,7 +1,6 @@
 package me.aggellos2001.survivaleuplugin.hooks;
 
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
-import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
@@ -101,7 +100,7 @@ public final class LuckPermsHook extends PluginActivity {
 		var rank = getPlayerRank(e.getPlayer()).format;
 		var chatColor = "&" + data.chatColor;
 		if (mobileUser.contains(e.getPlayer()))
-			e.setFormat(colorize.parse("&b✆&r "+ rank + "&r %s:&r %s").toString());
+			e.setFormat(colorize.parse("&b✆&r " + rank + "&r %s:&r %s").toString());
 		else
 			e.setFormat(colorize.parse(rank + "&r %s:&r %s").toString());
 		e.setMessage(colorize.parse(chatColor + e.getMessage()).toString());

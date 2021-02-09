@@ -35,8 +35,8 @@ public class Config {
 		this.vpnProxyCheckAPIToken = "null";
 	}
 
-	public static void loadConfig(File pluginDataFolder) {
-		var file = new File(pluginDataFolder, "config.json");
+	public static void loadConfig(final File pluginDataFolder) {
+		final var file = new File(pluginDataFolder, "config.json");
 		if (!file.exists()) {
 			config = DEFAULT;
 			return;
@@ -51,14 +51,14 @@ public class Config {
 		}
 	}
 
-	public static void saveConfig(File pluginDataFolder) {
+	public static void saveConfig(final File pluginDataFolder) {
 		if (config == null) {
 			return;
 		}
-		var file = new File(pluginDataFolder, "config.json");
+		final var file = new File(pluginDataFolder, "config.json");
 		try (var writer = Files.newBufferedWriter(file.toPath())) {
 			gson.toJson(config, writer);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -69,8 +69,8 @@ public class Config {
 
 	@Override
 	public String toString() {
-		return "entityLimit: " + entityLimit + " xpMultiplier: " + xpMultiplier + " slowModeDelay: " + slowModeDelay +
-				" wildBlockRange: " + wildBlockRange + " wildCost: " + wildCost + " wildDelay: " + wildDelay + " wildRetries: " + wildRetries +
-				" voteAPIToken: " + voteAPIToken + " vpnProxyCheckAPIToken: " + vpnProxyCheckAPIToken;
+		return "entityLimit: " + this.entityLimit + " xpMultiplier: " + this.xpMultiplier + " slowModeDelay: " + this.slowModeDelay +
+				" wildBlockRange: " + this.wildBlockRange + " wildCost: " + this.wildCost + " wildDelay: " + this.wildDelay + " wildRetries: " + this.wildRetries +
+				" voteAPIToken: " + this.voteAPIToken + " vpnProxyCheckAPIToken: " + this.vpnProxyCheckAPIToken;
 	}
 }

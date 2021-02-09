@@ -2,7 +2,6 @@ package me.aggellos2001.survivaleuplugin.modules;
 
 
 import me.aggellos2001.survivaleuplugin.languages.Language;
-import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;

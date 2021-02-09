@@ -1,8 +1,7 @@
-package me.aggellos2001.survivaleuplugin.discordreport;
+package me.aggellos2001.survivaleuplugin.discordwebhooks;
 
+import co.aikar.taskchain.TaskChain;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
-import me.aggellos2001.survivaleuplugin.utils.Utilities;
-import org.bukkit.entity.Player;
 
 import java.awt.*;
 import java.io.IOException;
@@ -16,15 +15,15 @@ import java.util.List;
 import java.util.*;
 
 /**
- * Created by k3kdude and modified by me to work with minecraft for my needs. Also using new Java 9 API for HTTP requests
- * Original here: https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb
- * Accessed: December 6, 2020
+ * Class used to execute Discord Webhooks with low effort<br><br>
+ * Created by k3kdude and modified by me to work with minecraft for my needs. Also using new Java 9 API for HTTP and TaskChain<br><br>
+ * Accessed: December 6, 2020<br><br>
+ * <ol>Sources:
+ * <li>@see <a href="https://gist.github.com/k3kdude/fba6f6b37594eae3d6f9475330733bdb">Source to original class</a><br></li>
+ * <li>@see <a href="https://github.com/aikar/TaskChain">TaskChain Github</a></li>
+ *</ol>
  */
-
-/**
- * Class used to execute Discord Webhooks with low effort
- */
-public class DiscordWebHookReport {
+public class DiscordWebHook {
 
 	private final String url;
 	private String content;
@@ -34,19 +33,19 @@ public class DiscordWebHookReport {
 	private final List<EmbedObject> embeds = new ArrayList<>();
 
 	//mc related fields
-	private final Player player;
-	private final Player reportedPlayer;
+//	private final Player player;
+//	private final Player reportedPlayer;
 
 	/**
 	 * Constructs a new DiscordWebhook instance
 	 *
 	 * @param url The webhook URL obtained in Discord
 	 */
-	public DiscordWebHookReport(final String url, final Player player, final Player reportedPlayer) {
+	public DiscordWebHook(final String url) {
 		this.url = url;
 		//mc related fields
-		this.player = player;
-		this.reportedPlayer = reportedPlayer;
+//		this.player = player;
+//		this.reportedPlayer = reportedPlayer;
 	}
 
 	public void setContent(final String content) {
@@ -69,7 +68,27 @@ public class DiscordWebHookReport {
 		this.embeds.add(embed);
 	}
 
-	public void execute() throws IOException {
+	/**
+	 * Method to create a TaskChain which includes the HTTP Request inside! <br>
+	 * Returns a {@link TaskChain} which MUST be executed using {@link TaskChain#execute()} otherwise the request won't be sent! <br>
+	 *
+	 * <pre>Example handler that informs the player if the request was correctly sent by reading the response code:
+	 *
+	 * var chain = report.createHTTPChain();
+	 * chain.syncLast((response -> {
+	 * final var httpResponse = ((HttpResponse<String>) response);
+	 * if (httpResponse != null && httpResponse.statusCode() == 204) {
+	 * 		player.sendMessage("Success");
+	 *    } else {
+	 * 		player.sendMessage("Something went wrong!");
+	 *    }
+	 * })).execute();
+	 * </pre>
+	 *
+	 * @return TaskChain that must be executed by using {@link TaskChain#execute()}
+	 * @see <a href="https://github.com/aikar/TaskChain">TaskChain Github</a><br>
+	 */
+	public TaskChain<Object> createHTTPChain() throws IOException {
 		if (this.content == null && this.embeds.isEmpty()) {
 			throw new IllegalArgumentException("Set content or add at least one EmbedObject");
 		}
@@ -161,7 +180,7 @@ public class DiscordWebHookReport {
 		chain.asyncFirst(() -> {
 			HttpResponse<String> response = null;
 			try {
-				var request = HttpRequest.newBuilder()
+				final var request = HttpRequest.newBuilder()
 						.uri(new URI(this.url))
 						.version(HttpClient.Version.HTTP_2)
 						.header("Content-Type", "application/json")
@@ -173,13 +192,8 @@ public class DiscordWebHookReport {
 			} catch (final Exception ignore) {
 			}
 			return response;
-		}).syncLast(response -> {
-			if (response != null && response.statusCode() == 204) {
-				Utilities.sendMsg(this.player, "&aReported player&e " + this.reportedPlayer.getName() + " &asuccessfully!");
-			} else {
-				Utilities.sendMsg(this.player, "&cReport failed! Try again in a few seconds!");
-			}
-		}).execute();
+		});
+		return chain;
 	}
 
 	public static class EmbedObject {
@@ -272,6 +286,12 @@ public class DiscordWebHookReport {
 
 		public EmbedObject addField(final String name, final String value, final boolean inline) {
 			this.fields.add(new Field(name, value, inline));
+			return this;
+		}
+
+		public EmbedObject addBlankField() {
+			final var space = "\\u200b";
+			this.fields.add(new Field(space, space, false));
 			return this;
 		}
 

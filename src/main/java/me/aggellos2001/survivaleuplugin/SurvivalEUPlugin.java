@@ -31,9 +31,9 @@ public class SurvivalEUPlugin extends JavaPlugin {
 	public void onLoad() {
 		try {
 			//Make sure the directories are created. Nothing happens if they exist already.
-			var dataFolder = Files.createDirectories(Path.of(this.getDataFolder().toURI()));
-			var playerDataDir = Files.createDirectories(Path.of(this.getDataFolder() + File.separator + "playerData"));
-		} catch (IOException e) {
+			final var dataFolder = Files.createDirectories(Path.of(this.getDataFolder().toURI()));
+			final var playerDataDir = Files.createDirectories(Path.of(this.getDataFolder() + File.separator + "playerData"));
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}

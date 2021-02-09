@@ -9,3 +9,4 @@ TestMapDB.java
 TestSQLite.java
 NitriteTest.java
 NitriteDataExample.java
+ReportBug.java

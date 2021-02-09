@@ -2,11 +2,11 @@ package me.aggellos2001.survivaleuplugin.utils;
 
 import co.aikar.commands.annotation.CommandAlias;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
-import me.aggellos2001.survivaleuplugin.discordreport.ReportPlayerCommand;
+import me.aggellos2001.survivaleuplugin.discordwebhooks.ReportBug;
+import me.aggellos2001.survivaleuplugin.discordwebhooks.ReportPlayerCommand;
 import me.aggellos2001.survivaleuplugin.hooks.LuckPermsHook;
 import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
 import me.aggellos2001.survivaleuplugin.modules.*;
-import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
@@ -74,6 +74,7 @@ public final class CommandEventRegister {
 				new StaffChatCommand(),
 				new AntiSpamEvent(),
 				new AdFilterEvent(),
+				new ReportBug()
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

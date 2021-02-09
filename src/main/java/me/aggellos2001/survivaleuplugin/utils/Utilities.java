@@ -237,5 +237,9 @@ public class Utilities {
 		return true;
 	}
 
+	public static String locationString(Location location){
+		return "World: " + location.getWorld().getEnvironment().name() + ", x: " + location.getBlockX() + ", y: " + location.getBlockY() + ", z: " + location.getBlockZ();
+	}
+
 
 }

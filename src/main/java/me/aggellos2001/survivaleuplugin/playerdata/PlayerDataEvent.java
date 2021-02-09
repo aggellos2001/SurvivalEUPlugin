@@ -21,7 +21,7 @@ import java.util.UUID;
 public final class PlayerDataEvent extends PluginActivity {
 
 	/**
-	 *  This is a HashMap acting as a cache to store player data
+	 * This is a HashMap acting as a cache to store player data
 	 */
 	private static final Map<UUID, PlayerData> PLAYER_DATA = new HashMap<>();
 
@@ -35,7 +35,6 @@ public final class PlayerDataEvent extends PluginActivity {
 	 * We use this to read and write player data from our cache {@link #PLAYER_DATA} to json files
 	 */
 	protected static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
 
 	/**
 	 * Method to access the private playerData cache from outside.<br>
@@ -52,8 +51,9 @@ public final class PlayerDataEvent extends PluginActivity {
 
 	/**
 	 * Method to change playerData in the cache.
+	 *
 	 * @param player The player to change data
-	 * @param data Data value or null to set players Data to default values. See {@link #getPlayerData(Player)}
+	 * @param data   Data value or null to set players Data to default values. See {@link #getPlayerData(Player)}
 	 */
 	public static void setPlayerData(@NotNull Player player, @NotNull final PlayerData data) {
 		PLAYER_DATA.put(player.getUniqueId(), data);
@@ -62,9 +62,10 @@ public final class PlayerDataEvent extends PluginActivity {
 	/**
 	 * Removes player data from cache after data is no longer needed in memory.
 	 * For example after data is written to disk.
+	 *
 	 * @param player The player to remove data from cache
 	 */
-	public static void removePlayerData(final Player player) {
+	public static void removePlayerData(@NotNull Player player) {
 		PLAYER_DATA.remove(player.getUniqueId());
 	}
 
@@ -74,7 +75,6 @@ public final class PlayerDataEvent extends PluginActivity {
 	 * File names are following the format: <pre>uuid.json</pre>
 	 * If the file doesn't exist it add the default values to the cache.
 	 * We will create the file when the we have save the data when the player leaves the server {@link #onPlayerLeaveSaveToFile(PlayerQuitEvent)}
-	 *
 	 */
 	@EventHandler(ignoreCancelled = true)
 	private void onPlayerJoinLoadDataFromFile(final PlayerJoinEvent event) {
@@ -96,7 +96,6 @@ public final class PlayerDataEvent extends PluginActivity {
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * Method that saves player data from the cache {@link #PLAYER_DATA} to a json file in the disk when the

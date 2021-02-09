@@ -5,7 +5,6 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
 import me.aggellos2001.survivaleuplugin.languages.Language;
-import me.aggellos2001.survivaleuplugin.playerdata.PlayerData;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
 import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
@@ -40,13 +39,13 @@ public final class PvPCommandEvent extends PluginActivity {
 	}
 
 	@Default
-	private void toggleBypass(Player player){
-		if (PVP_BYPASS.contains(player)){
+	private void toggleBypass(Player player) {
+		if (PVP_BYPASS.contains(player)) {
 			PVP_BYPASS.remove(player);
-			Utilities.sendMsg(player,"&cYou are now respecting PvP protections!");
-		}else{
+			Utilities.sendMsg(player, "&cYou are now respecting PvP protections!");
+		} else {
 			PVP_BYPASS.add(player);
-			Utilities.sendMsg(player,"&aYou are now ignoring PvP protections!");
+			Utilities.sendMsg(player, "&aYou are now ignoring PvP protections!");
 		}
 	}
 
