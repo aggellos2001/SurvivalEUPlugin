@@ -111,8 +111,8 @@ public class SignLockHandler extends PluginActivity {
 	}
 
 	@EventHandler(ignoreCancelled = true)
-	@SuppressWarnings("ConstantConditions")
 	private void preventHopperStealing(final InventoryMoveItemEvent e) {
+		if (e.getSource().getLocation() == null) return;
 		final var block = e.getSource().getLocation().getBlock();
 		if (!(block.getState() instanceof Chest))
 			return;
