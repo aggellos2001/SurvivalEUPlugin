@@ -152,7 +152,7 @@ public final class VoteCommand extends PluginActivity {
 						final var rewards = new String[]{
 								"acb " + player.getName() + " 500",
 								"give " + player.getName() + " phantom_membrane 2",
-								"eco give " + player.getName() + " 1000"
+								"eco give " + player.getName() + " 300"
 						};
 						for (final String reward : rewards) {
 							Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), reward);

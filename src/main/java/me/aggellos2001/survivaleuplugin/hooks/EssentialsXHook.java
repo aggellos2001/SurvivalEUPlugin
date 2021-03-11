@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import me.aggellos2001.survivaleuplugin.SurvivalEUPlugin;
+import me.aggellos2001.survivaleuplugin.utils.Utilities;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;

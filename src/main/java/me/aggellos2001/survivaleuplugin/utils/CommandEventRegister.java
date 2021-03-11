@@ -9,7 +9,9 @@ import me.aggellos2001.survivaleuplugin.languages.PlayerLanguage;
 import me.aggellos2001.survivaleuplugin.modules.*;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataCommand;
 import me.aggellos2001.survivaleuplugin.playerdata.PlayerDataEvent;
+import me.aggellos2001.survivaleuplugin.shop.EarningMoney;
 import me.aggellos2001.survivaleuplugin.shop.Shop;
+import me.aggellos2001.survivaleuplugin.signlock.SignLockHandler;
 import me.aggellos2001.survivaleuplugin.ui.PlayMusicCommand;
 import me.aggellos2001.survivaleuplugin.ui.WarpUICommand;
 import me.aggellos2001.survivaleuplugin.vpnprotection.BlockVPN;
@@ -74,7 +76,9 @@ public final class CommandEventRegister {
 				new StaffChatCommand(),
 				new AntiSpamEvent(),
 				new AdFilterEvent(),
-				new ReportBug()
+				new ReportBug(),
+				new EarningMoney(),
+				new SignLockHandler(),
 		};
 
 		for (final PluginActivity unregisteredCommandEvent : commandsEvents) {

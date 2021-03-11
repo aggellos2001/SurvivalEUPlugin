@@ -2,402 +2,314 @@ package me.aggellos2001.survivaleuplugin.shop;
 
 import me.aggellos2001.survivaleuplugin.hooks.EssentialsXHook;
 import me.aggellos2001.survivaleuplugin.languages.Language;
-import me.aggellos2001.survivaleuplugin.utils.PluginActivity;
 import me.aggellos2001.survivaleuplugin.utils.Utilities;
+import me.mattstudios.mfgui.gui.components.ItemBuilder;
+import me.mattstudios.mfgui.gui.guis.Gui;
+import me.mattstudios.mfgui.gui.guis.PaginatedGui;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+public class ShopGUI {
 
-import static me.aggellos2001.survivaleuplugin.utils.Utilities.createRenamedItemStack;
-import static org.bukkit.Bukkit.createInventory;
+	//private final PaginatedGui mainGUI;
+
+	public static void mainUI(final Player player, final int filter) {
+
+		//initializes main UI
+		final var mainGUI = new PaginatedGui(6, 45, Utilities.colorize("<g:#ff0000:#001fff>SurvivalEU Shop"));
+
+		//add default action to cancel any events to prevent theft from the menu etc
+		mainGUI.setDefaultClickAction(event -> {
+			event.setCancelled(true);
+		});
+
+		//next btn
+		mainGUI.setItem(6, 6, ItemBuilder.from(Material.LIME_DYE)
+				.setName(Utilities.colorize("&a&lNext"))
+				.asGuiItem(event -> {
+					mainGUI.next();
+				}));
+
+		//previous btn
+		mainGUI.setItem(6, 4, ItemBuilder.from(Material.GRAY_DYE)
+				.setName(Utilities.colorize("&c&lPrevious"))
+				.asGuiItem(event -> {
+					mainGUI.previous();
+				}));
+
+		//exit btn
+		mainGUI.setItem(6, 9, ItemBuilder.from(Material.BARRIER)
+				.setName(Utilities.colorize("&4&lExit")).glow(true)
+				.asGuiItem(event -> {
+					event.getWhoClicked().closeInventory(InventoryCloseEvent.Reason.PLUGIN);
+				})
+		);
+
+		//info btn
+		mainGUI.setItem(6, 1, ItemBuilder.from(Material.PAPER)
+				.setName(Utilities.colorize("&eHow to get in-game money ($)?\n")).glow(true)
+				.setLore(
+						Utilities.colorize("&b1. Breaking blocks (All buyable blocks)&c*"),
+						Utilities.colorize("&b2. Killing mobs&c*"),
+						Utilities.colorize("&b3. Actively playing (Not being AFK)&c*"),
+						Utilities.colorize("&b4. Selling items on /ah"),
+						Utilities.colorize("&b5. Voting for the server /vote"),
+						Utilities.colorize("&c&o(*) Money drops are random!")
+				)
+				.asGuiItem()
+		);
+
+		//home btn
+		mainGUI.setItem(6, 5, ItemBuilder.from(Material.COMPASS)
+				.setName(Utilities.colorize("&eHome")).glow(true)
+				.asGuiItem(event -> mainUI(((Player) event.getWhoClicked()), 0))
+		);
+
+		//food(1) filter button
+		mainGUI.setItem(6, 2, ItemBuilder.from(Material.COOKED_BEEF)
+				.setName(Utilities.colorize("&eFood"))
+				.asGuiItem(event -> mainUI(((Player) event.getWhoClicked()), 1))
+		);
+
+		//tools & combat(2) filter button
+		mainGUI.setItem(6, 3, ItemBuilder.from(Material.DIAMOND_SWORD)
+				.setName(Utilities.colorize("&eTools & Combat"))
+				.addItemFlags(ItemFlag.values())
+				.asGuiItem(event -> mainUI(((Player) event.getWhoClicked()), 2))
+		);
+
+		//transportation(3) filter btn
+		mainGUI.setItem(6, 7, ItemBuilder.from(Material.MINECART)
+				.setName(Utilities.colorize("&eTransportation"))
+				.asGuiItem(event -> mainUI(((Player) event.getWhoClicked()), 3))
+		);
+
+		//records(4) filter btn
+		mainGUI.setItem(6, 8, ItemBuilder.from(Material.MUSIC_DISC_PIGSTEP)
+				.setName(Utilities.colorize("&eMusic Disc"))
+				.addItemFlags(ItemFlag.values())
+				.asGuiItem(event -> mainUI(((Player) event.getWhoClicked()), 4))
+		);
 
 
-public class ShopGUI extends PluginActivity {
 
-
-	public static final Set<Inventory> mainShopUISet = new HashSet<>();
-	public static final Set<Inventory> purchaseShopUISet = new HashSet<>();
-
-
-	public ShopGUI() {
-		//Possible sizes 9, 18, 27, 36, 45,54
-	}
-
-
-	public static void openInventory(final Player player) {
-		openMainShopMenu(0, player, null);
-	}
-
-	//============================== main shop =========================
-	public static void openMainShopMenu(final int first, final Player player, Inventory inventory) {
-
-		if (player == null) return;
-
-		if (inventory == null) {
-			inventory = createInventory(null, 54, Utilities.colorize(
-					"#02A122&lSurvivalEU &e&lShop"));
+		switch (filter) {
+			case 0:
+				for (final Material material : Material.values()) {
+					final var price = Shop.getShopPrice(material);
+					if (price == 0) continue;
+					final var guiItem = ItemBuilder.from(material)
+							.setLore(Utilities.colorize("&aBuy price: &f" + price + "&a$"))
+							.asGuiItem();
+					guiItem.setAction(event -> {
+						final var clickedMat = event.getInventory().getItem(event.getSlot());
+						if (clickedMat == null) return;
+						//create and open the buy sell UI
+						createBuySellUI(((Player) event.getWhoClicked()), mainGUI, clickedMat.getType());
+					});
+					mainGUI.addItem(guiItem);
+				}
+				break;
+			case 1:
+				for (final Material material : Material.values()) {
+					if (!material.isEdible()) continue;
+					final var price = Shop.getShopPrice(material);
+					if (price == 0) continue;
+					final var guiItem = ItemBuilder.from(material)
+							.setLore(Utilities.colorize("&aBuy price: &f" + price + "&a$"))
+							.asGuiItem();
+					guiItem.setAction(event -> {
+						final var clickedMat = event.getInventory().getItem(event.getSlot());
+						if (clickedMat == null) return;
+						//create and open the buy sell UI
+						createBuySellUI(((Player) event.getWhoClicked()), mainGUI, clickedMat.getType());
+					});
+					mainGUI.addItem(guiItem);
+				}
+				break;
+			case 2:
+				for (final Material material : Material.values()) {
+					if (!Utilities.isTool(material)) continue;
+					final var price = Shop.getShopPrice(material);
+					if (price == 0) continue;
+					final var guiItem = ItemBuilder.from(material)
+							.setLore(Utilities.colorize("&aBuy price: &f" + price + "&a$"))
+							.asGuiItem();
+					guiItem.setAction(event -> {
+						final var clickedMat = event.getInventory().getItem(event.getSlot());
+						if (clickedMat == null) return;
+						//create and open the buy sell UI
+						createBuySellUI(((Player) event.getWhoClicked()), mainGUI, clickedMat.getType());
+					});
+					mainGUI.addItem(guiItem);
+				}
+				break;
+			case 3:
+				for (final Material material : Material.values()) {
+					if (!Utilities.isTransportation(material)) continue;
+					final var price = Shop.getShopPrice(material);
+					if (price == 0) continue;
+					final var guiItem = ItemBuilder.from(material)
+							.setLore(Utilities.colorize("&aBuy price: &f" + price + "&a$"))
+							.asGuiItem();
+					guiItem.setAction(event -> {
+						final var clickedMat = event.getInventory().getItem(event.getSlot());
+						if (clickedMat == null) return;
+						//create and open the buy sell UI
+						createBuySellUI(((Player) event.getWhoClicked()), mainGUI, clickedMat.getType());
+					});
+					mainGUI.addItem(guiItem);
+				}
+				break;
+			case 4:
+				for (final Material material : Material.values()) {
+					if (!material.isRecord()) continue;
+					final var price = Shop.getShopPrice(material);
+					if (price == 0) continue;
+					final var guiItem = ItemBuilder.from(material)
+							.setLore(Utilities.colorize("&aBuy price: &f" + price + "&a$"))
+							.asGuiItem();
+					guiItem.setAction(event -> {
+						final var clickedMat = event.getInventory().getItem(event.getSlot());
+						if (clickedMat == null) return;
+						//create and open the buy sell UI
+						createBuySellUI(((Player) event.getWhoClicked()), mainGUI, clickedMat.getType());
+					});
+					mainGUI.addItem(guiItem);
+				}
+				break;
 		}
-
-		if (first < 0) return;
-
-		int last = first + 45;
-
-		final var items = Shop.ShopPrices.values();
-
-		if (first > items.length) {
-			return;
-		}
-		if (last > items.length) {
-			last = items.length;
-		}
-
-		inventory.clear();
-
-		for (int i = first; i < last; i++) {
-			final var item = Material.getMaterial(items[i].name());
-			if (item == null) {
-				continue;
-			}
-			final var itemToBeAdded = new ItemStack(item);
-			final var buyPrice = items[i].buy;
-			final var sellPrice = items[i].sell;
-			itemToBeAdded.setLore(
-					Arrays.asList(Utilities.colorize("#1eff00Buy price: #fffb00" + buyPrice + " #1dbf00$"),
-							Utilities.colorize("#e30000Sell price: #fffb00" + sellPrice + " #1dbf00$"))
-			);
-			inventory.addItem(itemToBeAdded);
-		}
-
-		//adding menu items
-		final var previousPage = createRenamedItemStack(Material.PAPER, "#e30000Previous page");
-
-		final var nextPage = createRenamedItemStack(Material.PAPER, "#02a147Next page");
-
-		final var homeButton = createRenamedItemStack(Material.BOOK, "#1a6debHome");
-
-		final var exitButton = createRenamedItemStack(Material.BARRIER, "#e30000&lExit");
-
-
-		inventory.setItem(48, previousPage);
-		inventory.setItem(49, homeButton);
-		inventory.setItem(50, nextPage);
-		inventory.setItem(53, exitButton);
-
-		if (!mainShopUISet.contains(inventory)) {
-			//open inventory to player if inventory is not yet created
-			player.openInventory(inventory);
-		}
-
-
-		// add inventory to Set if it doesn't exist
-		mainShopUISet.add(inventory);
-	}
-
-	//========================== purchase menu ===========================
-	public static void openPurchaseMenu(final Player player, final Material material) {
-
-		final var inventory = createInventory(null, 9, Utilities.colorize("#02A122&lSurvivalEU &e&lShop"));
-
-
-		//back button
-		{
-			final var backButton = createRenamedItemStack(Material.OAK_DOOR, "#f6ff00&lBack");
-
-			inventory.setItem(0, backButton);
-		}
-
-		{
-			//exit button
-			final var exitButton = createRenamedItemStack(Material.BARRIER, "#e30000&lExit");
-
-			inventory.setItem(8, new ItemStack(exitButton));
-		}
-
-		//=================  BUY, SELL and Middle Buttons  ===================
-		final var maxStackOfMaterial = material.getMaxStackSize();
-		final var shopPrice = Shop.ShopPrices.valueOf(material.name());
-
-		//set middle slot with relevant material
-		final var itemToBeAdded = createRenamedItemStack(material, null,
-				"#1eff00Buy price: #fffb00" + shopPrice.buy + " #1dbf00$",
-				"#e30000Sell price: #fffb00" + shopPrice.sell + " #1dbf00$");
-
-		inventory.setItem(4, itemToBeAdded);
-
-
-		//buy 1
-		{
-			final var buyOne = createRenamedItemStack(Material.GREEN_STAINED_GLASS, "#1eff00Buy&l 1x",
-					"#fffb00" + shopPrice.buy + " #1dbf00$");
-
-			inventory.setItem(2, buyOne);
-		}
-
-		//buy 64
-		{
-
-			final var buyFullStack = createRenamedItemStack(Material.GREEN_STAINED_GLASS,
-					"#1eff00Buy&l " + maxStackOfMaterial + "x",
-					"#fffb00" + shopPrice.buy * maxStackOfMaterial + " #1dbf00$"
-			);
-
-			inventory.setItem(3, buyFullStack);
-		}
-
-		//sell 1
-		{
-			final var sellOne = createRenamedItemStack(Material.RED_STAINED_GLASS_PANE,
-					"#e30000Sell&l 1x",
-					"#fffb00" + shopPrice.sell + " #1dbf00$");
-
-			inventory.setItem(5, sellOne);
-		}
-		//sell all from inventory
-		{
-			final var sellInventory = createRenamedItemStack(Material.RED_STAINED_GLASS_PANE,
-					"#e30000Sell&l Inventory",
-					"#fffb00" + shopPrice.sell + " #1dbf00$ #fffb00each ");
-
-			inventory.setItem(6, sellInventory);
-		}
-
-
-		player.openInventory(inventory);
-
-		purchaseShopUISet.add(inventory);
-	}
-
-
-//===================  Main shop UI Handlers   ================
-
-	@EventHandler
-	private void mainShopMenuHandler(final InventoryClickEvent event) {
-
-		final var inventory = event.getInventory();
-		if (!mainShopUISet.contains(inventory)) return;
-
-		event.setCancelled(true);
-
-		//Handle menu buttons for front shop menu
-
-		final var player = ((Player) event.getWhoClicked());
-		if (event.getRawSlot() > inventory.getSize())
-			return; //fixes NullPointerException from the line getItem(event.getRawSlot() if >inv size)
-		final var clickedItem = event.getInventory().getItem(event.getRawSlot());
-
-
-		//previous page.
-		if (event.getRawSlot() == 48) {
-			final var firstItem = inventory.getItem(0);
-			if (firstItem == null) return;
-			final var firstItemNumber = Arrays.asList(Shop.ShopPrices.values()).indexOf(Shop.ShopPrices.valueOf(firstItem.getType().name()));
-			openMainShopMenu(firstItemNumber - 45, player, inventory);
-			return;
-		}
-		//home button
-		if (event.getRawSlot() == 49) {
-			openMainShopMenu(0, player, inventory);
-			return;
-		}
-		//next page
-		if (event.getRawSlot() == 50) {
-			final var lastItem = inventory.getItem(44);
-			if (lastItem == null) return;
-			final var lastItemNumber = Arrays.asList(Shop.ShopPrices.values()).indexOf(Shop.ShopPrices.valueOf(lastItem.getType().name()));
-			openMainShopMenu(lastItemNumber + 1, player, inventory);
-			return;
-		}
-		//exit
-		if (event.getRawSlot() == 53) {
-			player.closeInventory();
-			return;
-		}
-		//else open purchase menu
-		if (clickedItem == null) return;
-
-		player.closeInventory();
-
-		openPurchaseMenu(player, clickedItem.getType());
-
+		mainGUI.getFiller().fillBottom(ItemBuilder.from(Material.GRAY_STAINED_GLASS_PANE).setName(" ").asGuiItem());
+		mainGUI.open(player);
 
 	}
 
 
-//===========================Purchase menu handlers =========================
+	/**
+	 * Creates the buy menu and displays it to the player
+	 *
+	 * @param player
+	 * @param mainUI
+	 * @param material
+	 */
+	private static void createBuySellUI(final Player player, final PaginatedGui mainUI, final Material material) {
 
+		final var buyGUI = new Gui(1, Utilities.colorize("<g:#00bdff:#0009ff>Buy " + Utilities.readableEnumName(material.name())));
+		buyGUI.setDefaultClickAction(event -> event.setCancelled(true));
+		final var price = Shop.getShopPrice(material);
 
-	@EventHandler
-	private void purchaseMenuHandler(final InventoryClickEvent event) {
+		final var backButton = ItemBuilder.from(Material.OAK_DOOR).setName(Utilities.colorize("&eBack")).asGuiItem();
+		backButton.setAction(event -> {
+			mainUI.open(player);
+		});
+		buyGUI.setItem(0, backButton);
 
-		final var inventory = event.getInventory();
-		if (!purchaseShopUISet.contains(inventory)) return;
+		//item display btn
+		buyGUI.setItem(4,
+				ItemBuilder.from(material)
+						.setName(Utilities.colorize("&e&l" + Utilities.readableEnumName(material.name())))
+						.setLore(Utilities.colorize("&aBuy price: &f" + price + "&a$")
+						)
+						.asGuiItem()
+		);
 
-		event.setCancelled(true);
+		//buy 1x
+		buyGUI.setItem(2, ItemBuilder.from(Material.LIME_STAINED_GLASS_PANE)
+				.setName(Utilities.colorize("&aBuy 1x"))
+				.setLore(Utilities.colorize("&f" + price + "&a$"))
+				.asGuiItem(event -> {
 
-		final var player = ((Player) event.getWhoClicked());
-		if (event.getSlotType() == InventoryType.SlotType.CONTAINER)
-
-			if (event.getRawSlot() == 0) {
-				//close inventory first to clear it from purchaseShopUISet
-				player.closeInventory();
-				openMainShopMenu(0, player, null);
-				return;
-			}
-		if (event.getRawSlot() == 8) {
-			player.closeInventory();
-			return;
-		}
-		//Buy - sell handlers
-		var clickedItem = inventory.getItem(4);
-		if (clickedItem == null) return;
-
-		final var shopPrice = Shop.ShopPrices.valueOf(clickedItem.getType().name());
-		final var material = clickedItem.getType();
-		final var maxStack = Material.valueOf(shopPrice.name()).getMaxStackSize();
-
-		//buy 1 button
-		{
-			if (event.getRawSlot() == 2) {
-				if (shopPrice.buy == 0) {
-					Utilities.sendMsg(player, Language.SHOP_CANNOT_BUY.getTranslation(player));
-					return;
-				}
-
-				final var amountToPay = shopPrice.buy * 1;
-				if (!EssentialsXHook.hasEnough(player, amountToPay)) {
-					Utilities.sendMsg(player, Language.NO_MONEY.getTranslation(player));
-					return;
-				}
-				EssentialsXHook.subtractPlayerBalance(player, amountToPay);
-				final var map = player.getInventory().addItem(new ItemStack(Material.valueOf(shopPrice.name()), 1));
-				Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), 1, shopPrice.name(), amountToPay));
-				//if ivnentory was full throw to the ground extra items
-				if (!map.isEmpty()) {
-					map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
-					Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
-				}
-			}
-		}
-
-		//buy full stack button
-		{
-			if (event.getRawSlot() == 3) {
-				if (shopPrice.buy == 0) {
-					Utilities.sendMsg(player, Language.SHOP_CANNOT_BUY.getTranslation(player));
-					return;
-				}
-				final var amountToPay = shopPrice.buy * maxStack;
-				if (!EssentialsXHook.hasEnough(player, amountToPay)) {
-					Utilities.sendMsg(player, Language.NO_MONEY.getTranslation(player));
-					return;
-				}
-				EssentialsXHook.subtractPlayerBalance(player, amountToPay);
-				final var map = player.getInventory().addItem(new ItemStack(Material.valueOf(shopPrice.name()), maxStack));
-				Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), maxStack, shopPrice.name(), amountToPay));
-				//if ivnentory was full throw to the ground extra items
-				if (!map.isEmpty()) {
-					map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
-					Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
-				}
-			}
-		}
-		//sell x1 button handler
-		{
-			if (event.getRawSlot() == 5) {
-				if (shopPrice.sell == 0) {
-					Utilities.sendMsg(player, Language.SHOP_CANNOT_SELL.getTranslation(player));
-					return;
-				}
-				final var playerInventory = player.getInventory();
-				var amountOfItemOnInventory = 0;
-				//check every slot for the item in PLAYERS inventory
-				for (final ItemStack slot : playerInventory.getContents()) {
-					//slot may be null
-					if (slot == null) continue;
-
-					if (slot.getType().equals(material)) {
-						amountOfItemOnInventory += 1; //only 1 because button is x1
-						slot.setAmount(slot.getAmount() - 1);
-						// break when first item is found (button is sell x1)
-						break;
+					final var amountToPay = price * 1;
+					if (!EssentialsXHook.hasEnough(player, amountToPay)) {
+						Utilities.sendMsg(player, Language.NO_MONEY.getTranslation(player));
+						return;
 					}
-				}
-				if (amountOfItemOnInventory == 0) {
-					Utilities.sendMsg(player, String.format(Language.SHOP_SELL_INVENTORY_NO_ITEM.getTranslation(player), material.name()));
-					return;
-				}
-				final var amountToGetPaid = amountOfItemOnInventory * shopPrice.sell;
-				EssentialsXHook.addPlayerBalance(player, amountToGetPaid);
-				Utilities.sendMsg(player, String.format(Language.SHOP_SELL_SUCCESS.getTranslation(player), amountOfItemOnInventory, material.name(), Math.round(amountToGetPaid * 100.0) / 100.0));
-
-			}
-		}
-
-		// Sell inventory of the item button
-		{
-			if (event.getRawSlot() == 6) {
-				if (shopPrice.sell == 0) {
-					Utilities.sendMsg(player, Language.SHOP_CANNOT_SELL.getTranslation(player));
-					return;
-				}
-				final var playerInventory = player.getInventory();
-				var amountOfItemOnInventory = 0;
-				//check every slot for the item in PLAYERS inventory
-				for (final ItemStack slot : playerInventory.getContents()) {
-					//slot may be null
-					if (slot == null) continue;
-
-					if (slot.getType().equals(material)) {
-						amountOfItemOnInventory += slot.getAmount();
-						slot.setAmount(-1);
+					EssentialsXHook.subtractPlayerBalance(player, amountToPay);
+					final var map = player.getInventory().addItem(new ItemStack(material, 1));
+					Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), 1, Utilities.readableEnumName(material.name()), amountToPay));
+					//if ivnentory was full throw to the ground extra items
+					if (!map.isEmpty()) {
+						map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
+						Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
 					}
-				}
-				if (amountOfItemOnInventory == 0) {
-					Utilities.sendMsg(player, String.format(Language.SHOP_SELL_INVENTORY_NO_ITEM.getTranslation(player), material.name()));
-					return;
-				}
-				final var amountToGetPaid = amountOfItemOnInventory * shopPrice.sell;
-				EssentialsXHook.addPlayerBalance(player, amountToGetPaid);
-				Utilities.sendMsg(player, String.format(Language.SHOP_SELL_SUCCESS.getTranslation(player), amountOfItemOnInventory, material.name(), Math.round(amountToGetPaid * 100.0) / 100.0));
+				})
+		);
 
-			}
-		}
+		//buy 1/4 of stack
+		buyGUI.setItem(3, ItemBuilder.from(Material.LIME_STAINED_GLASS)
+				.setName(Utilities.colorize("&aBuy " + (int) (material.getMaxStackSize() * 0.25) + "x"))
+				.setLore(Utilities.colorize("&f" + price * (material.getMaxStackSize() * 0.25) + "&a$"))
+				.asGuiItem(event -> {
+					final var maxStack = (int) (material.getMaxStackSize() * 0.25);
+					final var amountToPay = price * maxStack;
+					if (!EssentialsXHook.hasEnough(player, amountToPay)) {
+						Utilities.sendMsg(player, Language.NO_MONEY.getTranslation(player));
+						return;
+					}
+					EssentialsXHook.subtractPlayerBalance(player, amountToPay);
+					final var map = player.getInventory().addItem(new ItemStack(material, maxStack));
+					Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), maxStack, Utilities.readableEnumName(material.name()), amountToPay));
+					//if inventory was full throw to the ground extra items
+					if (!map.isEmpty()) {
+						map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
+						Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
+					}
+				})
+		);
 
+		//buy 2/4
+		buyGUI.setItem(5, ItemBuilder.from(Material.LIME_STAINED_GLASS)
+				.setName(Utilities.colorize("&aBuy " + (int) (material.getMaxStackSize() * 0.5) + "x"))
+				.setLore(Utilities.colorize("&f" + price * (material.getMaxStackSize() * 0.5) + "&a$"))
+				.asGuiItem(event -> {
+					final var maxStack = (int) (material.getMaxStackSize() * 0.5);
+					final var amountToPay = price * maxStack;
+					if (!EssentialsXHook.hasEnough(player, amountToPay)) {
+						Utilities.sendMsg(player, Language.NO_MONEY.getTranslation(player));
+						return;
+					}
+					EssentialsXHook.subtractPlayerBalance(player, amountToPay);
+					final var map = player.getInventory().addItem(new ItemStack(material, maxStack));
+					Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), maxStack, Utilities.readableEnumName(material.name()), amountToPay));
+					//if inventory was full throw to the ground extra items
+					if (!map.isEmpty()) {
+						map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
+						Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
+					}
+				})
+		);
 
-	}
+		//buy stack
+		buyGUI.setItem(6, ItemBuilder.from(Material.LIME_STAINED_GLASS)
+				.setName(Utilities.colorize("&aBuy " + material.getMaxStackSize() + "x"))
+				.setLore(Utilities.colorize("&f" + price * material.getMaxStackSize() + "&a$"))
+				.asGuiItem(event -> {
+					final var maxStack = material.getMaxStackSize();
+					final var amountToPay = price * maxStack;
+					if (!EssentialsXHook.hasEnough(player, amountToPay)) {
+						Utilities.sendMsg(player, Language.NO_MONEY.getTranslation(player));
+						return;
+					}
+					EssentialsXHook.subtractPlayerBalance(player, amountToPay);
+					final var map = player.getInventory().addItem(new ItemStack(material, maxStack));
+					Utilities.sendMsg(player, String.format(Language.SHOP_SUCCESS_BUY.getTranslation(player), maxStack, Utilities.readableEnumName(material.name()), amountToPay));
+					//if inventory was full throw to the ground extra items
+					if (!map.isEmpty()) {
+						map.forEach((integer, itemStack) -> player.getWorld().dropItemNaturally(player.getLocation(), itemStack));
+						Utilities.sendMsg(player, Language.SHOP_NOT_ENOUGH_SPACE.getTranslation(player));
+					}
+				})
+		);
 
-
-	//==========Listener for all UIS
-
-	@EventHandler
-	private void removeFromHash(final InventoryCloseEvent event) {
-
-		final var inventory = event.getInventory();
-		//remove inventory - checks if it's already there
-		mainShopUISet.remove(inventory);
-		purchaseShopUISet.remove(inventory);
-	}
-
-	@EventHandler
-	private void disableDrag(final InventoryDragEvent event) {
-
-		final var inventory = event.getInventory();
-
-		//check if inventory is not shop GUI both main menu and purchase one
-		if (!mainShopUISet.contains(inventory) | !purchaseShopUISet.contains(inventory)) {
-			return;
-		}
-
-		event.setCancelled(true);
+		//exit btn
+		buyGUI.setItem(8, ItemBuilder.from(Material.BARRIER)
+				.setName(Utilities.colorize("&4&lClose")).glow(true)
+				.asGuiItem(event -> {
+					buyGUI.close(player);
+				}));
+		buyGUI.open(player);
 	}
 }

@@ -62,10 +62,5 @@ public class CustomCommandConditions {
 				COOLDOWN_MAP.put(player, System.currentTimeMillis());
 			}
 		});
-
-		/*
-			Adds tab completer for shop command
-		 */
-		manager.getCommandCompletions().registerCompletion("shopItems", context -> Stream.of(Shop.ShopPrices.values()).map(Enum::name).collect(Collectors.toList()));
 	}
 }

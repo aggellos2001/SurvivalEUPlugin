@@ -13,6 +13,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @CommandAlias("playername")
 @Conditions("ConsoleOrOp")
@@ -103,5 +104,19 @@ public class PlayerFinder extends PluginActivity {
 						}
 					}
 				}).execute();
+	}
+
+	//utility method
+	public static boolean existsPlayerWithName(String name){
+		var offlinePlayers = Bukkit.getOfflinePlayers();
+		final var matches = new HashSet<String>();
+		for (final OfflinePlayer offlinePlayer : offlinePlayers) {
+			final var essentialPlayerName = EssentialsXHook.getEssentialsPlayerName(offlinePlayer.getUniqueId());
+			if (essentialPlayerName == null) continue;
+			if (essentialPlayerName.equalsIgnoreCase(name)) {
+				matches.add(essentialPlayerName);
+			}
+		}
+		return !matches.isEmpty();
 	}
 }

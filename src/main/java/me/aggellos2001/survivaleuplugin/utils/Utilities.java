@@ -3,21 +3,26 @@ package me.aggellos2001.survivaleuplugin.utils;
 import me.mattstudios.mfmsg.base.MessageOptions;
 import me.mattstudios.mfmsg.base.internal.Format;
 import me.mattstudios.mfmsg.bukkit.BukkitMessage;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashSet;
 
 public class Utilities {
 
@@ -168,11 +173,16 @@ public class Utilities {
 		return stack;
 	}
 
-	public static String readableEnumName(String enumValue) {
-		enumValue = enumValue.replace('_', ' ');
-		enumValue = enumValue.toLowerCase();
-		enumValue = StringUtils.capitalize(enumValue);
-		return enumValue;
+	public static String readableEnumName(final String enumValue) {
+		final var processed = enumValue.replace('_', ' ').split("\\s+");
+		final var result = new StringBuilder();
+		for (final String word : processed) {
+			result.append(StringUtils.capitalize(word.toLowerCase()));
+			if (!processed[processed.length - 1].equals(word)) {
+				result.append(' ');
+			}
+		}
+		return result.toString();
 	}
 
 	public static boolean isLiquid(final Material material) {
@@ -237,9 +247,60 @@ public class Utilities {
 		return true;
 	}
 
-	public static String locationString(Location location){
+	public static String locationString(final Location location) {
 		return "World: " + location.getWorld().getEnvironment().name() + ", x: " + location.getBlockX() + ", y: " + location.getBlockY() + ", z: " + location.getBlockZ();
 	}
 
+	public static double round(final double value, final int places) {
+		if (places < 0) throw new IllegalArgumentException();
+
+		BigDecimal bd = new BigDecimal(Double.toString(value));
+		bd = bd.setScale(places, RoundingMode.HALF_UP);
+		return bd.doubleValue();
+	}
+
+	public static boolean isTool(final Material material) {
+		final var toolNames = new String[]{"pickaxe", "hoe", "sword", "shovel", "shears",
+				"clock", "compass", "fishing", "lead", "tag",
+				"shell", "bow", "arrow", "helmet", "chestplate", "leggings", "boots"};
+		for (final String toolName : toolNames) {
+			if (material.name().toLowerCase().contains(toolName))
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isTransportation(final Material material) {
+		final var names = new String[]{
+				"rail", "boat", "minecart", "elytra", "a_stick", "saddle", "rocket", "pearl"
+		};
+		for (final String name : names) {
+			if (material.name().toLowerCase().contains(name))
+				return true;
+		}
+		return false;
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	public static boolean canBuildAt(final Player player, final Location location) {
+		var canBuild = true;
+		final var placedBlock = location.getBlock();
+		final var replacedBlockState = location.getBlock().getState();
+		final var itemInHand = player.getActiveItem() != null ? player.getEquipment().getItemInMainHand() : player.getEquipment().getItemInOffHand();
+		final var event = new BlockPlaceEvent(placedBlock, replacedBlockState, placedBlock, itemInHand, player, true, EquipmentSlot.HAND);
+		Bukkit.getPluginManager().callEvent(event);
+		if (event.isCancelled()) {
+			canBuild = false;
+		}else {
+			replacedBlockState.update(true);
+		};
+		return canBuild;
+	}
+
+	public static void removeDuplicates(ArrayList<String> list){
+		var linkedSet = new LinkedHashSet<>(list);
+		list.clear();
+		list.addAll(linkedSet);
+	}
 
 }
